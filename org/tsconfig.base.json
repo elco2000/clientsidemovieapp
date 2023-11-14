@@ -14,7 +14,18 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@org/backend/dto": ["libs/backend/dto/src/index.ts"],
+      "@org/backend/features": ["libs/backend/features/src/index.ts"],
+      "@org/clientside-movie-web/common": [
+        "libs/clientside-movie-web/common/src/index.ts"
+      ],
+      "@org/clientside-movie-web/features": [
+        "libs/clientside-movie-web/features/src/index.ts"
+      ],
+      "@org/shared/api": ["libs/shared/api/src/index.ts"],
+      "@org/ui": ["libs/clientside-movie-web/ui/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
