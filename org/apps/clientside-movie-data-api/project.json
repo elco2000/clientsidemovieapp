@@ -1,0 +1,57 @@
+{
+  "name": "clientside-movie-data-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/clientside-movie-data-api/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/clientside-movie-data-api",
+        "main": "apps/clientside-movie-data-api/src/main.ts",
+        "tsConfig": "apps/clientside-movie-data-api/tsconfig.app.json",
+        "assets": ["apps/clientside-movie-data-api/src/assets"],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/clientside-movie-data-api/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "clientside-movie-data-api:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "clientside-movie-data-api:build:development"
+        },
+        "production": {
+          "buildTarget": "clientside-movie-data-api:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/clientside-movie-data-api/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/clientside-movie-data-api/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}
