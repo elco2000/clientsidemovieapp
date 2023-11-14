@@ -1,1 +1,1 @@
-export * from './lib/movie.module';
+export * from './lib/backend-features-movie.module';
