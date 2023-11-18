@@ -16,7 +16,8 @@
         "tsConfig": "apps/clientside-movie-data-api/tsconfig.app.json",
         "assets": ["apps/clientside-movie-data-api/src/assets"],
         "isolatedConfig": true,
-        "webpackConfig": "apps/clientside-movie-data-api/webpack.config.js"
+        "webpackConfig": "apps/clientside-movie-data-api/webpack.config.js",
+        "generatePackageJson": true
       },
       "configurations": {
         "development": {},
