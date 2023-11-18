@@ -19,7 +19,7 @@ export class CreateMovieDto implements ICreateMovie {
     title!: string;
 
     @IsNotEmpty()
-    photo!: File;
+    photo!: Blob;
 
     @IsNumber()
     @IsNotEmpty()
@@ -56,7 +56,7 @@ export class UpdateMovieDto implements IUpdateMovie {
     title!: string;
 
     @IsNotEmpty()
-    photo!: File;
+    photo!: Blob;
 
     @IsNumber()
     @IsNotEmpty()

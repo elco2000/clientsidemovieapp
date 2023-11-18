@@ -113,9 +113,11 @@ tslib_1.__exportStar(__webpack_require__(8), exports);
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BackendFeaturesMovieModule = void 0;
 const tslib_1 = __webpack_require__(4);
+const mongoose_1 = __webpack_require__(9);
 const common_1 = __webpack_require__(1);
-const movie_controller_1 = __webpack_require__(9);
-const movie_service_1 = __webpack_require__(10);
+const movie_controller_1 = __webpack_require__(10);
+const movie_service_1 = __webpack_require__(11);
+const movie_schema_1 = __webpack_require__(16);
 let BackendFeaturesMovieModule = class BackendFeaturesMovieModule {
 };
 exports.BackendFeaturesMovieModule = BackendFeaturesMovieModule;
@@ -123,6 +125,7 @@ exports.BackendFeaturesMovieModule = BackendFeaturesMovieModule = tslib_1.__deco
     (0, common_1.Module)({
         controllers: [movie_controller_1.MovieController],
         providers: [movie_service_1.MovieService],
+        imports: [mongoose_1.MongooseModule.forRoot('mongodb+srv://elcoAdmin:Admin123Database@clusterlocaldataapi.m0cwagc.mongodb.net/'), mongoose_1.MongooseModule.forFeature([{ name: movie_schema_1.Movie.name, schema: movie_schema_1.MovieSchema }])],
         exports: [movie_service_1.MovieService],
     })
 ], BackendFeaturesMovieModule);
@@ -130,29 +133,35 @@ exports.BackendFeaturesMovieModule = BackendFeaturesMovieModule = tslib_1.__deco
 
 /***/ }),
 /* 9 */
+/***/ ((module) => {
+
+module.exports = require("@nestjs/mongoose");
+
+/***/ }),
+/* 10 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c, _d;
+var _a, _b, _c, _d, _e;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MovieController = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const common_2 = __webpack_require__(1);
-const movie_service_1 = __webpack_require__(10);
-const api_1 = __webpack_require__(11);
-const dto_1 = __webpack_require__(15);
+const movie_service_1 = __webpack_require__(11);
+const api_1 = __webpack_require__(12);
+const dto_1 = __webpack_require__(18);
 let MovieController = class MovieController {
     constructor(movieService) {
         this.movieService = movieService;
     }
-    getAll() {
+    async getAll() {
         return this.movieService.getAll();
     }
     getOne(id) {
         return this.movieService.getOne(id);
     }
-    create(data) {
+    async create(data) {
         return this.movieService.create(data);
     }
 };
@@ -161,21 +170,21 @@ tslib_1.__decorate([
     (0, common_2.Get)(''),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", []),
-    tslib_1.__metadata("design:returntype", Array)
+    tslib_1.__metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
 ], MovieController.prototype, "getAll", null);
 tslib_1.__decorate([
     (0, common_2.Get)(':id'),
     tslib_1.__param(0, (0, common_2.Param)('id')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String]),
-    tslib_1.__metadata("design:returntype", typeof (_b = typeof api_1.IMovie !== "undefined" && api_1.IMovie) === "function" ? _b : Object)
+    tslib_1.__metadata("design:returntype", typeof (_c = typeof api_1.IMovie !== "undefined" && api_1.IMovie) === "function" ? _c : Object)
 ], MovieController.prototype, "getOne", null);
 tslib_1.__decorate([
     (0, common_2.Post)(''),
     tslib_1.__param(0, (0, common_2.Body)()),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [typeof (_c = typeof dto_1.CreateMovieDto !== "undefined" && dto_1.CreateMovieDto) === "function" ? _c : Object]),
-    tslib_1.__metadata("design:returntype", typeof (_d = typeof api_1.IMovie !== "undefined" && api_1.IMovie) === "function" ? _d : Object)
+    tslib_1.__metadata("design:paramtypes", [typeof (_d = typeof dto_1.CreateMovieDto !== "undefined" && dto_1.CreateMovieDto) === "function" ? _d : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
 ], MovieController.prototype, "create", null);
 exports.MovieController = MovieController = tslib_1.__decorate([
     (0, common_1.Controller)('movie'),
@@ -184,18 +193,23 @@ exports.MovieController = MovieController = tslib_1.__decorate([
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
+var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MovieService = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const api_1 = __webpack_require__(11);
-const rxjs_1 = __webpack_require__(14);
+const api_1 = __webpack_require__(12);
+const rxjs_1 = __webpack_require__(15);
+const movie_schema_1 = __webpack_require__(16);
+const mongoose_1 = __webpack_require__(17);
+const mongoose_2 = __webpack_require__(9);
 let MovieService = class MovieService {
-    constructor() {
+    constructor(movieModel) {
+        this.movieModel = movieModel;
         this.TAG = 'MovieService';
         this.movies$ = new rxjs_1.BehaviorSubject([
             {
@@ -211,9 +225,9 @@ let MovieService = class MovieService {
             }
         ]);
     }
-    getAll() {
+    async getAll() {
         common_1.Logger.log('getAll', this.TAG);
-        return this.movies$.value;
+        return this.movieModel.find().exec();
     }
     getOne(id) {
         common_1.Logger.log(`getOne(${id})`, this.TAG);
@@ -223,44 +237,48 @@ let MovieService = class MovieService {
         }
         return movie;
     }
-    create(movie) {
+    async create(movie) {
         common_1.Logger.log('create', this.TAG);
-        const current = this.movies$.value;
-        const newMovie = {
-            ...movie,
-            id: `movie-${Math.floor(Math.random() * 10000)}`,
-            title: "test 2",
-            photo: new Blob(),
-            length: 35,
-            releaseDate: new Date(),
-            advicedAge: 16,
-            genre: [api_1.Genre.Comedy],
-            language: [api_1.Language.Dutch],
-            director: 'Elco Mussert'
-        };
-        this.movies$.next([...current, newMovie]);
-        return newMovie;
+        const newMovie = new this.movieModel(movie);
+        return newMovie.save();
+        // const current = this.movies$.value;
+        // const newMovie: IMovie = {
+        //     ...movie,
+        //     id: `movie-${Math.floor(Math.random() * 10000)}`,
+        //     title: "test 2",
+        //     photo: new Blob(),
+        //     length: 35,
+        //     releaseDate: new Date(),
+        //     advicedAge: 16,
+        //     genre: [Genre.Comedy],
+        //     language: [Language.Dutch],
+        //     director: 'Elco Mussert'
+        // };
+        // this.movies$.next([...current, newMovie]);
+        // return newMovie;
     }
 };
 exports.MovieService = MovieService;
 exports.MovieService = MovieService = tslib_1.__decorate([
-    (0, common_1.Injectable)()
+    (0, common_1.Injectable)(),
+    tslib_1.__param(0, (0, mongoose_2.InjectModel)(movie_schema_1.Movie.name)),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof mongoose_1.Model !== "undefined" && mongoose_1.Model) === "function" ? _a : Object])
 ], MovieService);
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
-tslib_1.__exportStar(__webpack_require__(12), exports);
 tslib_1.__exportStar(__webpack_require__(13), exports);
+tslib_1.__exportStar(__webpack_require__(14), exports);
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -287,7 +305,7 @@ var Language;
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -295,25 +313,82 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ ((module) => {
 
 module.exports = require("rxjs");
 
 /***/ }),
-/* 15 */
+/* 16 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a, _b;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.MovieSchema = exports.Movie = void 0;
+const tslib_1 = __webpack_require__(4);
+const mongoose_1 = __webpack_require__(9);
+let Movie = class Movie {
+};
+exports.Movie = Movie;
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)(),
+    tslib_1.__metadata("design:type", String)
+], Movie.prototype, "title", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)(),
+    tslib_1.__metadata("design:type", typeof (_a = typeof Blob !== "undefined" && Blob) === "function" ? _a : Object)
+], Movie.prototype, "photo", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)(),
+    tslib_1.__metadata("design:type", Number)
+], Movie.prototype, "length", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)(),
+    tslib_1.__metadata("design:type", typeof (_b = typeof Date !== "undefined" && Date) === "function" ? _b : Object)
+], Movie.prototype, "releaseDate", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)(),
+    tslib_1.__metadata("design:type", Number)
+], Movie.prototype, "advicedAge", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)(),
+    tslib_1.__metadata("design:type", Array)
+], Movie.prototype, "genre", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)(),
+    tslib_1.__metadata("design:type", Array)
+], Movie.prototype, "language", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)(),
+    tslib_1.__metadata("design:type", String)
+], Movie.prototype, "director", void 0);
+exports.Movie = Movie = tslib_1.__decorate([
+    (0, mongoose_1.Schema)()
+], Movie);
+exports.MovieSchema = mongoose_1.SchemaFactory.createForClass(Movie);
+
+
+/***/ }),
+/* 17 */
+/***/ ((module) => {
+
+module.exports = require("mongoose");
+
+/***/ }),
+/* 18 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
-tslib_1.__exportStar(__webpack_require__(16), exports);
-tslib_1.__exportStar(__webpack_require__(17), exports);
 tslib_1.__exportStar(__webpack_require__(19), exports);
+tslib_1.__exportStar(__webpack_require__(20), exports);
+tslib_1.__exportStar(__webpack_require__(22), exports);
 
 
 /***/ }),
-/* 16 */
+/* 19 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -334,7 +409,7 @@ exports.DtoModule = DtoModule = tslib_1.__decorate([
 
 
 /***/ }),
-/* 17 */
+/* 20 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -342,7 +417,7 @@ var _a, _b, _c, _d;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UpdateMovieDto = exports.CreateMovieDto = void 0;
 const tslib_1 = __webpack_require__(4);
-const class_validator_1 = __webpack_require__(18);
+const class_validator_1 = __webpack_require__(21);
 class CreateMovieDto {
 }
 exports.CreateMovieDto = CreateMovieDto;
@@ -353,7 +428,7 @@ tslib_1.__decorate([
 ], CreateMovieDto.prototype, "title", void 0);
 tslib_1.__decorate([
     (0, class_validator_1.IsNotEmpty)(),
-    tslib_1.__metadata("design:type", typeof (_a = typeof File !== "undefined" && File) === "function" ? _a : Object)
+    tslib_1.__metadata("design:type", typeof (_a = typeof Blob !== "undefined" && Blob) === "function" ? _a : Object)
 ], CreateMovieDto.prototype, "photo", void 0);
 tslib_1.__decorate([
     (0, class_validator_1.IsNumber)(),
@@ -400,7 +475,7 @@ tslib_1.__decorate([
 ], UpdateMovieDto.prototype, "title", void 0);
 tslib_1.__decorate([
     (0, class_validator_1.IsNotEmpty)(),
-    tslib_1.__metadata("design:type", typeof (_c = typeof File !== "undefined" && File) === "function" ? _c : Object)
+    tslib_1.__metadata("design:type", typeof (_c = typeof Blob !== "undefined" && Blob) === "function" ? _c : Object)
 ], UpdateMovieDto.prototype, "photo", void 0);
 tslib_1.__decorate([
     (0, class_validator_1.IsNumber)(),
@@ -435,13 +510,13 @@ tslib_1.__decorate([
 
 
 /***/ }),
-/* 18 */
+/* 21 */
 /***/ ((module) => {
 
 module.exports = require("class-validator");
 
 /***/ }),
-/* 19 */
+/* 22 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -449,7 +524,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ApiResponseInterceptor = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const operators_1 = __webpack_require__(20);
+const operators_1 = __webpack_require__(23);
 let ApiResponseInterceptor = class ApiResponseInterceptor {
     intercept(context, next) {
         return next.handle().pipe((0, operators_1.map)((results) => {
@@ -483,7 +558,7 @@ exports.ApiResponseInterceptor = ApiResponseInterceptor = tslib_1.__decorate([
 
 
 /***/ }),
-/* 20 */
+/* 23 */
 /***/ ((module) => {
 
 module.exports = require("rxjs/operators");
@@ -529,7 +604,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const common_1 = __webpack_require__(1);
 const core_1 = __webpack_require__(2);
 const app_module_1 = __webpack_require__(3);
-const dto_1 = __webpack_require__(15);
+const dto_1 = __webpack_require__(18);
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const globalPrefix = 'api';
