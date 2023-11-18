@@ -534,7 +534,9 @@ async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const globalPrefix = 'api';
     app.setGlobalPrefix(globalPrefix);
-    const corsOptions = {};
+    const corsOptions = {
+        origin: '*'
+    };
     app.enableCors(corsOptions);
     app.useGlobalInterceptors(new dto_1.ApiResponseInterceptor());
     const port = process.env.PORT || 3000;

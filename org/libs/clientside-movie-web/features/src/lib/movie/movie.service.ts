@@ -4,6 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { map, catchError, tap } from 'rxjs/operators';
 import { ApiResponse, IMovie } from '@org/shared/api';
 import { Injectable } from '@angular/core';
+import { environment } from '@org/shared/util-env';
 
 export const httpOptions = {
     observe: 'body',
@@ -16,7 +17,7 @@ export const httpOptions = {
  */
 @Injectable()
 export class MovieService {
-    endpoint = 'http://localhost:3000/api/movie';
+    endpoint = environment.dataApiUrl + '/api/movie';
 
     constructor(private readonly http : HttpClient) {}
 
