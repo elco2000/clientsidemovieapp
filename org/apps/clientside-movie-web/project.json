@@ -38,8 +38,8 @@
           ],
           "fileReplacements": [
             {
-              "replace": "../../libs/shared/util-env/src/lib/environment.ts",
-              "with": "../../libs/shared/util-env/src/lib/environment.prod.ts"
+              "replace": "libs/shared/util-env/src/lib/environment.ts",
+              "with": "libs/shared/util-env/src/lib/environment.prod.ts"
             }
           ],
           "outputHashing": "all"
@@ -50,8 +50,8 @@
           "sourceMap": true,
           "fileReplacements": [
             {
-              "replace": "../../libs/shared/util-env/src/lib/environment.ts",
-              "with": "../../libs/shared/util-env/src/lib/environment.staging.ts"
+              "replace": "libs/shared/util-env/src/lib/environment.ts",
+              "with": "libs/shared/util-env/src/lib/environment.staging.ts"
             }
           ]
         }

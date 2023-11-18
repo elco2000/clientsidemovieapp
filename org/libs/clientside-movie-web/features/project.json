@@ -13,6 +13,13 @@
         "jestConfig": "libs/clientside-movie-web/features/jest.config.ts"
       }
     },
+    "configurations": {
+      "production": {
+        
+      },
+      "development": {
+      }
+    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
