@@ -10,7 +10,7 @@ export class MovieService {
         {
             id: '0',
             title: 'Test Film',
-            photo: new File([], 'test.png'),
+            photo: new Blob(),
             length: 55,
             releaseDate: new Date(),
             advicedAge: 12,
@@ -41,7 +41,7 @@ export class MovieService {
             ...movie,
             id: `movie-${Math.floor(Math.random() * 10000)}`,
             title: "test 2",
-            photo: new File([], 'test.png'),
+            photo: new Blob(),
             length: 35,
             releaseDate: new Date(),
             advicedAge: 16,
