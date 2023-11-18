@@ -64,6 +64,9 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip clientside-movie-web-release.zip
+
+      - name: List contents of workspace
+        run: ls -R
         
       - name: Deploy to static azure web app
         id: builddeploy
