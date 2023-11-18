@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NxWelcomeComponent } from './nx-welcome.component';
-import { FeaturesModule } from '@org/clientside-movie-web/features';
+import { NavComponent } from '@org/ui'
 
 @Component({
   standalone: true,
-  imports: [NxWelcomeComponent, RouterModule, FeaturesModule],
+  imports: [NxWelcomeComponent, RouterModule, NavComponent],
   selector: 'org-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],

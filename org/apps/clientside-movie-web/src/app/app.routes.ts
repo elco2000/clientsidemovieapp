@@ -1,3 +1,8 @@
 import { Route } from '@angular/router';
 
-export const appRoutes: Route[] = [];
+export const routes: Route[] = [
+    {
+        path: 'movies',
+        loadChildren: () => import('@org/clientside-movie-web/features').then(m => m.MovieModule)
+      }
+];
