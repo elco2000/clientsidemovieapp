@@ -20,8 +20,22 @@
         "generatePackageJson": true
       },
       "configurations": {
-        "development": {},
-        "production": {}
+        "development": {
+          "fileReplacements": [
+            {
+              "replace": "../../libs/shared/util-env/src/lib/environment.ts",
+              "with": "../../libs/shared/util-env/src/lib/environment.staging.ts"
+            }
+          ]
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "../../libs/shared/util-env/src/lib/environment.ts",
+              "with": "../../libs/shared/util-env/src/lib/environment.prod.ts"
+            }
+          ]
+        }
       }
     },
     "serve": {
