@@ -4,7 +4,7 @@
 name: Build and deploy a Node.js app and an Angular app to an Azure
 
 env:
-  APP_LOCATION: "org/dist/apps/clientside-movie-web" # location of your client code
+  APP_LOCATION: "browser" # location of your client code
   
 
 on:
