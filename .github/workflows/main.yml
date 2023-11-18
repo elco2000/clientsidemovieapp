@@ -56,7 +56,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
-          name: clientsidemovieweb
+          name: clientside-movie-web
 
       - name: Unzip artifact for deployment
         run: unzip clientside-movie-web-release.zip
@@ -84,7 +84,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
-          name: clientsidemoviedataapi
+          name: clientside-movie-data-api
 
       - name: Unzip artifact for deployment
         run: unzip clientside-movie-data-api-release.zip
