@@ -3,6 +3,9 @@
 
 name: Build and deploy a Node.js app and an Angular app to an Azure
 
+env:
+  APP_LOCATION: "/org" # location of your client code
+
 on:
   push:
     branches:
@@ -68,7 +71,7 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.ANGULAR_PUBLISHTOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
           action: "upload"
-          app_location: "${{GITHUB_WORKSPACE}}/org/apps/clientside-movie-web/" # App source code path
+          app_location: ${{ env.APP_LOCATION }} # App source code path
           api_location: "" # Api source code path - optional
           output_location: "" # Built app content directory - optional
 
