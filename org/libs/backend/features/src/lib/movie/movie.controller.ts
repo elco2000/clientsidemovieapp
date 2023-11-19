@@ -1,7 +1,6 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Delete } from '@nestjs/common';
 import { Get, Param, Post, Body } from '@nestjs/common';
 import { MovieService } from './movie.service';
-import { IMovie } from '@org/shared/api';
 import { CreateMovieDto } from '@org/backend/dto';
 import { Movie } from './movie.schema';
 
@@ -15,12 +14,17 @@ export class MovieController {
     }
 
     @Get(':id')
-    getOne(@Param('id') id: string): IMovie {
+    async getOne(@Param('id') id: string): Promise<Movie> {
         return this.movieService.getOne(id);
     }
 
     @Post('')
     async create(@Body() data: CreateMovieDto): Promise<Movie> {
         return this.movieService.create(data);
+    }
+
+    @Delete(':id')
+    async delete(@Param('id') id: string): Promise<Movie> {
+        return this.movieService.delete(id);
     }
 }

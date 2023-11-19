@@ -143,15 +143,14 @@ module.exports = require("@nestjs/mongoose");
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c, _d, _e;
+var _a, _b, _c, _d, _e, _f;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MovieController = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const common_2 = __webpack_require__(1);
 const movie_service_1 = __webpack_require__(11);
-const api_1 = __webpack_require__(15);
-const dto_1 = __webpack_require__(18);
+const dto_1 = __webpack_require__(15);
 let MovieController = class MovieController {
     constructor(movieService) {
         this.movieService = movieService;
@@ -159,11 +158,14 @@ let MovieController = class MovieController {
     async getAll() {
         return this.movieService.getAll();
     }
-    getOne(id) {
+    async getOne(id) {
         return this.movieService.getOne(id);
     }
     async create(data) {
         return this.movieService.create(data);
+    }
+    async delete(id) {
+        return this.movieService.delete(id);
     }
 };
 exports.MovieController = MovieController;
@@ -178,7 +180,7 @@ tslib_1.__decorate([
     tslib_1.__param(0, (0, common_2.Param)('id')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String]),
-    tslib_1.__metadata("design:returntype", typeof (_c = typeof api_1.IMovie !== "undefined" && api_1.IMovie) === "function" ? _c : Object)
+    tslib_1.__metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
 ], MovieController.prototype, "getOne", null);
 tslib_1.__decorate([
     (0, common_2.Post)(''),
@@ -187,6 +189,13 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [typeof (_d = typeof dto_1.CreateMovieDto !== "undefined" && dto_1.CreateMovieDto) === "function" ? _d : Object]),
     tslib_1.__metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
 ], MovieController.prototype, "create", null);
+tslib_1.__decorate([
+    (0, common_1.Delete)(':id'),
+    tslib_1.__param(0, (0, common_2.Param)('id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
+], MovieController.prototype, "delete", null);
 exports.MovieController = MovieController = tslib_1.__decorate([
     (0, common_1.Controller)('movie'),
     tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof movie_service_1.MovieService !== "undefined" && movie_service_1.MovieService) === "function" ? _a : Object])
@@ -221,41 +230,40 @@ let MovieService = class MovieService {
                 advicedAge: 12,
                 genre: 'Action',
                 language: 'Dutch',
-                director: 'Elco Mussert'
-            }
+                director: 'Elco Mussert',
+            },
         ]);
     }
     async getAll() {
         common_1.Logger.log('getAll', this.TAG);
         return this.movieModel.find().exec();
     }
-    getOne(id) {
+    async getOne(id) {
         common_1.Logger.log(`getOne(${id})`, this.TAG);
-        const movie = this.movies$.value.find((td) => td.id === id);
-        if (!movie) {
-            throw new common_1.NotFoundException(`Movie could not be found!`);
+        try {
+            const movie = await this.movieModel.findById(id).exec();
+            if (!movie) {
+                throw new common_1.NotFoundException(`Movie not found for ID: ${id}`);
+            }
+            return movie;
         }
-        return movie;
+        catch (error) {
+            common_1.Logger.error(`Error fetching movie: ${error}`);
+            throw new Error(`Error fetching movie: ${error}`);
+        }
     }
     async create(movie) {
         common_1.Logger.log('create', this.TAG);
         const newMovie = new this.movieModel(movie);
         return newMovie.save();
-        // const current = this.movies$.value;
-        // const newMovie: IMovie = {
-        //     ...movie,
-        //     id: `movie-${Math.floor(Math.random() * 10000)}`,
-        //     title: "test 2",
-        //     photo: new Blob(),
-        //     length: 35,
-        //     releaseDate: new Date(),
-        //     advicedAge: 16,
-        //     genre: [Genre.Comedy],
-        //     language: [Language.Dutch],
-        //     director: 'Elco Mussert'
-        // };
-        // this.movies$.next([...current, newMovie]);
-        // return newMovie;
+    }
+    async delete(id) {
+        common_1.Logger.log('delete', this.TAG);
+        const movie = await this.movieModel.findByIdAndDelete(id).exec();
+        if (!movie) {
+            throw new common_1.NotFoundException(`Movie not found for ID: ${id}`);
+        }
+        return movie;
     }
 };
 exports.MovieService = MovieService;
@@ -282,9 +290,14 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MovieSchema = exports.Movie = void 0;
 const tslib_1 = __webpack_require__(4);
 const mongoose_1 = __webpack_require__(9);
+const mongoose_2 = tslib_1.__importDefault(__webpack_require__(14));
 let Movie = class Movie {
 };
 exports.Movie = Movie;
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({ type: mongoose_2.default.Schema.Types.ObjectId }),
+    tslib_1.__metadata("design:type", String)
+], Movie.prototype, "_id", void 0);
 tslib_1.__decorate([
     (0, mongoose_1.Prop)(),
     tslib_1.__metadata("design:type", String)
@@ -338,57 +351,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
 tslib_1.__exportStar(__webpack_require__(16), exports);
 tslib_1.__exportStar(__webpack_require__(17), exports);
+tslib_1.__exportStar(__webpack_require__(19), exports);
 
 
 /***/ }),
 /* 16 */
-/***/ ((__unused_webpack_module, exports) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Language = exports.Genre = void 0;
-var Genre;
-(function (Genre) {
-    Genre["Action"] = "Action";
-    Genre["Adventure"] = "Adventure";
-    Genre["Comedy"] = "Comedy";
-    Genre["Crime"] = "Crime";
-    Genre["Drama"] = "Drama";
-    Genre["Fantasy"] = "Fantasy";
-    Genre["Horror"] = "Horror";
-    Genre["Scifi"] = "Sci-Fi";
-    Genre["War"] = "War";
-})(Genre || (exports.Genre = Genre = {}));
-var Language;
-(function (Language) {
-    Language["English"] = "English";
-    Language["Dutch"] = "Dutch";
-    Language["Japanese"] = "Japanese";
-})(Language || (exports.Language = Language = {}));
-
-
-/***/ }),
-/* 17 */
-/***/ ((__unused_webpack_module, exports) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-
-
-/***/ }),
-/* 18 */
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const tslib_1 = __webpack_require__(4);
-tslib_1.__exportStar(__webpack_require__(19), exports);
-tslib_1.__exportStar(__webpack_require__(20), exports);
-tslib_1.__exportStar(__webpack_require__(22), exports);
-
-
-/***/ }),
-/* 19 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -409,7 +376,7 @@ exports.DtoModule = DtoModule = tslib_1.__decorate([
 
 
 /***/ }),
-/* 20 */
+/* 17 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -417,7 +384,7 @@ var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UpdateMovieDto = exports.CreateMovieDto = void 0;
 const tslib_1 = __webpack_require__(4);
-const class_validator_1 = __webpack_require__(21);
+const class_validator_1 = __webpack_require__(18);
 class CreateMovieDto {
     constructor(data) { Object.assign(this, data); }
 }
@@ -511,13 +478,13 @@ tslib_1.__decorate([
 
 
 /***/ }),
-/* 21 */
+/* 18 */
 /***/ ((module) => {
 
 module.exports = require("class-validator");
 
 /***/ }),
-/* 22 */
+/* 19 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -525,7 +492,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ApiResponseInterceptor = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const operators_1 = __webpack_require__(23);
+const operators_1 = __webpack_require__(20);
 let ApiResponseInterceptor = class ApiResponseInterceptor {
     intercept(context, next) {
         return next.handle().pipe((0, operators_1.map)((results) => {
@@ -559,7 +526,7 @@ exports.ApiResponseInterceptor = ApiResponseInterceptor = tslib_1.__decorate([
 
 
 /***/ }),
-/* 23 */
+/* 20 */
 /***/ ((module) => {
 
 module.exports = require("rxjs/operators");
@@ -605,7 +572,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const common_1 = __webpack_require__(1);
 const core_1 = __webpack_require__(2);
 const app_module_1 = __webpack_require__(3);
-const dto_1 = __webpack_require__(18);
+const dto_1 = __webpack_require__(15);
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const globalPrefix = 'api';

@@ -47,7 +47,7 @@ export class MovieService {
      */
     public read(id: string | null, options?: any): Observable<Movie> {
         return this.http
-            .get<ApiResponse<Movie>>(this.endpoint, {
+            .get<ApiResponse<Movie>>(`${this.endpoint}/${id}`, {
                 ...options,
                 ...httpOptions
             })
@@ -80,6 +80,22 @@ export class MovieService {
                 tap(console.log),
                 catchError(this.handleError)
             )
+    }
+
+    /**
+     *  Delete movie
+     * 
+     */
+    public delete(id: string | null, options?: any): Observable<Movie> {
+        return this.http
+            .delete<ApiResponse<Movie>>(`${this.endpoint}/${id}`, {
+                ...options,
+                ...httpOptions
+            })
+            .pipe(
+                map((response: any) => response.results as IMovie),
+                catchError(this.handleError)
+            );
     }
 
     /**

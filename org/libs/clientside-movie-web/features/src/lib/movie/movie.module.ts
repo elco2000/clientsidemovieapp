@@ -18,6 +18,11 @@ const routes: Routes = [
         path: 'create',
         pathMatch: 'full',
         component: MovieCreateComponent
+    },
+    {
+        path: ':id',
+        pathMatch: 'full',
+        component: MovieDetailComponent
     }
 ]
 
