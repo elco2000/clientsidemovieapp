@@ -2,7 +2,7 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { IMovie } from '@org/shared/api';
 import { BehaviorSubject } from 'rxjs';
 import { Movie } from './movie.schema';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateMovieDto } from '@org/backend/dto';
 
@@ -50,7 +50,24 @@ export class MovieService {
 
     const newMovie = new this.movieModel(movie);
 
+    newMovie._id = new mongoose.Types.ObjectId().toString();
+
     return newMovie.save();
+  }
+
+  async edit(movie: Movie): Promise<Movie | null> {
+    Logger.log('edit', this.TAG);
+  
+    const editedMovie = { ...movie };
+  
+    try {
+      const updatedMovie = await this.movieModel.findByIdAndUpdate(editedMovie._id, editedMovie, { new: true }).exec();
+  
+      return updatedMovie ?? null;
+    } catch (error) {
+      Logger.error(`Error editing movie: ${error}`);
+      throw new Error(`Error editing movie: ${error}`);
+    }
   }
 
   async delete(id: string): Promise<Movie> {

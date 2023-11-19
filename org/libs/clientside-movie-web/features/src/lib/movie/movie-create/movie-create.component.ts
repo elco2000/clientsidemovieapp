@@ -3,6 +3,7 @@ import { MovieService } from '../movie.service';
 import { initFlowbite } from 'flowbite';
 import { Genre, Language } from '@org/shared/api';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'org-movie-create',
@@ -24,45 +25,10 @@ export class MovieCreateComponent implements OnInit {
     director: new FormControl(),
   });
 
-  constructor(private movieService: MovieService) {}
+  constructor(private movieService: MovieService, private router: Router) {}
 
   ngOnInit(): void {
     initFlowbite();
-  }
-
-  public async fileToBlob(file: File): Promise<Blob> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        const result = reader.result as ArrayBuffer;
-        const blob = new Blob([result], { type: file.type });
-        resolve(blob);
-      };
-
-      reader.onerror = (error) => {
-        reject(error);
-      };
-
-      reader.readAsArrayBuffer(file);
-    });
-  }
-
-  public async blobToBase64(blob: Blob): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        const base64String = reader.result as string;
-        resolve(base64String.split(',')[1]); // Verwijder het data-url deel
-      };
-
-      reader.onerror = (error) => {
-        reject(error);
-      };
-
-      reader.readAsDataURL(blob);
-    });
   }
 
   public onSubmit() {
@@ -77,6 +43,10 @@ export class MovieCreateComponent implements OnInit {
         language: this.movieForm.value.language,
         director: this.movieForm.value.director,
       })
-      .subscribe();
+      .subscribe(
+        () => {
+          this.router.navigateByUrl('/movies');
+        }
+      );
   }
 }

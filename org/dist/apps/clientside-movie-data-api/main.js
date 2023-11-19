@@ -143,7 +143,7 @@ module.exports = require("@nestjs/mongoose");
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c, _d, _e, _f;
+var _a, _b, _c, _d, _e, _f, _g, _h;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MovieController = void 0;
 const tslib_1 = __webpack_require__(4);
@@ -151,6 +151,7 @@ const common_1 = __webpack_require__(1);
 const common_2 = __webpack_require__(1);
 const movie_service_1 = __webpack_require__(11);
 const dto_1 = __webpack_require__(15);
+const movie_schema_1 = __webpack_require__(13);
 let MovieController = class MovieController {
     constructor(movieService) {
         this.movieService = movieService;
@@ -163,6 +164,9 @@ let MovieController = class MovieController {
     }
     async create(data) {
         return this.movieService.create(data);
+    }
+    async update(data) {
+        return this.movieService.edit(data);
     }
     async delete(id) {
         return this.movieService.delete(id);
@@ -190,11 +194,18 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
 ], MovieController.prototype, "create", null);
 tslib_1.__decorate([
+    (0, common_1.Put)(':id'),
+    tslib_1.__param(0, (0, common_2.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_f = typeof movie_schema_1.Movie !== "undefined" && movie_schema_1.Movie) === "function" ? _f : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
+], MovieController.prototype, "update", null);
+tslib_1.__decorate([
     (0, common_1.Delete)(':id'),
     tslib_1.__param(0, (0, common_2.Param)('id')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String]),
-    tslib_1.__metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
+    tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
 ], MovieController.prototype, "delete", null);
 exports.MovieController = MovieController = tslib_1.__decorate([
     (0, common_1.Controller)('movie'),
@@ -214,7 +225,7 @@ const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const rxjs_1 = __webpack_require__(12);
 const movie_schema_1 = __webpack_require__(13);
-const mongoose_1 = __webpack_require__(14);
+const mongoose_1 = tslib_1.__importStar(__webpack_require__(14));
 const mongoose_2 = __webpack_require__(9);
 let MovieService = class MovieService {
     constructor(movieModel) {
@@ -255,7 +266,20 @@ let MovieService = class MovieService {
     async create(movie) {
         common_1.Logger.log('create', this.TAG);
         const newMovie = new this.movieModel(movie);
+        newMovie._id = new mongoose_1.default.Types.ObjectId().toString();
         return newMovie.save();
+    }
+    async edit(movie) {
+        common_1.Logger.log('edit', this.TAG);
+        const editedMovie = { ...movie };
+        try {
+            const updatedMovie = await this.movieModel.findByIdAndUpdate(editedMovie._id, editedMovie, { new: true }).exec();
+            return updatedMovie ?? null;
+        }
+        catch (error) {
+            common_1.Logger.error(`Error editing movie: ${error}`);
+            throw new Error(`Error editing movie: ${error}`);
+        }
     }
     async delete(id) {
         common_1.Logger.log('delete', this.TAG);

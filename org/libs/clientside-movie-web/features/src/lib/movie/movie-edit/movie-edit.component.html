@@ -1,10 +1,10 @@
-<div class="mx-20 h-screen">
+<div *ngIf="movie !== null" class="mx-20 h-screen">
 
-    <form [formGroup]="movieForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
 
 
         <div>
-            <h2 class="text-lg text-white font-medium">Create movie</h2>
+            <h2 class="text-lg text-white font-medium">Update movie: {{movie.title}}</h2>
         </div>
 
         <br>

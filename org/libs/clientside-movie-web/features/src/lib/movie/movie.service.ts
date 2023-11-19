@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { map, catchError, tap } from 'rxjs/operators';
 import { ApiResponse, IMovie } from '@org/shared/api';
@@ -21,6 +21,9 @@ export const httpOptions = {
 export class MovieService {
     endpoint = environment.dataApiUrl + '/api/movie';
 
+    private movieListSubject: BehaviorSubject<Movie[] | null> = new BehaviorSubject<Movie[] | null>(null);
+    public readonly movieList$: Observable<Movie[] | null> = this.movieListSubject.asObservable();
+
     constructor(private readonly http : HttpClient) {}
 
     /**
@@ -36,6 +39,9 @@ export class MovieService {
             })
             .pipe(
                 map((response: any) => response.results as Movie[]),
+                tap((movies: Movie[]) => {
+                    this.movieListSubject.next(movies);
+                  }),
                 tap(console.log),
                 catchError(this.handleError)
             );
@@ -77,7 +83,31 @@ export class MovieService {
             })
             .pipe(
                 map((response: any) => response.results as IMovie),
-                tap(console.log),
+                tap((createdMovie: IMovie) => {
+                    console.log('Created movie:', createdMovie);
+                    this.list(); // Opnieuw getAll aanroepen na succesvolle creatie
+                  }),
+                catchError(this.handleError)
+            )
+    }
+
+    /**
+     * Update movie
+     * 
+     */
+    public update(movie: Movie, options?: any): Observable<Movie>{
+
+        return this.http
+            .put<ApiResponse<Movie>>(`${this.endpoint}/${movie._id}`, movie, {
+                ...options,
+                ...httpOptions,
+            })
+            .pipe(
+                map((response: any) => response.results as Movie),
+                tap((updateMovie: Movie) => {
+                    console.log('Update movie:', updateMovie);
+                    this.list(); // Opnieuw getAll aanroepen na succesvolle creatie
+                  }),
                 catchError(this.handleError)
             )
     }
@@ -94,6 +124,11 @@ export class MovieService {
             })
             .pipe(
                 map((response: any) => response.results as IMovie),
+                tap((deleted: IMovie) => {
+                    console.log('Deleted movie:', deleted);
+                    const updatedList = this.movieListSubject.getValue()?.filter(movie => movie._id !== id);
+                    this.movieListSubject.next(updatedList || null);
+                  }),
                 catchError(this.handleError)
             );
     }

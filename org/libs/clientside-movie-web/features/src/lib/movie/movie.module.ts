@@ -7,6 +7,7 @@ import { MovieService } from "./movie.service";
 import { Routes, RouterModule } from '@angular/router';
 import { MovieCreateComponent } from "./movie-create/movie-create.component";
 import { ReactiveFormsModule } from "@angular/forms";
+import { MovieEditComponent } from "./movie-edit/movie-edit.component";
 
 const routes: Routes = [
     {
@@ -20,6 +21,11 @@ const routes: Routes = [
         component: MovieCreateComponent
     },
     {
+        path: 'edit/:id',
+        pathMatch: 'full',
+        component: MovieEditComponent
+    },
+    {
         path: ':id',
         pathMatch: 'full',
         component: MovieDetailComponent
@@ -28,8 +34,8 @@ const routes: Routes = [
 
 @NgModule({
     imports: [CommonModule, ReactiveFormsModule, HttpClientModule, RouterModule.forChild(routes)],
-    declarations: [MovieListComponent, MovieDetailComponent, MovieCreateComponent],
+    declarations: [MovieListComponent, MovieDetailComponent, MovieCreateComponent, MovieEditComponent],
     providers: [MovieService],
-    exports: [MovieListComponent, MovieDetailComponent, MovieCreateComponent, RouterModule]
+    exports: [MovieListComponent, MovieDetailComponent, MovieCreateComponent, MovieEditComponent, RouterModule]
 })
 export class MovieModule {}

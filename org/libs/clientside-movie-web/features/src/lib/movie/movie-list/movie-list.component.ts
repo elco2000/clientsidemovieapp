@@ -18,11 +18,7 @@ export class MovieListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscription = this.movieService.list().subscribe((results) => {
       if (results) {
-        this.movies = results.map(movie => {
-          return {
-            ...movie,
-          };
-        });
+        this.movies = results;
       }
     });
   }

@@ -41,11 +41,11 @@
                             </div>
 
                             <div class="mt-4">
-                                <button class="px-6 py-2 ml-2 mr-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-stone-400 rounded-lg hover:bg-stone-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+                                <button [routerLink]="['/movies/edit/' + movie._id]" class="px-6 py-2 ml-2 mr-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-stone-400 rounded-lg hover:bg-stone-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
                                     Update
                                 </button>
     
-                                <button (click)="onDelete(movie._id)" class="px-6 py-2 ml-2 mr-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-stone-400 rounded-lg hover:bg-stone-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+                                <button (click)="onDelete(movie._id)" [routerLink]="['/movies']" class="px-6 py-2 ml-2 mr-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-stone-400 rounded-lg hover:bg-stone-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
                                     Delete
                                 </button>
                             </div>
