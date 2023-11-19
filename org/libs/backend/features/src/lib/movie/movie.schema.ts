@@ -1,16 +1,16 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Genre, Language } from "@org/shared/api";
 import { HydratedDocument } from "mongoose";
 
 export type MovieDocument = HydratedDocument<Movie>;
 
 @Schema()
 export class Movie {
+
     @Prop()
     title!: string;
 
     @Prop()
-    photo!: Blob;
+    photo!: Buffer;
 
     @Prop()
     length!: number;
@@ -22,10 +22,10 @@ export class Movie {
     advicedAge!: number;
 
     @Prop()
-    genre!: [Genre]
+    genre!: string
 
     @Prop()
-    language!: [Language]
+    language!: string
 
     @Prop()
     director!: string;

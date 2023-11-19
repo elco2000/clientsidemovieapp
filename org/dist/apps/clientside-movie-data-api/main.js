@@ -103,6 +103,7 @@ exports.AppService = AppService = tslib_1.__decorate([
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
 tslib_1.__exportStar(__webpack_require__(8), exports);
+tslib_1.__exportStar(__webpack_require__(13), exports);
 
 
 /***/ }),
@@ -117,7 +118,7 @@ const mongoose_1 = __webpack_require__(9);
 const common_1 = __webpack_require__(1);
 const movie_controller_1 = __webpack_require__(10);
 const movie_service_1 = __webpack_require__(11);
-const movie_schema_1 = __webpack_require__(16);
+const movie_schema_1 = __webpack_require__(13);
 let BackendFeaturesMovieModule = class BackendFeaturesMovieModule {
 };
 exports.BackendFeaturesMovieModule = BackendFeaturesMovieModule;
@@ -149,7 +150,7 @@ const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const common_2 = __webpack_require__(1);
 const movie_service_1 = __webpack_require__(11);
-const api_1 = __webpack_require__(12);
+const api_1 = __webpack_require__(15);
 const dto_1 = __webpack_require__(18);
 let MovieController = class MovieController {
     constructor(movieService) {
@@ -202,10 +203,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MovieService = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const api_1 = __webpack_require__(12);
-const rxjs_1 = __webpack_require__(15);
-const movie_schema_1 = __webpack_require__(16);
-const mongoose_1 = __webpack_require__(17);
+const rxjs_1 = __webpack_require__(12);
+const movie_schema_1 = __webpack_require__(13);
+const mongoose_1 = __webpack_require__(14);
 const mongoose_2 = __webpack_require__(9);
 let MovieService = class MovieService {
     constructor(movieModel) {
@@ -215,12 +215,12 @@ let MovieService = class MovieService {
             {
                 id: '0',
                 title: 'Test Film',
-                photo: new Blob(),
+                photo: '',
                 length: 55,
                 releaseDate: new Date(),
                 advicedAge: 12,
-                genre: [api_1.Genre.Action],
-                language: [api_1.Language.Dutch],
+                genre: 'Action',
+                language: 'Dutch',
                 director: 'Elco Mussert'
             }
         ]);
@@ -268,17 +268,80 @@ exports.MovieService = MovieService = tslib_1.__decorate([
 
 /***/ }),
 /* 12 */
+/***/ ((module) => {
+
+module.exports = require("rxjs");
+
+/***/ }),
+/* 13 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a, _b;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.MovieSchema = exports.Movie = void 0;
+const tslib_1 = __webpack_require__(4);
+const mongoose_1 = __webpack_require__(9);
+let Movie = class Movie {
+};
+exports.Movie = Movie;
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)(),
+    tslib_1.__metadata("design:type", String)
+], Movie.prototype, "title", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)(),
+    tslib_1.__metadata("design:type", typeof (_a = typeof Buffer !== "undefined" && Buffer) === "function" ? _a : Object)
+], Movie.prototype, "photo", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)(),
+    tslib_1.__metadata("design:type", Number)
+], Movie.prototype, "length", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)(),
+    tslib_1.__metadata("design:type", typeof (_b = typeof Date !== "undefined" && Date) === "function" ? _b : Object)
+], Movie.prototype, "releaseDate", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)(),
+    tslib_1.__metadata("design:type", Number)
+], Movie.prototype, "advicedAge", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)(),
+    tslib_1.__metadata("design:type", String)
+], Movie.prototype, "genre", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)(),
+    tslib_1.__metadata("design:type", String)
+], Movie.prototype, "language", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)(),
+    tslib_1.__metadata("design:type", String)
+], Movie.prototype, "director", void 0);
+exports.Movie = Movie = tslib_1.__decorate([
+    (0, mongoose_1.Schema)()
+], Movie);
+exports.MovieSchema = mongoose_1.SchemaFactory.createForClass(Movie);
+
+
+/***/ }),
+/* 14 */
+/***/ ((module) => {
+
+module.exports = require("mongoose");
+
+/***/ }),
+/* 15 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
-tslib_1.__exportStar(__webpack_require__(13), exports);
-tslib_1.__exportStar(__webpack_require__(14), exports);
+tslib_1.__exportStar(__webpack_require__(16), exports);
+tslib_1.__exportStar(__webpack_require__(17), exports);
 
 
 /***/ }),
-/* 13 */
+/* 16 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -305,75 +368,12 @@ var Language;
 
 
 /***/ }),
-/* 14 */
+/* 17 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 
-
-/***/ }),
-/* 15 */
-/***/ ((module) => {
-
-module.exports = require("rxjs");
-
-/***/ }),
-/* 16 */
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-var _a, _b;
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.MovieSchema = exports.Movie = void 0;
-const tslib_1 = __webpack_require__(4);
-const mongoose_1 = __webpack_require__(9);
-let Movie = class Movie {
-};
-exports.Movie = Movie;
-tslib_1.__decorate([
-    (0, mongoose_1.Prop)(),
-    tslib_1.__metadata("design:type", String)
-], Movie.prototype, "title", void 0);
-tslib_1.__decorate([
-    (0, mongoose_1.Prop)(),
-    tslib_1.__metadata("design:type", typeof (_a = typeof Blob !== "undefined" && Blob) === "function" ? _a : Object)
-], Movie.prototype, "photo", void 0);
-tslib_1.__decorate([
-    (0, mongoose_1.Prop)(),
-    tslib_1.__metadata("design:type", Number)
-], Movie.prototype, "length", void 0);
-tslib_1.__decorate([
-    (0, mongoose_1.Prop)(),
-    tslib_1.__metadata("design:type", typeof (_b = typeof Date !== "undefined" && Date) === "function" ? _b : Object)
-], Movie.prototype, "releaseDate", void 0);
-tslib_1.__decorate([
-    (0, mongoose_1.Prop)(),
-    tslib_1.__metadata("design:type", Number)
-], Movie.prototype, "advicedAge", void 0);
-tslib_1.__decorate([
-    (0, mongoose_1.Prop)(),
-    tslib_1.__metadata("design:type", Array)
-], Movie.prototype, "genre", void 0);
-tslib_1.__decorate([
-    (0, mongoose_1.Prop)(),
-    tslib_1.__metadata("design:type", Array)
-], Movie.prototype, "language", void 0);
-tslib_1.__decorate([
-    (0, mongoose_1.Prop)(),
-    tslib_1.__metadata("design:type", String)
-], Movie.prototype, "director", void 0);
-exports.Movie = Movie = tslib_1.__decorate([
-    (0, mongoose_1.Schema)()
-], Movie);
-exports.MovieSchema = mongoose_1.SchemaFactory.createForClass(Movie);
-
-
-/***/ }),
-/* 17 */
-/***/ ((module) => {
-
-module.exports = require("mongoose");
 
 /***/ }),
 /* 18 */
@@ -413,12 +413,13 @@ exports.DtoModule = DtoModule = tslib_1.__decorate([
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c, _d;
+var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UpdateMovieDto = exports.CreateMovieDto = void 0;
 const tslib_1 = __webpack_require__(4);
 const class_validator_1 = __webpack_require__(21);
 class CreateMovieDto {
+    constructor(data) { Object.assign(this, data); }
 }
 exports.CreateMovieDto = CreateMovieDto;
 tslib_1.__decorate([
@@ -428,7 +429,7 @@ tslib_1.__decorate([
 ], CreateMovieDto.prototype, "title", void 0);
 tslib_1.__decorate([
     (0, class_validator_1.IsNotEmpty)(),
-    tslib_1.__metadata("design:type", typeof (_a = typeof Blob !== "undefined" && Blob) === "function" ? _a : Object)
+    tslib_1.__metadata("design:type", String)
 ], CreateMovieDto.prototype, "photo", void 0);
 tslib_1.__decorate([
     (0, class_validator_1.IsNumber)(),
@@ -438,7 +439,7 @@ tslib_1.__decorate([
 tslib_1.__decorate([
     (0, class_validator_1.IsDate)(),
     (0, class_validator_1.IsOptional)(),
-    tslib_1.__metadata("design:type", typeof (_b = typeof Date !== "undefined" && Date) === "function" ? _b : Object)
+    tslib_1.__metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
 ], CreateMovieDto.prototype, "releaseDate", void 0);
 tslib_1.__decorate([
     (0, class_validator_1.IsNumber)(),
@@ -446,14 +447,14 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:type", Number)
 ], CreateMovieDto.prototype, "advicedAge", void 0);
 tslib_1.__decorate([
-    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
-    tslib_1.__metadata("design:type", Array)
+    tslib_1.__metadata("design:type", String)
 ], CreateMovieDto.prototype, "genre", void 0);
 tslib_1.__decorate([
-    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
-    tslib_1.__metadata("design:type", Array)
+    tslib_1.__metadata("design:type", String)
 ], CreateMovieDto.prototype, "language", void 0);
 tslib_1.__decorate([
     (0, class_validator_1.IsString)(),
@@ -475,7 +476,7 @@ tslib_1.__decorate([
 ], UpdateMovieDto.prototype, "title", void 0);
 tslib_1.__decorate([
     (0, class_validator_1.IsNotEmpty)(),
-    tslib_1.__metadata("design:type", typeof (_c = typeof Blob !== "undefined" && Blob) === "function" ? _c : Object)
+    tslib_1.__metadata("design:type", String)
 ], UpdateMovieDto.prototype, "photo", void 0);
 tslib_1.__decorate([
     (0, class_validator_1.IsNumber)(),
@@ -485,7 +486,7 @@ tslib_1.__decorate([
 tslib_1.__decorate([
     (0, class_validator_1.IsDate)(),
     (0, class_validator_1.IsOptional)(),
-    tslib_1.__metadata("design:type", typeof (_d = typeof Date !== "undefined" && Date) === "function" ? _d : Object)
+    tslib_1.__metadata("design:type", typeof (_b = typeof Date !== "undefined" && Date) === "function" ? _b : Object)
 ], UpdateMovieDto.prototype, "releaseDate", void 0);
 tslib_1.__decorate([
     (0, class_validator_1.IsNumber)(),
@@ -493,14 +494,14 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:type", Number)
 ], UpdateMovieDto.prototype, "advicedAge", void 0);
 tslib_1.__decorate([
-    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
-    tslib_1.__metadata("design:type", Array)
+    tslib_1.__metadata("design:type", String)
 ], UpdateMovieDto.prototype, "genre", void 0);
 tslib_1.__decorate([
-    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
-    tslib_1.__metadata("design:type", Array)
+    tslib_1.__metadata("design:type", String)
 ], UpdateMovieDto.prototype, "language", void 0);
 tslib_1.__decorate([
     (0, class_validator_1.IsString)(),

@@ -19,12 +19,12 @@ export enum Language {
 export interface IMovie {
     id: string,
     title: string,
-    photo: Blob,
+    photo: string,
     length: number,
     releaseDate: Date,
     advicedAge: number,
-    genre: [Genre],
-    language: [Language],
+    genre: string,
+    language: string,
     director: string
 }
 

@@ -1,5 +1,5 @@
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
-import { Genre, IMovie, Language } from "@org/shared/api";
+import { IMovie } from "@org/shared/api";
 import { BehaviorSubject } from "rxjs";
 import { Movie } from "./movie.schema";
 import { Model } from "mongoose";
@@ -14,12 +14,12 @@ export class MovieService {
         {
             id: '0',
             title: 'Test Film',
-            photo: new Blob(),
+            photo: '',
             length: 55,
             releaseDate: new Date(),
             advicedAge: 12,
-            genre: [Genre.Action],
-            language: [Language.Dutch],
+            genre: 'Action',
+            language: 'Dutch',
             director: 'Elco Mussert'
         }
     ]);

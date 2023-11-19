@@ -4,22 +4,22 @@ import {
     IsOptional,
     IsDate,
     IsNumber,
-    IsArray
 } from 'class-validator';
 import {
     ICreateMovie,
     IUpdateMovie,
-    Genre,
-    Language
 } from '@org/shared/api';
 
 export class CreateMovieDto implements ICreateMovie {
+
+    constructor(data: Partial<CreateMovieDto>) { Object.assign(this, data) }
+
     @IsString()
     @IsNotEmpty()
     title!: string;
 
     @IsNotEmpty()
-    photo!: Blob;
+    photo!: string;
 
     @IsNumber()
     @IsNotEmpty()
@@ -33,13 +33,13 @@ export class CreateMovieDto implements ICreateMovie {
     @IsNotEmpty()
     advicedAge!: number;
 
-    @IsArray()
+    @IsString()
     @IsNotEmpty()
-    genre!: [Genre];
+    genre!: string;
 
-    @IsArray()
+    @IsString()
     @IsNotEmpty()
-    language!: [Language];
+    language!: string;
 
     @IsString()
     @IsNotEmpty()
@@ -56,7 +56,7 @@ export class UpdateMovieDto implements IUpdateMovie {
     title!: string;
 
     @IsNotEmpty()
-    photo!: Blob;
+    photo!: string;
 
     @IsNumber()
     @IsNotEmpty()
@@ -70,13 +70,13 @@ export class UpdateMovieDto implements IUpdateMovie {
     @IsNotEmpty()
     advicedAge!: number;
 
-    @IsArray()
+    @IsString()
     @IsNotEmpty()
-    genre!: [Genre];
+    genre!: string;
 
-    @IsArray()
+    @IsString()
     @IsNotEmpty()
-    language!: [Language];
+    language!: string;
 
     @IsString()
     @IsNotEmpty()
