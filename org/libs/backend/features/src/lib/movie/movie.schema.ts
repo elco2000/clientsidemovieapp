@@ -10,7 +10,7 @@ export class Movie {
     title!: string;
 
     @Prop()
-    photo!: Buffer;
+    photo!: string;
 
     @Prop()
     length!: number;

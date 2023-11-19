@@ -6,6 +6,7 @@ import { ApiResponse, IMovie } from '@org/shared/api';
 import { Injectable } from '@angular/core';
 import { environment } from '@org/shared/util-env';
 import { CreateMovieDto } from '@org/backend/dto';
+import { Movie } from '@org/backend/features';
 
 export const httpOptions = {
     observe: 'body',
@@ -27,14 +28,14 @@ export class MovieService {
      *
      * @options options - optional URL queryparam options
      */
-    public list(options?: any): Observable<IMovie[] | null> {
+    public list(options?: any): Observable<Movie[] | null> {
         return this.http
             .get<ApiResponse<IMovie[]>>(this.endpoint, {
                 ...options,
                 ...httpOptions
             })
             .pipe(
-                map((response: any) => response.results as IMovie[]),
+                map((response: any) => response.results as Movie[]),
                 tap(console.log),
                 catchError(this.handleError)
             );
@@ -44,9 +45,9 @@ export class MovieService {
      * Get a single item from the service.
      *
      */
-    public read(id: string | null, options?: any): Observable<IMovie> {
+    public read(id: string | null, options?: any): Observable<Movie> {
         return this.http
-            .get<ApiResponse<IMovie>>(this.endpoint, {
+            .get<ApiResponse<Movie>>(this.endpoint, {
                 ...options,
                 ...httpOptions
             })

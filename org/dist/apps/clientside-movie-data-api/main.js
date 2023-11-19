@@ -277,7 +277,7 @@ module.exports = require("rxjs");
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b;
+var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MovieSchema = exports.Movie = void 0;
 const tslib_1 = __webpack_require__(4);
@@ -291,7 +291,7 @@ tslib_1.__decorate([
 ], Movie.prototype, "title", void 0);
 tslib_1.__decorate([
     (0, mongoose_1.Prop)(),
-    tslib_1.__metadata("design:type", typeof (_a = typeof Buffer !== "undefined" && Buffer) === "function" ? _a : Object)
+    tslib_1.__metadata("design:type", String)
 ], Movie.prototype, "photo", void 0);
 tslib_1.__decorate([
     (0, mongoose_1.Prop)(),
@@ -299,7 +299,7 @@ tslib_1.__decorate([
 ], Movie.prototype, "length", void 0);
 tslib_1.__decorate([
     (0, mongoose_1.Prop)(),
-    tslib_1.__metadata("design:type", typeof (_b = typeof Date !== "undefined" && Date) === "function" ? _b : Object)
+    tslib_1.__metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
 ], Movie.prototype, "releaseDate", void 0);
 tslib_1.__decorate([
     (0, mongoose_1.Prop)(),
