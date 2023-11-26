@@ -29,7 +29,7 @@ jobs:
         run: |
           npm install
           npm run build --if-present
-          nx run-many -t test
+          npm test
 
       - name: Zip artifacts for deployment
         run: |
