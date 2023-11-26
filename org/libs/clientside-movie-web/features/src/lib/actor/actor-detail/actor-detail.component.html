@@ -1,0 +1,48 @@
+<div *ngIf="actor !== null" class="h-screen">
+    
+    <div class="container mx-auto">
+
+        <section class="dark:bg-gray-900">
+            <div class="max-w-6xl px-6 py-10 mx-auto">
+
+                <h1 class="mt-2 text-2xl font-medium text-gray-800 capitalize lg:text-3xl">
+                    {{actor.name}}
+                </h1>
+
+                <main class="relative z-20 w-full mt-8 md:flex md:items-center xl:mt-12">
+                    <div class="absolute w-full bg-white -z-10 md:h-96 rounded-2xl"></div>
+
+                    <div
+                        class="w-full p-6 bg-blue-600 md:flex md:items-center rounded-2xl md:bg-transparent md:p-0 lg:px-12 md:justify-evenly">
+                        <img class="h-24 w-24 md:mx-6 rounded-full  shadow-md md:h-[32rem] md:w-80 lg:h-[36rem] lg:w-[26rem] md:rounded-2xl"
+                            [src]="actor.photo" alt="client photo" />
+
+                        <div class="mt-2 md:mx-6">
+                            <div>
+                                <div
+                                    class="text-xs mt-2 mb-2 mr-2 inline-flex items-center font-bold leading-sm uppercase px-3 py-1 rounded-full bg-white text-gray-700 border">
+                                    <svg class="w-[16px] h-[16px] text-gray-800 dark:text-white mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 21 20">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6.487 1.746c0 4.192 3.592 1.66 4.592 5.754 0 .828 1 1.5 2 1.5s2-.672 2-1.5a1.5 1.5 0 0 1 1.5-1.5h1.5m-16.02.471c4.02 2.248 1.776 4.216 4.878 5.645C10.18 13.61 9 19 9 19m9.366-6h-2.287a3 3 0 0 0-3 3v2m6-8a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                      </svg>
+                                    {{actor.nationality}}
+                                </div>
+                                <p class="text-gray-800 ">Birhtdate: {{actor.birthdate}}</p>
+                            </div>
+
+                            <div class="mt-4">
+                                <button [routerLink]="['/actors/edit/' + actor._id]" class="px-6 py-2 ml-2 mr-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-stone-400 rounded-lg hover:bg-stone-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+                                    Update
+                                </button>
+    
+                                <button (click)="onDelete(actor._id)" [routerLink]="['/actors']" class="px-6 py-2 ml-2 mr-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-stone-400 rounded-lg hover:bg-stone-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+                                    Delete
+                                </button>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </section>
+    </div>
+</div>

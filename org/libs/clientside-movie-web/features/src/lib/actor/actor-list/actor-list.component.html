@@ -1,0 +1,17 @@
+<div class="container px-6 py-8 mx-auto">
+
+    <div class="grid gap-8 mt-8 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+        <div *ngFor="let actor of actors" class="w-full max-w-xs text-center mb-7 group">
+
+            <a [routerLink]="[actor._id]" class="">
+                <img class="object-center w-full h-9 mx-auto rounded-lg group-hover:scale-105" [src]="actor.photo" alt="picture" />
+            </a>    
+
+            <div class="mt-2">
+                <h3 class="text-lg font-medium text-gray-700 dark:text-gray-200">{{actor.name}}</h3>
+            </div>
+            
+        </div>
+    </div>
+
+</div>  

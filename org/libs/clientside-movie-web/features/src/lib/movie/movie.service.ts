@@ -69,8 +69,6 @@ export class MovieService {
      */
     public create(movie: CreateMovieDto, options?: any): Observable<IMovie>{
 
-        console.log('create in web');
-
         const movieDto: CreateMovieDto = {
             ...movie,
         };
@@ -85,7 +83,7 @@ export class MovieService {
                 map((response: any) => response.results as IMovie),
                 tap((createdMovie: IMovie) => {
                     console.log('Created movie:', createdMovie);
-                    this.list(); // Opnieuw getAll aanroepen na succesvolle creatie
+                    this.list();
                   }),
                 catchError(this.handleError)
             )

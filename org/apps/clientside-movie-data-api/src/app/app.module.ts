@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { BackendFeaturesMovieModule } from '@org/backend/features';
+import { BackendFeaturesActorModule, BackendFeaturesMovieModule } from '@org/backend/features';
 
 @Module({
-  imports: [BackendFeaturesMovieModule],
+  imports: [BackendFeaturesMovieModule, BackendFeaturesActorModule],
   controllers: [AppController],
   providers: [AppService],
 })

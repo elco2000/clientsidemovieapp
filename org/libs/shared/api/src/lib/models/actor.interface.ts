@@ -1,7 +1,9 @@
 export enum Nationality {
     English = "English",
     American = "American",
-    Dutch = "Dutch"
+    Dutch = "Dutch",
+    NewZealand = "New Zealand",
+    Swedish = "Swedish" 
 }
 
 export interface IActor {

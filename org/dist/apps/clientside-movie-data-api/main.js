@@ -30,7 +30,7 @@ let AppModule = class AppModule {
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = tslib_1.__decorate([
     (0, common_1.Module)({
-        imports: [features_1.BackendFeaturesMovieModule],
+        imports: [features_1.BackendFeaturesMovieModule, features_1.BackendFeaturesActorModule],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })
@@ -103,7 +103,9 @@ exports.AppService = AppService = tslib_1.__decorate([
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
 tslib_1.__exportStar(__webpack_require__(8), exports);
+tslib_1.__exportStar(__webpack_require__(22), exports);
 tslib_1.__exportStar(__webpack_require__(13), exports);
+tslib_1.__exportStar(__webpack_require__(25), exports);
 
 
 /***/ }),
@@ -620,6 +622,216 @@ exports.ApiResponseInterceptor = ApiResponseInterceptor = tslib_1.__decorate([
 /***/ ((module) => {
 
 module.exports = require("rxjs/operators");
+
+/***/ }),
+/* 22 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.BackendFeaturesActorModule = void 0;
+const tslib_1 = __webpack_require__(4);
+const mongoose_1 = __webpack_require__(9);
+const actor_controller_1 = __webpack_require__(23);
+const actor_schema_1 = __webpack_require__(25);
+const actor_service_1 = __webpack_require__(24);
+const common_1 = __webpack_require__(1);
+let BackendFeaturesActorModule = class BackendFeaturesActorModule {
+};
+exports.BackendFeaturesActorModule = BackendFeaturesActorModule;
+exports.BackendFeaturesActorModule = BackendFeaturesActorModule = tslib_1.__decorate([
+    (0, common_1.Module)({
+        controllers: [actor_controller_1.ActorController],
+        providers: [actor_service_1.ActorService],
+        imports: [mongoose_1.MongooseModule.forRoot('mongodb+srv://elcoAdmin:Admin123Database@clusterlocaldataapi.m0cwagc.mongodb.net/'), mongoose_1.MongooseModule.forFeature([{ name: actor_schema_1.Actor.name, schema: actor_schema_1.ActorSchema }])],
+        exports: [actor_service_1.ActorService]
+    })
+], BackendFeaturesActorModule);
+
+
+/***/ }),
+/* 23 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a, _b, _c, _d, _e, _f, _g, _h;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ActorController = void 0;
+const tslib_1 = __webpack_require__(4);
+const dto_1 = __webpack_require__(15);
+const actor_service_1 = __webpack_require__(24);
+const common_1 = __webpack_require__(1);
+const actor_schema_1 = __webpack_require__(25);
+let ActorController = class ActorController {
+    constructor(actorService) {
+        this.actorService = actorService;
+    }
+    async getAll() {
+        return this.actorService.getAll();
+    }
+    async getOne(id) {
+        return this.actorService.getOne(id);
+    }
+    async create(data) {
+        return this.actorService.create(data);
+    }
+    async update(data) {
+        return this.actorService.edit(data);
+    }
+    async delete(id) {
+        return this.actorService.delete(id);
+    }
+};
+exports.ActorController = ActorController;
+tslib_1.__decorate([
+    (0, common_1.Get)(''),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", []),
+    tslib_1.__metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
+], ActorController.prototype, "getAll", null);
+tslib_1.__decorate([
+    (0, common_1.Get)(':id'),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
+], ActorController.prototype, "getOne", null);
+tslib_1.__decorate([
+    (0, common_1.Post)(''),
+    tslib_1.__param(0, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_d = typeof dto_1.CreateActorDto !== "undefined" && dto_1.CreateActorDto) === "function" ? _d : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
+], ActorController.prototype, "create", null);
+tslib_1.__decorate([
+    (0, common_1.Put)(':id'),
+    tslib_1.__param(0, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_f = typeof actor_schema_1.Actor !== "undefined" && actor_schema_1.Actor) === "function" ? _f : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
+], ActorController.prototype, "update", null);
+tslib_1.__decorate([
+    (0, common_1.Delete)(':id'),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
+], ActorController.prototype, "delete", null);
+exports.ActorController = ActorController = tslib_1.__decorate([
+    (0, common_1.Controller)('actor'),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof actor_service_1.ActorService !== "undefined" && actor_service_1.ActorService) === "function" ? _a : Object])
+], ActorController);
+
+
+/***/ }),
+/* 24 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ActorService = void 0;
+const tslib_1 = __webpack_require__(4);
+const common_1 = __webpack_require__(1);
+const mongoose_1 = __webpack_require__(9);
+const actor_schema_1 = __webpack_require__(25);
+const mongoose_2 = tslib_1.__importStar(__webpack_require__(14));
+let ActorService = class ActorService {
+    constructor(actorModel) {
+        this.actorModel = actorModel;
+        this.TAG = 'ActorService';
+    }
+    async getAll() {
+        common_1.Logger.log('getAll', this.TAG);
+        return this.actorModel.find().exec();
+    }
+    async getOne(id) {
+        common_1.Logger.log(`getOne(${id})`, this.TAG);
+        try {
+            const actor = await this.actorModel.findById(id).exec();
+            if (!actor) {
+                throw new common_1.NotFoundException(`Actor not found for ID: ${id}`);
+            }
+            return actor;
+        }
+        catch (error) {
+            common_1.Logger.error(`Error fetching actor: ${error}`);
+            throw new Error(`Error fetching actor: ${error}`);
+        }
+    }
+    async create(actor) {
+        common_1.Logger.log('create', this.TAG);
+        const newActor = new this.actorModel(actor);
+        newActor._id = new mongoose_2.default.Types.ObjectId().toString();
+        return newActor.save();
+    }
+    async edit(actor) {
+        common_1.Logger.log('edit', this.TAG);
+        const editedActor = { ...actor };
+        try {
+            const updatedActor = await this.actorModel.findByIdAndUpdate(editedActor._id, editedActor, { new: true }).exec();
+            return updatedActor ?? null;
+        }
+        catch (error) {
+            common_1.Logger.error(`Error editing actor: ${error}`);
+            throw new Error(`Error editing actor: ${error}`);
+        }
+    }
+    async delete(id) {
+        common_1.Logger.log('delete', this.TAG);
+        const actor = await this.actorModel.findByIdAndDelete(id).exec();
+        if (!actor) {
+            throw new common_1.NotFoundException(`Actor not found for ID: ${id}`);
+        }
+        return actor;
+    }
+};
+exports.ActorService = ActorService;
+exports.ActorService = ActorService = tslib_1.__decorate([
+    (0, common_1.Injectable)(),
+    tslib_1.__param(0, (0, mongoose_1.InjectModel)(actor_schema_1.Actor.name)),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof mongoose_2.Model !== "undefined" && mongoose_2.Model) === "function" ? _a : Object])
+], ActorService);
+
+
+/***/ }),
+/* 25 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ActorSchema = exports.Actor = void 0;
+const tslib_1 = __webpack_require__(4);
+const mongoose_1 = __webpack_require__(9);
+const mongoose_2 = tslib_1.__importDefault(__webpack_require__(14));
+let Actor = class Actor {
+};
+exports.Actor = Actor;
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({ type: mongoose_2.default.Schema.Types.ObjectId }),
+    tslib_1.__metadata("design:type", String)
+], Actor.prototype, "_id", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)(),
+    tslib_1.__metadata("design:type", String)
+], Actor.prototype, "name", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)(),
+    tslib_1.__metadata("design:type", String)
+], Actor.prototype, "birthdate", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)(),
+    tslib_1.__metadata("design:type", String)
+], Actor.prototype, "nationality", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)(),
+    tslib_1.__metadata("design:type", String)
+], Actor.prototype, "photo", void 0);
+exports.Actor = Actor = tslib_1.__decorate([
+    (0, mongoose_1.Schema)()
+], Actor);
+exports.ActorSchema = mongoose_1.SchemaFactory.createForClass(Actor);
+
 
 /***/ })
 /******/ 	]);
