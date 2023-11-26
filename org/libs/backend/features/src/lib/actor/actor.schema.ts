@@ -13,7 +13,7 @@ export class Actor {
     name!: string;
 
     @Prop()
-    birthdate!: string;
+    birthdate!: Date;
 
     @Prop()
     nationality!: string;
