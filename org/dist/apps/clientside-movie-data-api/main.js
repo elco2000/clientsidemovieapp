@@ -799,6 +799,7 @@ exports.ActorService = ActorService = tslib_1.__decorate([
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
+var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ActorSchema = exports.Actor = void 0;
 const tslib_1 = __webpack_require__(4);
@@ -817,7 +818,7 @@ tslib_1.__decorate([
 ], Actor.prototype, "name", void 0);
 tslib_1.__decorate([
     (0, mongoose_1.Prop)(),
-    tslib_1.__metadata("design:type", String)
+    tslib_1.__metadata("design:type", typeof (_a = typeof Date !== "undefined" && Date) === "function" ? _a : Object)
 ], Actor.prototype, "birthdate", void 0);
 tslib_1.__decorate([
     (0, mongoose_1.Prop)(),
