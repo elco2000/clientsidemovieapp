@@ -34,7 +34,7 @@ export class MovieService {
   async getOne(id: string): Promise<Movie> {
     Logger.log(`getOne(${id})`, this.TAG);
     try {
-      const movie = await this.movieModel.findById(id).exec();
+      const movie = await this.movieModel.findById(id).populate({path: 'actors', select: 'name photo'}).exec();
       if (!movie) {
         throw new NotFoundException(`Movie not found for ID: ${id}`);
       }

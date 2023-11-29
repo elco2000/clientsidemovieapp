@@ -254,7 +254,7 @@ let MovieService = class MovieService {
     async getOne(id) {
         common_1.Logger.log(`getOne(${id})`, this.TAG);
         try {
-            const movie = await this.movieModel.findById(id).exec();
+            const movie = await this.movieModel.findById(id).populate({ path: 'actors', select: 'name photo' }).exec();
             if (!movie) {
                 throw new common_1.NotFoundException(`Movie not found for ID: ${id}`);
             }
@@ -356,6 +356,10 @@ tslib_1.__decorate([
     (0, mongoose_1.Prop)(),
     tslib_1.__metadata("design:type", String)
 ], Movie.prototype, "director", void 0);
+tslib_1.__decorate([
+    (0, mongoose_1.Prop)({ type: mongoose_2.default.Schema.Types.ObjectId, ref: 'Actor' }),
+    tslib_1.__metadata("design:type", Array)
+], Movie.prototype, "actors", void 0);
 exports.Movie = Movie = tslib_1.__decorate([
     (0, mongoose_1.Schema)()
 ], Movie);
@@ -654,7 +658,7 @@ exports.BackendFeaturesActorModule = BackendFeaturesActorModule = tslib_1.__deco
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c, _d, _e, _f, _g, _h;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ActorController = void 0;
 const tslib_1 = __webpack_require__(4);
@@ -668,6 +672,9 @@ let ActorController = class ActorController {
     }
     async getAll() {
         return this.actorService.getAll();
+    }
+    async getAllForLookup() {
+        return this.actorService.GetAllForLookup();
     }
     async getOne(id) {
         return this.actorService.getOne(id);
@@ -690,32 +697,38 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
 ], ActorController.prototype, "getAll", null);
 tslib_1.__decorate([
+    (0, common_1.Get)('lookup'),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", []),
+    tslib_1.__metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
+], ActorController.prototype, "getAllForLookup", null);
+tslib_1.__decorate([
     (0, common_1.Get)(':id'),
     tslib_1.__param(0, (0, common_1.Param)('id')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String]),
-    tslib_1.__metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
+    tslib_1.__metadata("design:returntype", typeof (_d = typeof Promise !== "undefined" && Promise) === "function" ? _d : Object)
 ], ActorController.prototype, "getOne", null);
 tslib_1.__decorate([
     (0, common_1.Post)(''),
     tslib_1.__param(0, (0, common_1.Body)()),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [typeof (_d = typeof dto_1.CreateActorDto !== "undefined" && dto_1.CreateActorDto) === "function" ? _d : Object]),
-    tslib_1.__metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
+    tslib_1.__metadata("design:paramtypes", [typeof (_e = typeof dto_1.CreateActorDto !== "undefined" && dto_1.CreateActorDto) === "function" ? _e : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
 ], ActorController.prototype, "create", null);
 tslib_1.__decorate([
     (0, common_1.Put)(':id'),
     tslib_1.__param(0, (0, common_1.Body)()),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [typeof (_f = typeof actor_schema_1.Actor !== "undefined" && actor_schema_1.Actor) === "function" ? _f : Object]),
-    tslib_1.__metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
+    tslib_1.__metadata("design:paramtypes", [typeof (_g = typeof actor_schema_1.Actor !== "undefined" && actor_schema_1.Actor) === "function" ? _g : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
 ], ActorController.prototype, "update", null);
 tslib_1.__decorate([
     (0, common_1.Delete)(':id'),
     tslib_1.__param(0, (0, common_1.Param)('id')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String]),
-    tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
+    tslib_1.__metadata("design:returntype", typeof (_j = typeof Promise !== "undefined" && Promise) === "function" ? _j : Object)
 ], ActorController.prototype, "delete", null);
 exports.ActorController = ActorController = tslib_1.__decorate([
     (0, common_1.Controller)('actor'),
@@ -744,6 +757,10 @@ let ActorService = class ActorService {
     async getAll() {
         common_1.Logger.log('getAll', this.TAG);
         return this.actorModel.find().exec();
+    }
+    async GetAllForLookup() {
+        common_1.Logger.log('getAllForLookup', this.TAG);
+        return this.actorModel.find().select({ name: 1 }).exec();
     }
     async getOne(id) {
         common_1.Logger.log(`getOne(${id})`, this.TAG);

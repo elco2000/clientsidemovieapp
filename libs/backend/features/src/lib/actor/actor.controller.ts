@@ -11,6 +11,12 @@ export class ActorController {
     async getAll(): Promise<Actor[]> {
         return this.actorService.getAll();
     }
+    
+    @Get('lookup')
+    async getAllForLookup(): Promise<Actor[]> {
+        return this.actorService.GetAllForLookup();
+    }
+
 
     @Get(':id')
     async getOne(@Param('id') id: string): Promise<Actor> {

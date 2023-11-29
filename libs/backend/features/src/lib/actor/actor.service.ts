@@ -8,11 +8,18 @@ import { CreateActorDto } from "@org/backend/dto";
 export class ActorService {
     TAG = 'ActorService';
 
-    constructor(@InjectModel(Actor.name) private actorModel: Model<Actor>) {}
+    constructor(
+        @InjectModel(Actor.name) private actorModel: Model<Actor>,
+        ) {}
 
     async getAll(): Promise<Actor[]> {
         Logger.log('getAll', this.TAG);
         return this.actorModel.find().exec();
+    }
+
+    async GetAllForLookup(): Promise<Actor[]> {
+        Logger.log('getAllForLookup', this.TAG);
+        return this.actorModel.find().select({name: 1}).exec();
     }
 
     async getOne(id: string): Promise<Actor> {
