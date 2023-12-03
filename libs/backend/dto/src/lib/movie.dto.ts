@@ -4,6 +4,7 @@ import {
     IsOptional,
     IsDate,
     IsNumber,
+    IsArray,
 } from 'class-validator';
 import {
     ICreateMovie,
@@ -44,6 +45,10 @@ export class CreateMovieDto implements ICreateMovie {
     @IsString()
     @IsNotEmpty()
     director!: string;
+
+    @IsArray()
+    @IsNotEmpty()
+    actors!: string[];
 }
 
 export class UpdateMovieDto implements IUpdateMovie {
@@ -81,4 +86,8 @@ export class UpdateMovieDto implements IUpdateMovie {
     @IsString()
     @IsNotEmpty()
     director!: string;
+
+    @IsArray()
+    @IsNotEmpty()
+    actors!: string[];
 }

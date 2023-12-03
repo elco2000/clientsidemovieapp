@@ -1,3 +1,4 @@
+
 export enum Genre {
     Action = "Action",
     Adventure = "Adventure",
@@ -25,11 +26,12 @@ export interface IMovie {
     advicedAge: number,
     genre: string,
     language: string,
-    director: string
+    director: string,
+    actors: string[]
 }
 
 export type ICreateMovie = Pick<
     IMovie,
-    'title' | 'photo' | 'length' | 'releaseDate' | 'advicedAge' | 'genre' | 'language' | 'director'
+    'title' | 'photo' | 'length' | 'releaseDate' | 'advicedAge' | 'genre' | 'language' | 'director' | 'actors'
 >;
 export type IUpdateMovie = IMovie;

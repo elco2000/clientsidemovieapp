@@ -1,18 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MovieService } from '../movie.service';
 import { initFlowbite } from 'flowbite';
 import { Genre, Language } from '@org/shared/api';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Actor } from '@org/backend/features';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'org-movie-create',
   templateUrl: './movie-create.component.html',
   styleUrls: ['./movie-create.component.css'],
 })
-export class MovieCreateComponent implements OnInit {
+export class MovieCreateComponent implements OnInit, OnDestroy {
   genreList = Object.values(Genre);
   languageList = Object.values(Language);
+
+  actors: Actor[] | null = null;
+  selectedActors: { [_id: string]: boolean } = {}; // Object om geselecteerde acteurs bij te houden
+  subscription: Subscription | undefined = undefined;
 
   movieForm = new FormGroup({
     title: new FormControl(),
@@ -29,9 +35,26 @@ export class MovieCreateComponent implements OnInit {
 
   ngOnInit(): void {
     initFlowbite();
+
+    this.subscription = this.movieService.actorLookup().subscribe((results) => {
+      if (results) {
+        this.actors = results;
+        this.actors.forEach(actor => this.selectedActors[actor._id] = false);
+      }
+    })
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) this.subscription.unsubscribe();
   }
 
   public onSubmit() {
+
+    const selectedActorIds = Object.keys(this.selectedActors)
+    .filter(actorId => this.selectedActors[actorId])
+
+    console.log(selectedActorIds);
+
     this.movieService
       .create({
         title: this.movieForm.value.title,
@@ -42,6 +65,7 @@ export class MovieCreateComponent implements OnInit {
         genre: this.movieForm.value.genre,
         language: this.movieForm.value.language,
         director: this.movieForm.value.director,
+        actors: selectedActorIds
       })
       .subscribe(
         () => {
@@ -49,4 +73,9 @@ export class MovieCreateComponent implements OnInit {
         }
       );
   }
+
+  toggleActorSelection(actorId: string): void {
+    this.selectedActors[actorId] = !this.selectedActors[actorId];
+  }
+
 }

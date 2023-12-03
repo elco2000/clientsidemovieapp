@@ -103,9 +103,9 @@ exports.AppService = AppService = tslib_1.__decorate([
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
 tslib_1.__exportStar(__webpack_require__(8), exports);
-tslib_1.__exportStar(__webpack_require__(22), exports);
-tslib_1.__exportStar(__webpack_require__(13), exports);
-tslib_1.__exportStar(__webpack_require__(25), exports);
+tslib_1.__exportStar(__webpack_require__(21), exports);
+tslib_1.__exportStar(__webpack_require__(12), exports);
+tslib_1.__exportStar(__webpack_require__(24), exports);
 
 
 /***/ }),
@@ -120,7 +120,7 @@ const mongoose_1 = __webpack_require__(9);
 const common_1 = __webpack_require__(1);
 const movie_controller_1 = __webpack_require__(10);
 const movie_service_1 = __webpack_require__(11);
-const movie_schema_1 = __webpack_require__(13);
+const movie_schema_1 = __webpack_require__(12);
 let BackendFeaturesMovieModule = class BackendFeaturesMovieModule {
 };
 exports.BackendFeaturesMovieModule = BackendFeaturesMovieModule;
@@ -152,8 +152,8 @@ const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const common_2 = __webpack_require__(1);
 const movie_service_1 = __webpack_require__(11);
-const dto_1 = __webpack_require__(15);
-const movie_schema_1 = __webpack_require__(13);
+const dto_1 = __webpack_require__(14);
+const movie_schema_1 = __webpack_require__(12);
 let MovieController = class MovieController {
     constructor(movieService) {
         this.movieService = movieService;
@@ -225,27 +225,13 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MovieService = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const rxjs_1 = __webpack_require__(12);
-const movie_schema_1 = __webpack_require__(13);
-const mongoose_1 = tslib_1.__importStar(__webpack_require__(14));
+const movie_schema_1 = __webpack_require__(12);
+const mongoose_1 = tslib_1.__importStar(__webpack_require__(13));
 const mongoose_2 = __webpack_require__(9);
 let MovieService = class MovieService {
     constructor(movieModel) {
         this.movieModel = movieModel;
         this.TAG = 'MovieService';
-        this.movies$ = new rxjs_1.BehaviorSubject([
-            {
-                id: '0',
-                title: 'Test Film',
-                photo: '',
-                length: 55,
-                releaseDate: new Date(),
-                advicedAge: 12,
-                genre: 'Action',
-                language: 'Dutch',
-                director: 'Elco Mussert',
-            },
-        ]);
     }
     async getAll() {
         common_1.Logger.log('getAll', this.TAG);
@@ -254,7 +240,10 @@ let MovieService = class MovieService {
     async getOne(id) {
         common_1.Logger.log(`getOne(${id})`, this.TAG);
         try {
-            const movie = await this.movieModel.findById(id).populate({ path: 'actors', select: 'name photo' }).exec();
+            const movie = await this.movieModel
+                .findById(id)
+                .populate('actors')
+                .exec();
             if (!movie) {
                 throw new common_1.NotFoundException(`Movie not found for ID: ${id}`);
             }
@@ -267,6 +256,18 @@ let MovieService = class MovieService {
     }
     async create(movie) {
         common_1.Logger.log('create', this.TAG);
+        //   const actorIds = movie.actors.map(actorId => Types.ObjectId.createFromHexString(actorId));
+        // const newMovieDto = {
+        //   title: movie.title,
+        //   photo: movie.photo,
+        //   length: movie.length,
+        //   releaseDate: movie.releaseDate,
+        //   advicedAge: movie.advicedAge,
+        //   genre: movie.genre,
+        //   language: movie.language,
+        //   director: movie.director,
+        //   actors: actorIds as unknown as string[], // Omzetten naar string[] voor actors
+        // };
         const newMovie = new this.movieModel(movie);
         newMovie._id = new mongoose_1.default.Types.ObjectId().toString();
         return newMovie.save();
@@ -275,7 +276,9 @@ let MovieService = class MovieService {
         common_1.Logger.log('edit', this.TAG);
         const editedMovie = { ...movie };
         try {
-            const updatedMovie = await this.movieModel.findByIdAndUpdate(editedMovie._id, editedMovie, { new: true }).exec();
+            const updatedMovie = await this.movieModel
+                .findByIdAndUpdate(editedMovie._id, editedMovie, { new: true })
+                .exec();
             return updatedMovie ?? null;
         }
         catch (error) {
@@ -302,12 +305,6 @@ exports.MovieService = MovieService = tslib_1.__decorate([
 
 /***/ }),
 /* 12 */
-/***/ ((module) => {
-
-module.exports = require("rxjs");
-
-/***/ }),
-/* 13 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -316,7 +313,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MovieSchema = exports.Movie = void 0;
 const tslib_1 = __webpack_require__(4);
 const mongoose_1 = __webpack_require__(9);
-const mongoose_2 = tslib_1.__importDefault(__webpack_require__(14));
+const mongoose_2 = tslib_1.__importDefault(__webpack_require__(13));
 let Movie = class Movie {
 };
 exports.Movie = Movie;
@@ -357,7 +354,7 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:type", String)
 ], Movie.prototype, "director", void 0);
 tslib_1.__decorate([
-    (0, mongoose_1.Prop)({ type: mongoose_2.default.Schema.Types.ObjectId, ref: 'Actor' }),
+    (0, mongoose_1.Prop)({ type: [{ type: mongoose_2.default.Schema.Types.ObjectId, ref: 'Actor' }] }),
     tslib_1.__metadata("design:type", Array)
 ], Movie.prototype, "actors", void 0);
 exports.Movie = Movie = tslib_1.__decorate([
@@ -367,26 +364,26 @@ exports.MovieSchema = mongoose_1.SchemaFactory.createForClass(Movie);
 
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ ((module) => {
 
 module.exports = require("mongoose");
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
+tslib_1.__exportStar(__webpack_require__(15), exports);
 tslib_1.__exportStar(__webpack_require__(16), exports);
-tslib_1.__exportStar(__webpack_require__(17), exports);
+tslib_1.__exportStar(__webpack_require__(18), exports);
 tslib_1.__exportStar(__webpack_require__(19), exports);
-tslib_1.__exportStar(__webpack_require__(20), exports);
 
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -407,7 +404,7 @@ exports.DtoModule = DtoModule = tslib_1.__decorate([
 
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -415,7 +412,7 @@ var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UpdateMovieDto = exports.CreateMovieDto = void 0;
 const tslib_1 = __webpack_require__(4);
-const class_validator_1 = __webpack_require__(18);
+const class_validator_1 = __webpack_require__(17);
 class CreateMovieDto {
     constructor(data) { Object.assign(this, data); }
 }
@@ -459,6 +456,11 @@ tslib_1.__decorate([
     (0, class_validator_1.IsNotEmpty)(),
     tslib_1.__metadata("design:type", String)
 ], CreateMovieDto.prototype, "director", void 0);
+tslib_1.__decorate([
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    tslib_1.__metadata("design:type", Array)
+], CreateMovieDto.prototype, "actors", void 0);
 class UpdateMovieDto {
 }
 exports.UpdateMovieDto = UpdateMovieDto;
@@ -506,16 +508,21 @@ tslib_1.__decorate([
     (0, class_validator_1.IsNotEmpty)(),
     tslib_1.__metadata("design:type", String)
 ], UpdateMovieDto.prototype, "director", void 0);
+tslib_1.__decorate([
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    tslib_1.__metadata("design:type", Array)
+], UpdateMovieDto.prototype, "actors", void 0);
 
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ ((module) => {
 
 module.exports = require("class-validator");
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -523,7 +530,7 @@ var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UpdateActorDto = exports.CreateActorDto = void 0;
 const tslib_1 = __webpack_require__(4);
-const class_validator_1 = __webpack_require__(18);
+const class_validator_1 = __webpack_require__(17);
 class CreateActorDto {
     constructor(data) { Object.assign(this, data); }
 }
@@ -580,7 +587,7 @@ tslib_1.__decorate([
 
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -588,7 +595,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ApiResponseInterceptor = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const operators_1 = __webpack_require__(21);
+const operators_1 = __webpack_require__(20);
 let ApiResponseInterceptor = class ApiResponseInterceptor {
     intercept(context, next) {
         return next.handle().pipe((0, operators_1.map)((results) => {
@@ -622,13 +629,13 @@ exports.ApiResponseInterceptor = ApiResponseInterceptor = tslib_1.__decorate([
 
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ ((module) => {
 
 module.exports = require("rxjs/operators");
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -636,9 +643,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BackendFeaturesActorModule = void 0;
 const tslib_1 = __webpack_require__(4);
 const mongoose_1 = __webpack_require__(9);
-const actor_controller_1 = __webpack_require__(23);
-const actor_schema_1 = __webpack_require__(25);
-const actor_service_1 = __webpack_require__(24);
+const actor_controller_1 = __webpack_require__(22);
+const actor_schema_1 = __webpack_require__(24);
+const actor_service_1 = __webpack_require__(23);
 const common_1 = __webpack_require__(1);
 let BackendFeaturesActorModule = class BackendFeaturesActorModule {
 };
@@ -654,7 +661,7 @@ exports.BackendFeaturesActorModule = BackendFeaturesActorModule = tslib_1.__deco
 
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -662,10 +669,10 @@ var _a, _b, _c, _d, _e, _f, _g, _h, _j;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ActorController = void 0;
 const tslib_1 = __webpack_require__(4);
-const dto_1 = __webpack_require__(15);
-const actor_service_1 = __webpack_require__(24);
+const dto_1 = __webpack_require__(14);
+const actor_service_1 = __webpack_require__(23);
 const common_1 = __webpack_require__(1);
-const actor_schema_1 = __webpack_require__(25);
+const actor_schema_1 = __webpack_require__(24);
 let ActorController = class ActorController {
     constructor(actorService) {
         this.actorService = actorService;
@@ -737,7 +744,7 @@ exports.ActorController = ActorController = tslib_1.__decorate([
 
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -747,8 +754,8 @@ exports.ActorService = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const mongoose_1 = __webpack_require__(9);
-const actor_schema_1 = __webpack_require__(25);
-const mongoose_2 = tslib_1.__importStar(__webpack_require__(14));
+const actor_schema_1 = __webpack_require__(24);
+const mongoose_2 = tslib_1.__importStar(__webpack_require__(13));
 let ActorService = class ActorService {
     constructor(actorModel) {
         this.actorModel = actorModel;
@@ -812,7 +819,7 @@ exports.ActorService = ActorService = tslib_1.__decorate([
 
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -821,7 +828,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ActorSchema = exports.Actor = void 0;
 const tslib_1 = __webpack_require__(4);
 const mongoose_1 = __webpack_require__(9);
-const mongoose_2 = tslib_1.__importDefault(__webpack_require__(14));
+const mongoose_2 = tslib_1.__importDefault(__webpack_require__(13));
 let Actor = class Actor {
 };
 exports.Actor = Actor;
@@ -849,6 +856,11 @@ exports.Actor = Actor = tslib_1.__decorate([
     (0, mongoose_1.Schema)()
 ], Actor);
 exports.ActorSchema = mongoose_1.SchemaFactory.createForClass(Actor);
+// ActorSchema.virtual('movies', {
+//     ref: 'Movie',
+//     localField: '_id',
+//     foreignField: 'actors'
+// })
 
 
 /***/ })
@@ -892,7 +904,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const common_1 = __webpack_require__(1);
 const core_1 = __webpack_require__(2);
 const app_module_1 = __webpack_require__(3);
-const dto_1 = __webpack_require__(15);
+const dto_1 = __webpack_require__(14);
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const globalPrefix = 'api';

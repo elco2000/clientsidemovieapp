@@ -11,7 +11,7 @@ export interface IActor {
     name: string,
     birthdate: Date,
     nationality: string,
-    photo: string
+    photo: string,
 }
 
 export type ICreateActor = Pick<

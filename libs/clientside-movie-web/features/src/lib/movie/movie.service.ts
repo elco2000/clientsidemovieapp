@@ -2,11 +2,11 @@
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { map, catchError, tap } from 'rxjs/operators';
-import { ApiResponse, IMovie } from '@org/shared/api';
+import { ApiResponse, IActor, IMovie } from '@org/shared/api';
 import { Injectable } from '@angular/core';
 import { environment } from '@org/shared/util-env';
 import { CreateMovieDto } from '@org/backend/dto';
-import { Movie } from '@org/backend/features';
+import { Actor, Movie } from '@org/backend/features';
 
 export const httpOptions = {
     observe: 'body',
@@ -20,9 +20,13 @@ export const httpOptions = {
 @Injectable()
 export class MovieService {
     endpoint = environment.dataApiUrl + '/api/movie';
+    actorEndpoint = environment.dataApiUrl + '/api/actor';
 
     private movieListSubject: BehaviorSubject<Movie[] | null> = new BehaviorSubject<Movie[] | null>(null);
     public readonly movieList$: Observable<Movie[] | null> = this.movieListSubject.asObservable();
+
+    private actorLookupListSubject: BehaviorSubject<Actor[] | null> = new BehaviorSubject<Actor[] | null>(null);
+    public readonly actorLookupList$: Observable<Actor[] | null> = this.actorLookupListSubject.asObservable();
 
     constructor(private readonly http : HttpClient) {}
 
@@ -127,6 +131,26 @@ export class MovieService {
                     const updatedList = this.movieListSubject.getValue()?.filter(movie => movie._id !== id);
                     this.movieListSubject.next(updatedList || null);
                   }),
+                catchError(this.handleError)
+            );
+    }
+
+    /**
+     * Get all actor for lookup.
+     *
+     */
+    public actorLookup(options?: any): Observable<Actor[] | null> {
+        return this.http
+            .get<ApiResponse<IActor[]>>(this.actorEndpoint + "/lookup", {
+                ...options,
+                ...httpOptions
+            })
+            .pipe(
+                map((response: any) => response.results as Actor[]),
+                tap((actors: Actor[]) => {
+                    this.actorLookupListSubject.next(actors);
+                  }),
+                tap(console.log),
                 catchError(this.handleError)
             );
     }

@@ -23,3 +23,8 @@ export class Actor {
 }
 
 export const ActorSchema = SchemaFactory.createForClass(Actor);
+// ActorSchema.virtual('movies', {
+//     ref: 'Movie',
+//     localField: '_id',
+//     foreignField: 'actors'
+// })
