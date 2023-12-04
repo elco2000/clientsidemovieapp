@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
-import { Actor } from "@org/backend/features";
+import { Actor, Movie } from "@org/backend/features";
 import { Subscription } from "rxjs";
 import { ActorService } from "../actor.service";
 
@@ -13,6 +13,7 @@ export class ActorDetailComponent implements OnInit, OnDestroy {
     
     id: string | null = null;
     actor: Actor | null = null;
+    movies: Movie[] | null = null;
     subscription: Subscription | undefined = undefined;
 
     constructor(private route: ActivatedRoute, private actorService: ActorService, private router: Router) {}
@@ -27,6 +28,11 @@ export class ActorDetailComponent implements OnInit, OnDestroy {
         this.subscription = this.actorService.read(this.id).subscribe((result) => {
             if (result) {
                 this.actor = result;
+            }
+        })
+        this.subscription = this.actorService.getActorMovies(this.id).subscribe((result) => {
+            if (result) {
+                this.movies = result;
             }
         })
     }

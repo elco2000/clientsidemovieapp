@@ -61,7 +61,7 @@
             <div class="grid gap-8 mt-8 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
                 <div *ngFor="let actor of movie.actors" class="w-full max-w-xs text-center mb-7 group">
         
-                    <a [routerLink]="[actor._id]" class="">
+                    <a [routerLink]="['/actors/', actor._id]" class="">
                         <img class="object-center w-full h-9 mx-auto rounded-lg group-hover:scale-105" [src]="actor.photo" alt="picture" />
                     </a>    
         

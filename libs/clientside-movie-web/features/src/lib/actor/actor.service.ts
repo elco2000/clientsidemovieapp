@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { environment } from "@org/shared/util-env";
-import { Actor } from "@org/backend/features";
+import { Actor, Movie } from "@org/backend/features";
 import { BehaviorSubject, Observable, catchError, map, tap, throwError } from "rxjs";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { ApiResponse, IActor } from "@org/shared/api";
+import { ApiResponse, IActor, IMovie } from "@org/shared/api";
 import { CreateActorDto } from "@org/backend/dto";
 import { Injectable } from "@angular/core";
 
@@ -20,6 +20,7 @@ export const httpOptions = {
 @Injectable()
 export class ActorService {
     endpoint = environment.dataApiUrl + '/api/actor';
+    endpointMovie = environment.dataApiUrl + '/api/movie';
 
     private actorListSubject: BehaviorSubject<Actor[] | null> = new BehaviorSubject<Actor[] | null>(null);
     public readonly actorList$: Observable<Actor[] | null> = this.actorListSubject.asObservable();
@@ -131,6 +132,22 @@ export class ActorService {
             );
     }
 
+
+    /**
+     * Get a movies of a actor from the service.
+     *
+     */
+    public getActorMovies(id: string | null, options?: any): Observable<Movie[]> {
+        return this.http
+            .get<ApiResponse<Movie>>(`${this.endpointMovie}/actor/${id}`, {
+                ...options,
+                ...httpOptions
+            })
+            .pipe(
+                map((response: any) => response.results as IMovie),
+                catchError(this.handleError)
+            );
+    }
 
     /**
      * Handle errors.

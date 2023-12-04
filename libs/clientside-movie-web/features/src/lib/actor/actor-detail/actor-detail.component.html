@@ -1,4 +1,4 @@
-<div *ngIf="actor !== null" class="h-screen">
+<div *ngIf="actor !== null">
     
     <div class="container mx-auto">
 
@@ -43,6 +43,25 @@
                     </div>
                 </main>
             </div>
+            <div class="mt-80 py-3 flex items-center text-lg font-bold text-gray-800 before:flex-[1_1_0%] before:border-t before:border-gray-200 before:me-6 after:flex-[1_1_0%] after:border-t after:border-gray-200 after:ms-6">Movies</div>
+        </section>
+        <section *ngIf="movies !== null" class="h-fit"> 
+            
+            <div class="grid gap-8 mt-8 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+                <div *ngFor="let movie of movies" class="w-full max-w-xs text-center mb-7 group">
+        
+                    <a [routerLink]="['/movies/', movie._id]" class="">
+                        <img class="object-center w-full h-9 mx-auto rounded-lg group-hover:scale-105" [src]="movie.photo" alt="picture" />
+                    </a>    
+        
+                    <div class="mt-2">
+                        <h3 class="text-lg font-medium text-gray-700 dark:text-gray-200">{{movie.title}}</h3>
+                    </div>
+                    
+                </div>
+            </div>
+        
+
         </section>
     </div>
 </div>
