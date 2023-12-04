@@ -856,11 +856,6 @@ exports.Actor = Actor = tslib_1.__decorate([
     (0, mongoose_1.Schema)()
 ], Actor);
 exports.ActorSchema = mongoose_1.SchemaFactory.createForClass(Actor);
-// ActorSchema.virtual('movies', {
-//     ref: 'Movie',
-//     localField: '_id',
-//     foreignField: 'actors'
-// })
 
 
 /***/ })

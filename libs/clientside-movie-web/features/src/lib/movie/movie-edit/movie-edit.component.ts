@@ -59,7 +59,7 @@ export class MovieEditComponent implements OnInit, OnDestroy {
             genre: ['', Validators.required],
             language: ['', Validators.required],
             director: ['', Validators.required],
-            actors: [[], Validators.required]
+            actors: [[]]
         });
     }
 

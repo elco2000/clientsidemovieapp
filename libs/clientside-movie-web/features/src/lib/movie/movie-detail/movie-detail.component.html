@@ -1,8 +1,8 @@
-<div *ngIf="movie !== null" class="h-screen">
+<div *ngIf="movie !== null">
     
     <div class="container mx-auto">
 
-        <section class="dark:bg-gray-900">
+        <section class="">
             <div class="max-w-6xl px-6 py-10 mx-auto">
 
                 <h1 class="mt-2 text-2xl font-medium text-gray-800 capitalize lg:text-3xl">
@@ -54,6 +54,25 @@
                     </div>
                 </main>
             </div>
+            <div class="mt-80 py-3 flex items-center text-lg font-bold text-gray-800 before:flex-[1_1_0%] before:border-t before:border-gray-200 before:me-6 after:flex-[1_1_0%] after:border-t after:border-gray-200 after:ms-6">Actors</div>
+        </section>
+        <section *ngIf="movie.actors.length !== 0" class="h-fit"> 
+            
+            <div class="grid gap-8 mt-8 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+                <div *ngFor="let actor of movie.actors" class="w-full max-w-xs text-center mb-7 group">
+        
+                    <a [routerLink]="[actor._id]" class="">
+                        <img class="object-center w-full h-9 mx-auto rounded-lg group-hover:scale-105" [src]="actor.photo" alt="picture" />
+                    </a>    
+        
+                    <div class="mt-2">
+                        <h3 class="text-lg font-medium text-gray-700 dark:text-gray-200">{{actor.name}}</h3>
+                    </div>
+                    
+                </div>
+            </div>
+        
+
         </section>
     </div>
 </div>
