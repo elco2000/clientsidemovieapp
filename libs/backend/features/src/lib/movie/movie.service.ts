@@ -1,6 +1,6 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Movie } from './movie.schema';
-import mongoose, { Model, Types } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateMovieDto } from '@org/backend/dto';
 
@@ -13,6 +13,11 @@ export class MovieService {
   async getAll(): Promise<Movie[]> {
     Logger.log('getAll', this.TAG);
     return this.movieModel.find().exec();
+  }
+
+  async getSmallInformationByActorId(id: string): Promise<Movie[]> {
+    Logger.log(`getSmallInformationByActorId(${id})`, this.TAG);
+    return this.movieModel.find({ actors: id}).select({title: 1, photo: 1}).exec();
   }
 
   async getOne(id: string): Promise<Movie> {
@@ -34,20 +39,6 @@ export class MovieService {
 
   async create(movie: CreateMovieDto): Promise<Movie> {
     Logger.log('create', this.TAG);
-
-  //   const actorIds = movie.actors.map(actorId => Types.ObjectId.createFromHexString(actorId));
-
-  // const newMovieDto = {
-  //   title: movie.title,
-  //   photo: movie.photo,
-  //   length: movie.length,
-  //   releaseDate: movie.releaseDate,
-  //   advicedAge: movie.advicedAge,
-  //   genre: movie.genre,
-  //   language: movie.language,
-  //   director: movie.director,
-  //   actors: actorIds as unknown as string[], // Omzetten naar string[] voor actors
-  // };
 
     const newMovie = new this.movieModel(movie);
 

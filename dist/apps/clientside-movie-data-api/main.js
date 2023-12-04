@@ -145,7 +145,7 @@ module.exports = require("@nestjs/mongoose");
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c, _d, _e, _f, _g, _h;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MovieController = void 0;
 const tslib_1 = __webpack_require__(4);
@@ -160,6 +160,9 @@ let MovieController = class MovieController {
     }
     async getAll() {
         return this.movieService.getAll();
+    }
+    async getSmallInformationByActorId(id) {
+        return this.movieService.getSmallInformationByActorId(id);
     }
     async getOne(id) {
         return this.movieService.getOne(id);
@@ -182,32 +185,39 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
 ], MovieController.prototype, "getAll", null);
 tslib_1.__decorate([
-    (0, common_2.Get)(':id'),
+    (0, common_2.Get)('actor/:id'),
     tslib_1.__param(0, (0, common_2.Param)('id')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String]),
     tslib_1.__metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
+], MovieController.prototype, "getSmallInformationByActorId", null);
+tslib_1.__decorate([
+    (0, common_2.Get)(':id'),
+    tslib_1.__param(0, (0, common_2.Param)('id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", typeof (_d = typeof Promise !== "undefined" && Promise) === "function" ? _d : Object)
 ], MovieController.prototype, "getOne", null);
 tslib_1.__decorate([
     (0, common_2.Post)(''),
     tslib_1.__param(0, (0, common_2.Body)()),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [typeof (_d = typeof dto_1.CreateMovieDto !== "undefined" && dto_1.CreateMovieDto) === "function" ? _d : Object]),
-    tslib_1.__metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
+    tslib_1.__metadata("design:paramtypes", [typeof (_e = typeof dto_1.CreateMovieDto !== "undefined" && dto_1.CreateMovieDto) === "function" ? _e : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
 ], MovieController.prototype, "create", null);
 tslib_1.__decorate([
     (0, common_1.Put)(':id'),
     tslib_1.__param(0, (0, common_2.Body)()),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [typeof (_f = typeof movie_schema_1.Movie !== "undefined" && movie_schema_1.Movie) === "function" ? _f : Object]),
-    tslib_1.__metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
+    tslib_1.__metadata("design:paramtypes", [typeof (_g = typeof movie_schema_1.Movie !== "undefined" && movie_schema_1.Movie) === "function" ? _g : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
 ], MovieController.prototype, "update", null);
 tslib_1.__decorate([
     (0, common_1.Delete)(':id'),
     tslib_1.__param(0, (0, common_2.Param)('id')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String]),
-    tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
+    tslib_1.__metadata("design:returntype", typeof (_j = typeof Promise !== "undefined" && Promise) === "function" ? _j : Object)
 ], MovieController.prototype, "delete", null);
 exports.MovieController = MovieController = tslib_1.__decorate([
     (0, common_1.Controller)('movie'),
@@ -237,6 +247,10 @@ let MovieService = class MovieService {
         common_1.Logger.log('getAll', this.TAG);
         return this.movieModel.find().exec();
     }
+    async getSmallInformationByActorId(id) {
+        common_1.Logger.log(`getSmallInformationByActorId(${id})`, this.TAG);
+        return this.movieModel.find({ actors: id }).select({ title: 1, photo: 1 }).exec();
+    }
     async getOne(id) {
         common_1.Logger.log(`getOne(${id})`, this.TAG);
         try {
@@ -256,18 +270,6 @@ let MovieService = class MovieService {
     }
     async create(movie) {
         common_1.Logger.log('create', this.TAG);
-        //   const actorIds = movie.actors.map(actorId => Types.ObjectId.createFromHexString(actorId));
-        // const newMovieDto = {
-        //   title: movie.title,
-        //   photo: movie.photo,
-        //   length: movie.length,
-        //   releaseDate: movie.releaseDate,
-        //   advicedAge: movie.advicedAge,
-        //   genre: movie.genre,
-        //   language: movie.language,
-        //   director: movie.director,
-        //   actors: actorIds as unknown as string[], // Omzetten naar string[] voor actors
-        // };
         const newMovie = new this.movieModel(movie);
         newMovie._id = new mongoose_1.default.Types.ObjectId().toString();
         return newMovie.save();

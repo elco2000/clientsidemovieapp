@@ -13,6 +13,11 @@ export class MovieController {
         return this.movieService.getAll();
     }
 
+    @Get('actor/:id')
+    async getSmallInformationByActorId(@Param('id') id: string): Promise<Movie[]> {
+        return this.movieService.getSmallInformationByActorId(id);
+    }
+
     @Get(':id')
     async getOne(@Param('id') id: string): Promise<Movie> {
         return this.movieService.getOne(id);
