@@ -2,8 +2,9 @@
 import { ConflictException, Injectable, Logger, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { CreateUserDto } from "@org/backend/dto";
-import { IUserCredentials, IUserIdentity, UserRole } from "@org/shared/api";
+import { IUserCredentials, IUserIdentity } from "@org/shared/api";
 import { Neo4jService } from "nest-neo4j";
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class AuthService {
@@ -48,10 +49,10 @@ export class AuthService {
             if (result && result.get('u').properties.password === credentials.password) {
                 const userProperties = result.get('u').properties;
                 const payload = {
-                    user_id: result.get('u').identity.low // Using identity as the ID
+                    user_id: userProperties.id // Using identity as the ID
                 };
                 const userIdentity: IUserIdentity = {
-                    id: payload.user_id,
+                    id: userProperties.id,
                     username: userProperties.username,
                     password: userProperties.password,
                     role: userProperties.role,
@@ -86,9 +87,11 @@ export class AuthService {
         }
 
         this.logger.debug('User not found, creating');
+        const id = uuidv4();
         const createdUser = await this.neo4jService.write(
             `
             CREATE (u:User {
+                id: $id,
                 username: $username,
                 password: $password,
                 birthdate: $birthdate,
@@ -98,7 +101,7 @@ export class AuthService {
             })
             RETURN u {.id, .username, .password, .birthdate, .country, .description, .role}
             `,
-            { username, password, birthdate, country, description, role }
+            { id, username, password, birthdate, country, description, role }
         );
 
         const newUser = createdUser.records[0]?.get('u');

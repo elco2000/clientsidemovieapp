@@ -1,5 +1,3 @@
-import { IUserRegistration } from './auth.interface';
-
 export enum UserRole {
     Guest = 'Guest',
     Admin = 'Admin',
@@ -21,10 +19,18 @@ export interface IUserIdentity {
 /**
  * All user information, excl. domain entities
  */
-export interface IUserInfo extends IUserRegistration {
+export interface IUserInfo {
     id: string;
     username: string;
     password: string;
+    birthdate: string;
+    country: string;
+    description?: string;
+}
+
+export interface IUser {
+    id: string;
+    username: string;
     birthdate: string;
     country: string;
     description?: string;

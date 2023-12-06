@@ -5,9 +5,10 @@ import { AppService } from './app.service';
 import { BackendFeaturesActorModule, BackendFeaturesMovieModule } from '@org/backend/features';
 import { AuthModule } from '@org/backend/auth';
 import { Neo4jModule } from 'nest-neo4j';
+import { UserModule } from '@org/backend/user';
 
 @Module({
-  imports: [BackendFeaturesMovieModule, BackendFeaturesActorModule, AuthModule,
+  imports: [BackendFeaturesMovieModule, BackendFeaturesActorModule, AuthModule, UserModule,
     Neo4jModule.forRoot({
       scheme: 'neo4j+s',
       host: '80f65338.databases.neo4j.io',
