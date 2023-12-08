@@ -41,12 +41,19 @@ export class MovieService {
   async create(movie: CreateMovieDto): Promise<Movie> {
     Logger.log('create', this.TAG);
   
-    const newMovie = new this.movieModel(movie);
-    newMovie._id = new mongoose.Types.ObjectId().toString();
-  
     try {
+      const newMovie = new this.movieModel(movie);
+      newMovie._id = new mongoose.Types.ObjectId().toString();
+  
       // MongoDB
       const resultMongoDB = await newMovie.save();
+  
+      if (resultMongoDB) {
+        Logger.log('Movie saved in MongoDB:', resultMongoDB);
+      } else {
+        Logger.error('Failed to save movie in MongoDB');
+        throw new Error('Failed to save movie in MongoDB');
+      }
   
       // Neo4j
       await this.neo4jService.write(
@@ -56,7 +63,7 @@ export class MovieService {
         }) 
         RETURN m
         `,
-        { id: newMovie._id.toString }
+        { id: newMovie._id.toString() }
       );
   
       return resultMongoDB;

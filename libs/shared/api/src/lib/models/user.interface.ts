@@ -4,10 +4,6 @@ export enum UserRole {
     Unknown = 'Unknown'
 }
 
-/**
- * Minimal user information
- */
-
 export interface IUserIdentity {
     id: string;
     username: string;
@@ -16,9 +12,6 @@ export interface IUserIdentity {
     token?: string;
 }
 
-/**
- * All user information, excl. domain entities
- */
 export interface IUserInfo {
     id: string;
     username: string;

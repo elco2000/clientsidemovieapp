@@ -25,15 +25,15 @@ const common_1 = __webpack_require__(1);
 const app_controller_1 = __webpack_require__(5);
 const app_service_1 = __webpack_require__(6);
 const features_1 = __webpack_require__(7);
-const auth_1 = __webpack_require__(27);
+const auth_1 = __webpack_require__(33);
 const nest_neo4j_1 = __webpack_require__(14);
-const user_1 = __webpack_require__(30);
+const user_1 = __webpack_require__(36);
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = tslib_1.__decorate([
     (0, common_1.Module)({
-        imports: [features_1.BackendFeaturesMovieModule, features_1.BackendFeaturesActorModule, auth_1.AuthModule, user_1.UserModule,
+        imports: [features_1.BackendFeaturesMovieModule, features_1.BackendFeaturesActorModule, features_1.BackendFeaturesReviewModule, auth_1.AuthModule, user_1.UserModule,
             nest_neo4j_1.Neo4jModule.forRoot({
                 scheme: 'neo4j+s',
                 host: '80f65338.databases.neo4j.io',
@@ -113,9 +113,10 @@ exports.AppService = AppService = tslib_1.__decorate([
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
 tslib_1.__exportStar(__webpack_require__(8), exports);
-tslib_1.__exportStar(__webpack_require__(23), exports);
+tslib_1.__exportStar(__webpack_require__(24), exports);
+tslib_1.__exportStar(__webpack_require__(28), exports);
 tslib_1.__exportStar(__webpack_require__(12), exports);
-tslib_1.__exportStar(__webpack_require__(26), exports);
+tslib_1.__exportStar(__webpack_require__(27), exports);
 
 
 /***/ }),
@@ -282,18 +283,25 @@ let MovieService = class MovieService {
     }
     async create(movie) {
         common_1.Logger.log('create', this.TAG);
-        const newMovie = new this.movieModel(movie);
-        newMovie._id = new mongoose_1.default.Types.ObjectId().toString();
         try {
+            const newMovie = new this.movieModel(movie);
+            newMovie._id = new mongoose_1.default.Types.ObjectId().toString();
             // MongoDB
             const resultMongoDB = await newMovie.save();
+            if (resultMongoDB) {
+                common_1.Logger.log('Movie saved in MongoDB:', resultMongoDB);
+            }
+            else {
+                common_1.Logger.error('Failed to save movie in MongoDB');
+                throw new Error('Failed to save movie in MongoDB');
+            }
             // Neo4j
             await this.neo4jService.write(`
         CREATE (m:Movie {
           id: $id
         }) 
         RETURN m
-        `, { id: newMovie._id.toString });
+        `, { id: newMovie._id.toString() });
             return resultMongoDB;
         }
         catch (error) {
@@ -429,6 +437,7 @@ tslib_1.__exportStar(__webpack_require__(17), exports);
 tslib_1.__exportStar(__webpack_require__(19), exports);
 tslib_1.__exportStar(__webpack_require__(20), exports);
 tslib_1.__exportStar(__webpack_require__(21), exports);
+tslib_1.__exportStar(__webpack_require__(22), exports);
 
 
 /***/ }),
@@ -702,10 +711,72 @@ tslib_1.__decorate([
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.UpdateReviewDto = exports.CreateReviewDto = void 0;
+const tslib_1 = __webpack_require__(4);
+const class_validator_1 = __webpack_require__(18);
+class CreateReviewDto {
+}
+exports.CreateReviewDto = CreateReviewDto;
+tslib_1.__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    tslib_1.__metadata("design:type", String)
+], CreateReviewDto.prototype, "title", void 0);
+tslib_1.__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    tslib_1.__metadata("design:type", String)
+], CreateReviewDto.prototype, "text", void 0);
+tslib_1.__decorate([
+    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    tslib_1.__metadata("design:type", Number)
+], CreateReviewDto.prototype, "rating", void 0);
+tslib_1.__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    tslib_1.__metadata("design:type", String)
+], CreateReviewDto.prototype, "userId", void 0);
+tslib_1.__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    tslib_1.__metadata("design:type", String)
+], CreateReviewDto.prototype, "movieId", void 0);
+class UpdateReviewDto {
+}
+exports.UpdateReviewDto = UpdateReviewDto;
+tslib_1.__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    tslib_1.__metadata("design:type", String)
+], UpdateReviewDto.prototype, "title", void 0);
+tslib_1.__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    tslib_1.__metadata("design:type", String)
+], UpdateReviewDto.prototype, "text", void 0);
+tslib_1.__decorate([
+    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    tslib_1.__metadata("design:type", Number)
+], UpdateReviewDto.prototype, "rating", void 0);
+tslib_1.__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    tslib_1.__metadata("design:type", String)
+], UpdateReviewDto.prototype, "userId", void 0);
+
+
+/***/ }),
+/* 22 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ApiResponseInterceptor = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const operators_1 = __webpack_require__(22);
+const operators_1 = __webpack_require__(23);
 let ApiResponseInterceptor = class ApiResponseInterceptor {
     intercept(context, next) {
         return next.handle().pipe((0, operators_1.map)((results) => {
@@ -739,13 +810,13 @@ exports.ApiResponseInterceptor = ApiResponseInterceptor = tslib_1.__decorate([
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ ((module) => {
 
 module.exports = require("rxjs/operators");
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -753,9 +824,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BackendFeaturesActorModule = void 0;
 const tslib_1 = __webpack_require__(4);
 const mongoose_1 = __webpack_require__(9);
-const actor_controller_1 = __webpack_require__(24);
-const actor_schema_1 = __webpack_require__(26);
-const actor_service_1 = __webpack_require__(25);
+const actor_controller_1 = __webpack_require__(25);
+const actor_schema_1 = __webpack_require__(27);
+const actor_service_1 = __webpack_require__(26);
 const common_1 = __webpack_require__(1);
 let BackendFeaturesActorModule = class BackendFeaturesActorModule {
 };
@@ -771,7 +842,7 @@ exports.BackendFeaturesActorModule = BackendFeaturesActorModule = tslib_1.__deco
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -780,9 +851,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ActorController = void 0;
 const tslib_1 = __webpack_require__(4);
 const dto_1 = __webpack_require__(15);
-const actor_service_1 = __webpack_require__(25);
+const actor_service_1 = __webpack_require__(26);
 const common_1 = __webpack_require__(1);
-const actor_schema_1 = __webpack_require__(26);
+const actor_schema_1 = __webpack_require__(27);
 let ActorController = class ActorController {
     constructor(actorService) {
         this.actorService = actorService;
@@ -854,7 +925,7 @@ exports.ActorController = ActorController = tslib_1.__decorate([
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -864,7 +935,7 @@ exports.ActorService = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const mongoose_1 = __webpack_require__(9);
-const actor_schema_1 = __webpack_require__(26);
+const actor_schema_1 = __webpack_require__(27);
 const mongoose_2 = tslib_1.__importStar(__webpack_require__(13));
 let ActorService = class ActorService {
     constructor(actorModel) {
@@ -929,7 +1000,7 @@ exports.ActorService = ActorService = tslib_1.__decorate([
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -969,18 +1040,225 @@ exports.ActorSchema = mongoose_1.SchemaFactory.createForClass(Actor);
 
 
 /***/ }),
-/* 27 */
+/* 28 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.BackendFeaturesReviewModule = void 0;
+const tslib_1 = __webpack_require__(4);
+const mongoose_1 = __webpack_require__(9);
+const common_1 = __webpack_require__(1);
+const review_controller_1 = __webpack_require__(29);
+const review_service_1 = __webpack_require__(30);
+let BackendFeaturesReviewModule = class BackendFeaturesReviewModule {
+};
+exports.BackendFeaturesReviewModule = BackendFeaturesReviewModule;
+exports.BackendFeaturesReviewModule = BackendFeaturesReviewModule = tslib_1.__decorate([
+    (0, common_1.Module)({
+        controllers: [review_controller_1.ReviewController],
+        providers: [review_service_1.ReviewService],
+        imports: [mongoose_1.MongooseModule.forRoot('mongodb+srv://elcoAdmin:Admin123Database@clusterlocaldataapi.m0cwagc.mongodb.net/')],
+        exports: [review_service_1.ReviewService]
+    })
+], BackendFeaturesReviewModule);
+
+
+/***/ }),
+/* 29 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a, _b, _c, _d, _e, _f;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ReviewController = void 0;
+const tslib_1 = __webpack_require__(4);
+const common_1 = __webpack_require__(1);
+const review_service_1 = __webpack_require__(30);
+const dto_1 = __webpack_require__(15);
+let ReviewController = class ReviewController {
+    constructor(reviewService) {
+        this.reviewService = reviewService;
+    }
+    async create(data) {
+        return this.reviewService.create(data);
+    }
+    async update(id, data) {
+        return this.reviewService.update(id, data);
+    }
+    async delete(id) {
+        return this.reviewService.delete(id);
+    }
+};
+exports.ReviewController = ReviewController;
+tslib_1.__decorate([
+    (0, common_1.Post)(''),
+    tslib_1.__param(0, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_b = typeof dto_1.CreateReviewDto !== "undefined" && dto_1.CreateReviewDto) === "function" ? _b : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
+], ReviewController.prototype, "create", null);
+tslib_1.__decorate([
+    (0, common_1.Put)(':id'),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__param(1, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String, typeof (_d = typeof dto_1.UpdateReviewDto !== "undefined" && dto_1.UpdateReviewDto) === "function" ? _d : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
+], ReviewController.prototype, "update", null);
+tslib_1.__decorate([
+    (0, common_1.Delete)(':id'),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
+], ReviewController.prototype, "delete", null);
+exports.ReviewController = ReviewController = tslib_1.__decorate([
+    (0, common_1.Controller)('review'),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof review_service_1.ReviewService !== "undefined" && review_service_1.ReviewService) === "function" ? _a : Object])
+], ReviewController);
+
+
+/***/ }),
+/* 30 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ReviewService = void 0;
+const tslib_1 = __webpack_require__(4);
+const common_1 = __webpack_require__(1);
+const dist_1 = __webpack_require__(31);
+const uuid_1 = __webpack_require__(32);
+let ReviewService = class ReviewService {
+    constructor(neo4jService) {
+        this.neo4jService = neo4jService;
+        this.TAG = 'ReviewService';
+    }
+    // GET All
+    // GET by id
+    // POST create
+    async create(review) {
+        common_1.Logger.log(`Create review`, this.TAG);
+        const { title, text, rating } = review;
+        const id = (0, uuid_1.v4)();
+        const date = new Date().toDateString();
+        const createdReview = await this.neo4jService.write(`
+            CREATE (r:Review {
+                id: $id,
+                title: $title,
+                text: $text,
+                rating: $rating,
+                date: $date
+            })
+            RETURN r {.id, .title, .text, .rating, .date}
+            `, { id, title, text, rating, date });
+        const newReview = createdReview.records[0]?.get('r');
+        if (!newReview) {
+            throw new Error('Failed to create review');
+        }
+        const userId = review.userId;
+        const reviewId = newReview.id; // Verander '.Id' naar '.id'
+        await this.neo4jService.write(`
+            MATCH (u:User), (r:Review)
+            WHERE u.id = $userId and r.id = $reviewId
+            MERGE (u)-[:MAKEDREVIEW]->(r)
+            `, { userId: userId, reviewId: reviewId });
+        const movieId = review.movieId;
+        await this.neo4jService.write(`
+            MATCH (r:Review), (m:Movie)
+            WHERE r.id = $reviewId and m.id = $movieId
+            MERGE (r)-[:REVIEWMADEFOR]->(m)
+            `, { reviewId: reviewId, movieId: movieId });
+        return newReview;
+    }
+    // PUT update
+    async update(id, review) {
+        common_1.Logger.log(`Update review`, this.TAG);
+        const date = new Date().toDateString();
+        const result = await this.neo4jService.write(`
+            MATCH (r:Review {id: $id})
+            RETURN r {.id, .title, .text, .rating, .date }
+            `, { id: id });
+        if (!result.records[0]) {
+            common_1.Logger.debug('User not found');
+            return null;
+        }
+        ;
+        const updatedReview = {
+            title: review.title,
+            text: review.text,
+            rating: review.rating,
+            date: date
+        };
+        const updateResult = await this.neo4jService.write(`
+            MATCH (r:Review {id: $id})
+            SET r += $updatedReview
+            RETURN r {.id, .title, .text, .rating, .date} as review
+            `, { id: id, updatedReview: updatedReview });
+        if (!updateResult.records[0]) {
+            throw new Error('Failed to update review');
+        }
+        ;
+        const updatedResult = updateResult.records[0].get('review');
+        const updatedReviewInfo = {
+            id: updatedResult.id,
+            title: updatedResult.title,
+            text: updatedResult.text,
+            rating: updatedResult.rating,
+            date: updatedResult.date,
+            userId: review.userId
+        };
+        return updatedReviewInfo;
+    }
+    // DELETE
+    async delete(id) {
+        common_1.Logger.log('delete', this.TAG);
+        const deleteResult = await this.neo4jService.write(`
+            MATCH (r:Review {id: $id})
+            DETACH DELETE r
+            `, { id: id });
+        const containsUpdates = deleteResult.summary.updateStatistics.containsUpdates();
+        if (!containsUpdates) {
+            common_1.Logger.debug('Failed to delete review');
+            throw new Error('Failed to delete review');
+        }
+        return 'Success';
+    }
+};
+exports.ReviewService = ReviewService;
+exports.ReviewService = ReviewService = tslib_1.__decorate([
+    (0, common_1.Injectable)(),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof dist_1.Neo4jService !== "undefined" && dist_1.Neo4jService) === "function" ? _a : Object])
+], ReviewService);
+
+
+/***/ }),
+/* 31 */
+/***/ ((module) => {
+
+module.exports = require("nest-neo4j/dist");
+
+/***/ }),
+/* 32 */
+/***/ ((module) => {
+
+module.exports = require("uuid");
+
+/***/ }),
+/* 33 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
-tslib_1.__exportStar(__webpack_require__(28), exports);
-tslib_1.__exportStar(__webpack_require__(45), exports);
+tslib_1.__exportStar(__webpack_require__(34), exports);
+tslib_1.__exportStar(__webpack_require__(51), exports);
 
 
 /***/ }),
-/* 28 */
+/* 34 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -988,10 +1266,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthModule = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const jwt_1 = __webpack_require__(29);
-const user_1 = __webpack_require__(30);
-const auth_controller_1 = __webpack_require__(35);
-const auth_service_1 = __webpack_require__(36);
+const jwt_1 = __webpack_require__(35);
+const user_1 = __webpack_require__(36);
+const auth_controller_1 = __webpack_require__(41);
+const auth_service_1 = __webpack_require__(42);
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -1012,25 +1290,25 @@ exports.AuthModule = AuthModule = tslib_1.__decorate([
 
 
 /***/ }),
-/* 29 */
+/* 35 */
 /***/ ((module) => {
 
 module.exports = require("@nestjs/jwt");
 
 /***/ }),
-/* 30 */
+/* 36 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
-tslib_1.__exportStar(__webpack_require__(31), exports);
-tslib_1.__exportStar(__webpack_require__(34), exports);
-tslib_1.__exportStar(__webpack_require__(31), exports);
+tslib_1.__exportStar(__webpack_require__(37), exports);
+tslib_1.__exportStar(__webpack_require__(40), exports);
+tslib_1.__exportStar(__webpack_require__(37), exports);
 
 
 /***/ }),
-/* 31 */
+/* 37 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1038,8 +1316,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserModule = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const user_controller_1 = __webpack_require__(32);
-const user_service_1 = __webpack_require__(33);
+const user_controller_1 = __webpack_require__(38);
+const user_service_1 = __webpack_require__(39);
 let UserModule = class UserModule {
 };
 exports.UserModule = UserModule;
@@ -1053,7 +1331,7 @@ exports.UserModule = UserModule = tslib_1.__decorate([
 
 
 /***/ }),
-/* 32 */
+/* 38 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1063,7 +1341,7 @@ exports.UserController = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const common_2 = __webpack_require__(1);
-const user_service_1 = __webpack_require__(33);
+const user_service_1 = __webpack_require__(39);
 const dto_1 = __webpack_require__(15);
 let UserController = class UserController {
     constructor(userService) {
@@ -1141,7 +1419,7 @@ exports.UserController = UserController = tslib_1.__decorate([
 
 
 /***/ }),
-/* 33 */
+/* 39 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1291,7 +1569,7 @@ exports.UserService = UserService = UserService_1 = tslib_1.__decorate([
 
 
 /***/ }),
-/* 34 */
+/* 40 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1327,7 +1605,7 @@ exports.UserExistsGuard = UserExistsGuard = tslib_1.__decorate([
 
 
 /***/ }),
-/* 35 */
+/* 41 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1338,10 +1616,10 @@ exports.AuthController = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const dto_1 = __webpack_require__(15);
-const auth_service_1 = __webpack_require__(36);
-const api_1 = __webpack_require__(38);
-const decorators_1 = __webpack_require__(44);
-const user_1 = __webpack_require__(30);
+const auth_service_1 = __webpack_require__(42);
+const api_1 = __webpack_require__(43);
+const decorators_1 = __webpack_require__(50);
+const user_1 = __webpack_require__(36);
 let AuthController = AuthController_1 = class AuthController {
     constructor(authService) {
         this.authService = authService;
@@ -1381,7 +1659,7 @@ exports.AuthController = AuthController = AuthController_1 = tslib_1.__decorate(
 
 
 /***/ }),
-/* 36 */
+/* 42 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1392,9 +1670,9 @@ exports.AuthService = void 0;
 const tslib_1 = __webpack_require__(4);
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const common_1 = __webpack_require__(1);
-const jwt_1 = __webpack_require__(29);
+const jwt_1 = __webpack_require__(35);
 const nest_neo4j_1 = __webpack_require__(14);
-const uuid_1 = __webpack_require__(37);
+const uuid_1 = __webpack_require__(32);
 let AuthService = AuthService_1 = class AuthService {
     constructor(neo4jService, jwtService) {
         this.neo4jService = neo4jService;
@@ -1487,27 +1765,22 @@ exports.AuthService = AuthService = AuthService_1 = tslib_1.__decorate([
 
 
 /***/ }),
-/* 37 */
-/***/ ((module) => {
-
-module.exports = require("uuid");
-
-/***/ }),
-/* 38 */
+/* 43 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
-tslib_1.__exportStar(__webpack_require__(39), exports);
-tslib_1.__exportStar(__webpack_require__(40), exports);
-tslib_1.__exportStar(__webpack_require__(41), exports);
-tslib_1.__exportStar(__webpack_require__(42), exports);
-tslib_1.__exportStar(__webpack_require__(43), exports);
+tslib_1.__exportStar(__webpack_require__(44), exports);
+tslib_1.__exportStar(__webpack_require__(45), exports);
+tslib_1.__exportStar(__webpack_require__(46), exports);
+tslib_1.__exportStar(__webpack_require__(47), exports);
+tslib_1.__exportStar(__webpack_require__(48), exports);
+tslib_1.__exportStar(__webpack_require__(49), exports);
 
 
 /***/ }),
-/* 39 */
+/* 44 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -1534,7 +1807,7 @@ var Language;
 
 
 /***/ }),
-/* 40 */
+/* 45 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -1542,7 +1815,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 
 
 /***/ }),
-/* 41 */
+/* 46 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -1560,7 +1833,7 @@ var Nationality;
 
 
 /***/ }),
-/* 42 */
+/* 47 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -1568,7 +1841,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 
 
 /***/ }),
-/* 43 */
+/* 48 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -1583,7 +1856,15 @@ var UserRole;
 
 
 /***/ }),
-/* 44 */
+/* 49 */
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+
+/***/ }),
+/* 50 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1596,7 +1877,7 @@ exports.Public = Public;
 
 
 /***/ }),
-/* 45 */
+/* 51 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1606,7 +1887,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthGuard = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const jwt_1 = __webpack_require__(29);
+const jwt_1 = __webpack_require__(35);
 let AuthGuard = AuthGuard_1 = class AuthGuard {
     constructor(jwtService) {
         this.jwtService = jwtService;
