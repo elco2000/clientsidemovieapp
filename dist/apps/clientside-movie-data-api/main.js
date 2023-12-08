@@ -1069,7 +1069,7 @@ exports.BackendFeaturesReviewModule = BackendFeaturesReviewModule = tslib_1.__de
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c, _d, _e, _f;
+var _a, _b, _c, _d, _e, _f, _g, _h;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ReviewController = void 0;
 const tslib_1 = __webpack_require__(4);
@@ -1079,6 +1079,12 @@ const dto_1 = __webpack_require__(15);
 let ReviewController = class ReviewController {
     constructor(reviewService) {
         this.reviewService = reviewService;
+    }
+    async getAll(movieId) {
+        return this.reviewService.getAll(movieId);
+    }
+    async getOne(id) {
+        return this.reviewService.getOne(id);
     }
     async create(data) {
         return this.reviewService.create(data);
@@ -1092,26 +1098,40 @@ let ReviewController = class ReviewController {
 };
 exports.ReviewController = ReviewController;
 tslib_1.__decorate([
+    (0, common_1.Get)('movie/:movieId'),
+    tslib_1.__param(0, (0, common_1.Param)('movieId')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
+], ReviewController.prototype, "getAll", null);
+tslib_1.__decorate([
+    (0, common_1.Get)(':id'),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
+], ReviewController.prototype, "getOne", null);
+tslib_1.__decorate([
     (0, common_1.Post)(''),
     tslib_1.__param(0, (0, common_1.Body)()),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [typeof (_b = typeof dto_1.CreateReviewDto !== "undefined" && dto_1.CreateReviewDto) === "function" ? _b : Object]),
-    tslib_1.__metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
+    tslib_1.__metadata("design:paramtypes", [typeof (_d = typeof dto_1.CreateReviewDto !== "undefined" && dto_1.CreateReviewDto) === "function" ? _d : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
 ], ReviewController.prototype, "create", null);
 tslib_1.__decorate([
     (0, common_1.Put)(':id'),
     tslib_1.__param(0, (0, common_1.Param)('id')),
     tslib_1.__param(1, (0, common_1.Body)()),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [String, typeof (_d = typeof dto_1.UpdateReviewDto !== "undefined" && dto_1.UpdateReviewDto) === "function" ? _d : Object]),
-    tslib_1.__metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
+    tslib_1.__metadata("design:paramtypes", [String, typeof (_f = typeof dto_1.UpdateReviewDto !== "undefined" && dto_1.UpdateReviewDto) === "function" ? _f : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
 ], ReviewController.prototype, "update", null);
 tslib_1.__decorate([
     (0, common_1.Delete)(':id'),
     tslib_1.__param(0, (0, common_1.Param)('id')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String]),
-    tslib_1.__metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
+    tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
 ], ReviewController.prototype, "delete", null);
 exports.ReviewController = ReviewController = tslib_1.__decorate([
     (0, common_1.Controller)('review'),
@@ -1137,7 +1157,26 @@ let ReviewService = class ReviewService {
         this.TAG = 'ReviewService';
     }
     // GET All
+    async getAll(movieId) {
+        common_1.Logger.log(`Get all reviews for movie ID: ${movieId}`, this.TAG);
+        const result = await this.neo4jService.read(`
+            MATCH (:Movie {id: $movieId})<-[:REVIEWMADEFOR]-(r:Review)<-[:MAKEDREVIEW]-(u:User)
+            RETURN r {.id, .title, .text, .rating, .date, userId: u.id, username: u.username}
+            `, { movieId });
+        return result.records.map((record) => record.get('r'));
+    }
     // GET by id
+    async getOne(reviewId) {
+        common_1.Logger.log(`Get review ${reviewId}`, this.TAG);
+        const result = await this.neo4jService.read(`
+            MATCH (r:Review {id: $reviewId})<-[:MAKEDREVIEW]-(u:User)
+            RETURN r {.id, .title, .text, .rating, .date, userId: u.id, username: u.username}
+            `, { reviewId });
+        if (result.records.length === 0) {
+            throw new Error(`Review with ID ${reviewId} not found`);
+        }
+        return result.records[0].get('r');
+    }
     // POST create
     async create(review) {
         common_1.Logger.log(`Create review`, this.TAG);

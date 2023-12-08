@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { CreateReviewDto, UpdateReviewDto } from "@org/backend/dto";
-import { IReview } from "@org/shared/api";
+import { IReview, IReviewInfo } from "@org/shared/api";
 import { Neo4jService } from "nest-neo4j/dist";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -13,8 +13,38 @@ export class ReviewService {
     ) {}
 
     // GET All
+    async getAll(movieId: string): Promise<IReviewInfo[]> {
+        Logger.log(`Get all reviews for movie ID: ${movieId}`, this.TAG);
+
+        const result = await this.neo4jService.read(
+            `
+            MATCH (:Movie {id: $movieId})<-[:REVIEWMADEFOR]-(r:Review)<-[:MAKEDREVIEW]-(u:User)
+            RETURN r {.id, .title, .text, .rating, .date, userId: u.id, username: u.username}
+            `,
+            { movieId }
+        );
+
+        return result.records.map((record) => record.get('r'));
+    }
 
     // GET by id
+    async getOne(reviewId: string): Promise<IReviewInfo> {
+        Logger.log(`Get review ${reviewId}`, this.TAG);
+
+        const result = await this.neo4jService.read(
+            `
+            MATCH (r:Review {id: $reviewId})<-[:MAKEDREVIEW]-(u:User)
+            RETURN r {.id, .title, .text, .rating, .date, userId: u.id, username: u.username}
+            `,
+            { reviewId }
+        );
+
+        if (result.records.length === 0) {
+            throw new Error(`Review with ID ${reviewId} not found`);
+        }
+
+        return result.records[0].get('r');
+    }
 
     // POST create
     async create(review: CreateReviewDto): Promise<IReview> {
