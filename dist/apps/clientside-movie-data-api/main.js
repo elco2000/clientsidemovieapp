@@ -1021,7 +1021,7 @@ exports.UserModule = UserModule = tslib_1.__decorate([
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c, _d, _e, _f;
+var _a, _b, _c, _d, _e, _f, _g, _h;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserController = void 0;
 const tslib_1 = __webpack_require__(4);
@@ -1033,17 +1033,23 @@ let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
     }
-    async findOne(id) {
-        return this.userService.findById(id);
+    async findOne(userid) {
+        return this.userService.findById(userid);
     }
-    async update(id, data) {
-        return this.userService.update(id, data);
+    async update(userid, data) {
+        return this.userService.update(userid, data);
     }
     async follow(userid, followuserid) {
         return this.userService.follow(userid, followuserid);
     }
     async unfollow(userid, unfollowuserid) {
         return this.userService.unfollow(userid, unfollowuserid);
+    }
+    async getFollowers(userid) {
+        return this.userService.getFollowers(userid);
+    }
+    async getFollowing(userid) {
+        return this.userService.getFollowing(userid);
     }
 };
 exports.UserController = UserController;
@@ -1063,7 +1069,7 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", typeof (_d = typeof Promise !== "undefined" && Promise) === "function" ? _d : Object)
 ], UserController.prototype, "update", null);
 tslib_1.__decorate([
-    (0, common_1.Put)('follow/:userid/:followuserid'),
+    (0, common_1.Put)(':userid/follow/:followuserid'),
     tslib_1.__param(0, (0, common_2.Param)('userid')),
     tslib_1.__param(1, (0, common_2.Param)('followuserid')),
     tslib_1.__metadata("design:type", Function),
@@ -1071,13 +1077,27 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
 ], UserController.prototype, "follow", null);
 tslib_1.__decorate([
-    (0, common_1.Put)('unfollow/:userid/:unfollowuserid'),
+    (0, common_1.Put)(':userid/unfollow/:unfollowuserid'),
     tslib_1.__param(0, (0, common_2.Param)('userid')),
     tslib_1.__param(1, (0, common_2.Param)('unfollowuserid')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String, String]),
     tslib_1.__metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
 ], UserController.prototype, "unfollow", null);
+tslib_1.__decorate([
+    (0, common_1.Get)(':id/followers'),
+    tslib_1.__param(0, (0, common_2.Param)('id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
+], UserController.prototype, "getFollowers", null);
+tslib_1.__decorate([
+    (0, common_1.Get)(':id/following'),
+    tslib_1.__param(0, (0, common_2.Param)('id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
+], UserController.prototype, "getFollowing", null);
 exports.UserController = UserController = tslib_1.__decorate([
     (0, common_2.Controller)('user'),
     tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof user_service_1.UserService !== "undefined" && user_service_1.UserService) === "function" ? _a : Object])
@@ -1173,7 +1193,6 @@ let UserService = UserService_1 = class UserService {
             WHERE u.id = $userId AND f.id = $followUserId
             MERGE (u)-[:FOLLOWS]->(f)
             `, { userId, followUserId });
-        console.log(result);
         const containsUpdates = result.summary.updateStatistics.containsUpdates();
         if (!containsUpdates) {
             this.logger.debug('Failed to follow user');
@@ -1188,13 +1207,44 @@ let UserService = UserService_1 = class UserService {
             WHERE u.id = $userId AND f.id = $followUserId
             DELETE r
             `, { userId, followUserId });
-        console.log(result);
         const containsUpdates = result.summary.updateStatistics.containsUpdates();
         if (!containsUpdates) {
             this.logger.debug('Failed to unfollow user');
             return 'Failed';
         }
         return 'Succes';
+    }
+    async getFollowers(userId) {
+        this.logger.log(`Getting followers for user with ID ${userId}`);
+        const result = await this.neo4jService.read(`
+            MATCH (u:User)-[:FOLLOWS]->(follower:User)
+            WHERE follower.id = $userId
+            RETURN u.id AS id, u.username AS username, u.birthdate AS birthdate, u.country AS country, u.description AS description
+            `, { userId });
+        const followers = result.records.map((record) => ({
+            id: record.get('id'),
+            username: record.get('username'),
+            birthdate: record.get('birthdate'),
+            country: record.get('country'),
+            description: record.get('description'),
+        }));
+        return followers;
+    }
+    async getFollowing(userId) {
+        this.logger.log(`Getting users followed by user with ID ${userId}`);
+        const result = await this.neo4jService.read(`
+            MATCH (u:User)-[:FOLLOWS]->(following:User)
+            WHERE u.id = $userId
+            RETURN following.id AS id, following.username AS username, following.birthdate AS birthdate, following.country AS country, following.description AS description
+            `, { userId });
+        const following = result.records.map((record) => ({
+            id: record.get('id'),
+            username: record.get('username'),
+            birthdate: record.get('birthdate'),
+            country: record.get('country'),
+            description: record.get('description'),
+        }));
+        return following;
     }
 };
 exports.UserService = UserService;

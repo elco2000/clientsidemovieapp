@@ -110,7 +110,6 @@ export class UserService {
             { userId, followUserId }
         );
             
-            console.log(result);
             const containsUpdates = result.summary.updateStatistics.containsUpdates();
     
             if (!containsUpdates) {
@@ -133,8 +132,6 @@ export class UserService {
             { userId, followUserId }
         );
     
-        console.log(result);
-
         const containsUpdates = result.summary.updateStatistics.containsUpdates();
 
         if (!containsUpdates) {
@@ -143,5 +140,52 @@ export class UserService {
         }
 
         return 'Succes';
+    }
+
+    
+    async getFollowers(userId: string): Promise<IUser[]> {
+        this.logger.log(`Getting followers for user with ID ${userId}`);
+        
+        const result = await this.neo4jService.read(
+            `
+            MATCH (u:User)-[:FOLLOWS]->(follower:User)
+            WHERE follower.id = $userId
+            RETURN u.id AS id, u.username AS username, u.birthdate AS birthdate, u.country AS country, u.description AS description
+            `,
+            { userId }
+        );
+
+        const followers: IUser[] = result.records.map((record) => ({
+            id: record.get('id'),
+            username: record.get('username'),
+            birthdate: record.get('birthdate'),
+            country: record.get('country'),
+            description: record.get('description'),
+        }));
+        
+        return followers;
+    }
+
+    async getFollowing(userId: string): Promise<IUser[]> {
+        this.logger.log(`Getting users followed by user with ID ${userId}`);
+        
+        const result = await this.neo4jService.read(
+            `
+            MATCH (u:User)-[:FOLLOWS]->(following:User)
+            WHERE u.id = $userId
+            RETURN following.id AS id, following.username AS username, following.birthdate AS birthdate, following.country AS country, following.description AS description
+            `,
+            { userId }
+        );
+
+        const following: IUser[] = result.records.map((record) => ({
+            id: record.get('id'),
+            username: record.get('username'),
+            birthdate: record.get('birthdate'),
+            country: record.get('country'),
+            description: record.get('description'),
+        }));
+        
+        return following;
     }
 }

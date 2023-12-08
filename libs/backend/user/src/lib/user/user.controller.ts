@@ -9,22 +9,32 @@ export class UserController {
     constructor(private readonly userService: UserService) {}
 
         @Get(':id')
-        async findOne(@Param('id') id: string): Promise<IUser | null> {
-            return this.userService.findById(id);
+        async findOne(@Param('id') userid: string): Promise<IUser | null> {
+            return this.userService.findById(userid);
         }
     
         @Put(':id')
-        async update(@Param('id') id: string, @Body() data: UpdateUserDto): Promise<IUserInfo | null> {
-            return this.userService.update(id ,data);
+        async update(@Param('id') userid: string, @Body() data: UpdateUserDto): Promise<IUserInfo | null> {
+            return this.userService.update(userid ,data);
         }
 
-        @Put('follow/:userid/:followuserid')
+        @Put(':userid/follow/:followuserid')
         async follow(@Param('userid') userid: string, @Param('followuserid') followuserid: string): Promise<string> {
             return this.userService.follow(userid, followuserid);
         }
 
-        @Put('unfollow/:userid/:unfollowuserid')
+        @Put(':userid/unfollow/:unfollowuserid')
         async unfollow(@Param('userid') userid: string, @Param('unfollowuserid') unfollowuserid: string): Promise<string> {
             return this.userService.unfollow(userid, unfollowuserid);
+        }
+
+        @Get(':id/followers')
+        async getFollowers(@Param('id') userid: string): Promise<IUser[]> {
+            return this.userService.getFollowers(userid);
+        }
+
+        @Get(':id/following')
+        async getFollowing(@Param('id') userid: string): Promise<IUser[]> {
+            return this.userService.getFollowing(userid);
         }
 }
