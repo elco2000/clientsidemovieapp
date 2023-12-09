@@ -11,7 +11,11 @@ export class CreateCollectionDto {
 
     @IsBoolean()
     @IsNotEmpty()
-    private!: string
+    privateCollection!: string
+
+    @IsString()
+    @IsNotEmpty()
+    userId!: string
 }
 
 export class EditCollectionDto {
@@ -27,5 +31,23 @@ export class EditCollectionDto {
 
     @IsBoolean()
     @IsNotEmpty()
-    private!: string
+    privateCollection!: string
+
+    @IsString()
+    @IsNotEmpty()
+    userId!: string
+}
+
+export class EditCollectionMovie {
+    @IsString()
+    @IsNotEmpty()
+    userId!: string;
+
+    @IsString()
+    @IsNotEmpty()
+    movieId!: string;
+
+    @IsString()
+    @IsNotEmpty()
+    collectionId!: string;
 }

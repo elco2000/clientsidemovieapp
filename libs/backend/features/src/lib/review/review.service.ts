@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable, Logger, UnauthorizedException } from "@nestjs/common";
-import { CreateReviewDto, UpdateReviewDto } from "@org/backend/dto";
+import { CreateReviewDto } from "@org/backend/dto";
 import { IReview, IReviewInfo } from "@org/shared/api";
 import { Neo4jService } from "nest-neo4j/dist";
 import { v4 as uuidv4 } from 'uuid';
@@ -94,7 +94,7 @@ export class ReviewService {
             MERGE (r)-[:REVIEWMADEFOR]->(m)
             `,
             { reviewId: reviewId, movieId: movieId }
-)
+        )
 
         return newReview;
     }

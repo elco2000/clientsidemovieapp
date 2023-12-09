@@ -25,15 +25,20 @@ const common_1 = __webpack_require__(1);
 const app_controller_1 = __webpack_require__(5);
 const app_service_1 = __webpack_require__(6);
 const features_1 = __webpack_require__(7);
-const auth_1 = __webpack_require__(33);
+const auth_1 = __webpack_require__(34);
 const nest_neo4j_1 = __webpack_require__(14);
-const user_1 = __webpack_require__(36);
+const user_1 = __webpack_require__(37);
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = tslib_1.__decorate([
     (0, common_1.Module)({
-        imports: [features_1.BackendFeaturesMovieModule, features_1.BackendFeaturesActorModule, features_1.BackendFeaturesReviewModule, auth_1.AuthModule, user_1.UserModule,
+        imports: [features_1.BackendFeaturesMovieModule,
+            features_1.BackendFeaturesActorModule,
+            features_1.BackendFeaturesReviewModule,
+            features_1.BackendFeaturesCollectionModule,
+            auth_1.AuthModule,
+            user_1.UserModule,
             nest_neo4j_1.Neo4jModule.forRoot({
                 scheme: 'neo4j+s',
                 host: '80f65338.databases.neo4j.io',
@@ -113,10 +118,11 @@ exports.AppService = AppService = tslib_1.__decorate([
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
 tslib_1.__exportStar(__webpack_require__(8), exports);
-tslib_1.__exportStar(__webpack_require__(24), exports);
-tslib_1.__exportStar(__webpack_require__(28), exports);
+tslib_1.__exportStar(__webpack_require__(25), exports);
+tslib_1.__exportStar(__webpack_require__(29), exports);
+tslib_1.__exportStar(__webpack_require__(54), exports);
 tslib_1.__exportStar(__webpack_require__(12), exports);
-tslib_1.__exportStar(__webpack_require__(27), exports);
+tslib_1.__exportStar(__webpack_require__(28), exports);
 
 
 /***/ }),
@@ -438,6 +444,7 @@ tslib_1.__exportStar(__webpack_require__(19), exports);
 tslib_1.__exportStar(__webpack_require__(20), exports);
 tslib_1.__exportStar(__webpack_require__(21), exports);
 tslib_1.__exportStar(__webpack_require__(22), exports);
+tslib_1.__exportStar(__webpack_require__(23), exports);
 
 
 /***/ }),
@@ -773,10 +780,85 @@ tslib_1.__decorate([
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.EditCollectionMovie = exports.EditCollectionDto = exports.CreateCollectionDto = void 0;
+const tslib_1 = __webpack_require__(4);
+const class_validator_1 = __webpack_require__(18);
+class CreateCollectionDto {
+}
+exports.CreateCollectionDto = CreateCollectionDto;
+tslib_1.__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    tslib_1.__metadata("design:type", String)
+], CreateCollectionDto.prototype, "name", void 0);
+tslib_1.__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    tslib_1.__metadata("design:type", String)
+], CreateCollectionDto.prototype, "description", void 0);
+tslib_1.__decorate([
+    (0, class_validator_1.IsBoolean)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    tslib_1.__metadata("design:type", String)
+], CreateCollectionDto.prototype, "privateCollection", void 0);
+tslib_1.__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    tslib_1.__metadata("design:type", String)
+], CreateCollectionDto.prototype, "userId", void 0);
+class EditCollectionDto {
+}
+exports.EditCollectionDto = EditCollectionDto;
+tslib_1.__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    tslib_1.__metadata("design:type", String)
+], EditCollectionDto.prototype, "name", void 0);
+tslib_1.__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    tslib_1.__metadata("design:type", String)
+], EditCollectionDto.prototype, "description", void 0);
+tslib_1.__decorate([
+    (0, class_validator_1.IsBoolean)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    tslib_1.__metadata("design:type", String)
+], EditCollectionDto.prototype, "privateCollection", void 0);
+tslib_1.__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    tslib_1.__metadata("design:type", String)
+], EditCollectionDto.prototype, "userId", void 0);
+class EditCollectionMovie {
+}
+exports.EditCollectionMovie = EditCollectionMovie;
+tslib_1.__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    tslib_1.__metadata("design:type", String)
+], EditCollectionMovie.prototype, "userId", void 0);
+tslib_1.__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    tslib_1.__metadata("design:type", String)
+], EditCollectionMovie.prototype, "movieId", void 0);
+tslib_1.__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    tslib_1.__metadata("design:type", String)
+], EditCollectionMovie.prototype, "collectionId", void 0);
+
+
+/***/ }),
+/* 23 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ApiResponseInterceptor = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const operators_1 = __webpack_require__(23);
+const operators_1 = __webpack_require__(24);
 let ApiResponseInterceptor = class ApiResponseInterceptor {
     intercept(context, next) {
         return next.handle().pipe((0, operators_1.map)((results) => {
@@ -810,13 +892,13 @@ exports.ApiResponseInterceptor = ApiResponseInterceptor = tslib_1.__decorate([
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ ((module) => {
 
 module.exports = require("rxjs/operators");
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -824,9 +906,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BackendFeaturesActorModule = void 0;
 const tslib_1 = __webpack_require__(4);
 const mongoose_1 = __webpack_require__(9);
-const actor_controller_1 = __webpack_require__(25);
-const actor_schema_1 = __webpack_require__(27);
-const actor_service_1 = __webpack_require__(26);
+const actor_controller_1 = __webpack_require__(26);
+const actor_schema_1 = __webpack_require__(28);
+const actor_service_1 = __webpack_require__(27);
 const common_1 = __webpack_require__(1);
 let BackendFeaturesActorModule = class BackendFeaturesActorModule {
 };
@@ -842,7 +924,7 @@ exports.BackendFeaturesActorModule = BackendFeaturesActorModule = tslib_1.__deco
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -851,9 +933,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ActorController = void 0;
 const tslib_1 = __webpack_require__(4);
 const dto_1 = __webpack_require__(15);
-const actor_service_1 = __webpack_require__(26);
+const actor_service_1 = __webpack_require__(27);
 const common_1 = __webpack_require__(1);
-const actor_schema_1 = __webpack_require__(27);
+const actor_schema_1 = __webpack_require__(28);
 let ActorController = class ActorController {
     constructor(actorService) {
         this.actorService = actorService;
@@ -925,7 +1007,7 @@ exports.ActorController = ActorController = tslib_1.__decorate([
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -935,7 +1017,7 @@ exports.ActorService = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const mongoose_1 = __webpack_require__(9);
-const actor_schema_1 = __webpack_require__(27);
+const actor_schema_1 = __webpack_require__(28);
 const mongoose_2 = tslib_1.__importStar(__webpack_require__(13));
 let ActorService = class ActorService {
     constructor(actorModel) {
@@ -1000,7 +1082,7 @@ exports.ActorService = ActorService = tslib_1.__decorate([
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1040,7 +1122,7 @@ exports.ActorSchema = mongoose_1.SchemaFactory.createForClass(Actor);
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1049,10 +1131,10 @@ exports.BackendFeaturesReviewModule = void 0;
 const tslib_1 = __webpack_require__(4);
 const mongoose_1 = __webpack_require__(9);
 const common_1 = __webpack_require__(1);
-const review_controller_1 = __webpack_require__(29);
-const review_service_1 = __webpack_require__(30);
-const auth_1 = __webpack_require__(33);
-const jwt_1 = __webpack_require__(35);
+const review_controller_1 = __webpack_require__(30);
+const review_service_1 = __webpack_require__(31);
+const auth_1 = __webpack_require__(34);
+const jwt_1 = __webpack_require__(36);
 let BackendFeaturesReviewModule = class BackendFeaturesReviewModule {
 };
 exports.BackendFeaturesReviewModule = BackendFeaturesReviewModule;
@@ -1069,7 +1151,7 @@ exports.BackendFeaturesReviewModule = BackendFeaturesReviewModule = tslib_1.__de
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1079,9 +1161,9 @@ exports.ReviewController = void 0;
 const tslib_1 = __webpack_require__(4);
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const common_1 = __webpack_require__(1);
-const review_service_1 = __webpack_require__(30);
+const review_service_1 = __webpack_require__(31);
 const dto_1 = __webpack_require__(15);
-const auth_1 = __webpack_require__(33);
+const auth_1 = __webpack_require__(34);
 let ReviewController = class ReviewController {
     constructor(reviewService) {
         this.reviewService = reviewService;
@@ -1150,7 +1232,7 @@ exports.ReviewController = ReviewController = tslib_1.__decorate([
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1160,8 +1242,8 @@ exports.ReviewService = void 0;
 const tslib_1 = __webpack_require__(4);
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const common_1 = __webpack_require__(1);
-const dist_1 = __webpack_require__(31);
-const uuid_1 = __webpack_require__(32);
+const dist_1 = __webpack_require__(32);
+const uuid_1 = __webpack_require__(33);
 let ReviewService = class ReviewService {
     constructor(neo4jService) {
         this.neo4jService = neo4jService;
@@ -1295,27 +1377,16 @@ exports.ReviewService = ReviewService = tslib_1.__decorate([
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ ((module) => {
 
 module.exports = require("nest-neo4j/dist");
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ ((module) => {
 
 module.exports = require("uuid");
-
-/***/ }),
-/* 33 */
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const tslib_1 = __webpack_require__(4);
-tslib_1.__exportStar(__webpack_require__(34), exports);
-tslib_1.__exportStar(__webpack_require__(51), exports);
-
 
 /***/ }),
 /* 34 */
@@ -1323,13 +1394,24 @@ tslib_1.__exportStar(__webpack_require__(51), exports);
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const tslib_1 = __webpack_require__(4);
+tslib_1.__exportStar(__webpack_require__(35), exports);
+tslib_1.__exportStar(__webpack_require__(53), exports);
+
+
+/***/ }),
+/* 35 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthModule = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const jwt_1 = __webpack_require__(35);
-const user_1 = __webpack_require__(36);
-const auth_controller_1 = __webpack_require__(41);
-const auth_service_1 = __webpack_require__(42);
+const jwt_1 = __webpack_require__(36);
+const user_1 = __webpack_require__(37);
+const auth_controller_1 = __webpack_require__(42);
+const auth_service_1 = __webpack_require__(43);
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -1350,22 +1432,10 @@ exports.AuthModule = AuthModule = tslib_1.__decorate([
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ ((module) => {
 
 module.exports = require("@nestjs/jwt");
-
-/***/ }),
-/* 36 */
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const tslib_1 = __webpack_require__(4);
-tslib_1.__exportStar(__webpack_require__(37), exports);
-tslib_1.__exportStar(__webpack_require__(40), exports);
-tslib_1.__exportStar(__webpack_require__(37), exports);
-
 
 /***/ }),
 /* 37 */
@@ -1373,11 +1443,23 @@ tslib_1.__exportStar(__webpack_require__(37), exports);
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const tslib_1 = __webpack_require__(4);
+tslib_1.__exportStar(__webpack_require__(38), exports);
+tslib_1.__exportStar(__webpack_require__(41), exports);
+tslib_1.__exportStar(__webpack_require__(38), exports);
+
+
+/***/ }),
+/* 38 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserModule = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const user_controller_1 = __webpack_require__(38);
-const user_service_1 = __webpack_require__(39);
+const user_controller_1 = __webpack_require__(39);
+const user_service_1 = __webpack_require__(40);
 let UserModule = class UserModule {
 };
 exports.UserModule = UserModule;
@@ -1391,7 +1473,7 @@ exports.UserModule = UserModule = tslib_1.__decorate([
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1401,7 +1483,7 @@ exports.UserController = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const common_2 = __webpack_require__(1);
-const user_service_1 = __webpack_require__(39);
+const user_service_1 = __webpack_require__(40);
 const dto_1 = __webpack_require__(15);
 let UserController = class UserController {
     constructor(userService) {
@@ -1479,7 +1561,7 @@ exports.UserController = UserController = tslib_1.__decorate([
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1629,7 +1711,7 @@ exports.UserService = UserService = UserService_1 = tslib_1.__decorate([
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1665,7 +1747,7 @@ exports.UserExistsGuard = UserExistsGuard = tslib_1.__decorate([
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1676,10 +1758,10 @@ exports.AuthController = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const dto_1 = __webpack_require__(15);
-const auth_service_1 = __webpack_require__(42);
-const api_1 = __webpack_require__(43);
-const decorators_1 = __webpack_require__(50);
-const user_1 = __webpack_require__(36);
+const auth_service_1 = __webpack_require__(43);
+const api_1 = __webpack_require__(44);
+const decorators_1 = __webpack_require__(52);
+const user_1 = __webpack_require__(37);
 let AuthController = AuthController_1 = class AuthController {
     constructor(authService) {
         this.authService = authService;
@@ -1719,7 +1801,7 @@ exports.AuthController = AuthController = AuthController_1 = tslib_1.__decorate(
 
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1730,9 +1812,9 @@ exports.AuthService = void 0;
 const tslib_1 = __webpack_require__(4);
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const common_1 = __webpack_require__(1);
-const jwt_1 = __webpack_require__(35);
+const jwt_1 = __webpack_require__(36);
 const nest_neo4j_1 = __webpack_require__(14);
-const uuid_1 = __webpack_require__(32);
+const uuid_1 = __webpack_require__(33);
 let AuthService = AuthService_1 = class AuthService {
     constructor(neo4jService, jwtService) {
         this.neo4jService = neo4jService;
@@ -1825,22 +1907,23 @@ exports.AuthService = AuthService = AuthService_1 = tslib_1.__decorate([
 
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
-tslib_1.__exportStar(__webpack_require__(44), exports);
 tslib_1.__exportStar(__webpack_require__(45), exports);
 tslib_1.__exportStar(__webpack_require__(46), exports);
 tslib_1.__exportStar(__webpack_require__(47), exports);
 tslib_1.__exportStar(__webpack_require__(48), exports);
 tslib_1.__exportStar(__webpack_require__(49), exports);
+tslib_1.__exportStar(__webpack_require__(50), exports);
+tslib_1.__exportStar(__webpack_require__(51), exports);
 
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -1867,7 +1950,7 @@ var Language;
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -1875,7 +1958,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -1893,7 +1976,7 @@ var Nationality;
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -1901,7 +1984,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -1916,7 +1999,7 @@ var UserRole;
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -1924,7 +2007,15 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 
 
 /***/ }),
-/* 50 */
+/* 51 */
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+
+/***/ }),
+/* 52 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1937,7 +2028,7 @@ exports.Public = Public;
 
 
 /***/ }),
-/* 51 */
+/* 53 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1947,7 +2038,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthGuard = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const jwt_1 = __webpack_require__(35);
+const jwt_1 = __webpack_require__(36);
 let AuthGuard = AuthGuard_1 = class AuthGuard {
     constructor(jwtService) {
         this.jwtService = jwtService;
@@ -1984,6 +2075,348 @@ exports.AuthGuard = AuthGuard = AuthGuard_1 = tslib_1.__decorate([
     (0, common_1.Injectable)(),
     tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof jwt_1.JwtService !== "undefined" && jwt_1.JwtService) === "function" ? _a : Object])
 ], AuthGuard);
+
+
+/***/ }),
+/* 54 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.BackendFeaturesCollectionModule = void 0;
+const tslib_1 = __webpack_require__(4);
+const common_1 = __webpack_require__(1);
+const jwt_1 = __webpack_require__(36);
+const auth_1 = __webpack_require__(34);
+const collection_controller_1 = __webpack_require__(55);
+const collection_service_1 = __webpack_require__(56);
+let BackendFeaturesCollectionModule = class BackendFeaturesCollectionModule {
+};
+exports.BackendFeaturesCollectionModule = BackendFeaturesCollectionModule;
+exports.BackendFeaturesCollectionModule = BackendFeaturesCollectionModule = tslib_1.__decorate([
+    (0, common_1.Module)({
+        controllers: [collection_controller_1.CollectionController],
+        providers: [collection_service_1.CollectionService],
+        imports: [
+            auth_1.AuthModule,
+            jwt_1.JwtModule
+        ],
+        exports: [collection_service_1.CollectionService]
+    })
+], BackendFeaturesCollectionModule);
+
+
+/***/ }),
+/* 55 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CollectionController = void 0;
+const tslib_1 = __webpack_require__(4);
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const common_1 = __webpack_require__(1);
+const collection_service_1 = __webpack_require__(56);
+const dto_1 = __webpack_require__(15);
+const auth_1 = __webpack_require__(34);
+let CollectionController = class CollectionController {
+    constructor(collectionService) {
+        this.collectionService = collectionService;
+    }
+    async getAllByUSer(id) {
+        return this.collectionService.getAllByUser(id);
+    }
+    async getOne(id) {
+        return this.collectionService.getOne(id);
+    }
+    async getListsWithoutMovie(id) {
+        return this.collectionService.getListsWithoutMovie(id);
+    }
+    async create(data) {
+        return this.collectionService.create(data);
+    }
+    async update(id, req) {
+        return this.collectionService.update(id, req);
+    }
+    async delete(id, req) {
+        return this.collectionService.delete(id, req);
+    }
+    async addToCollection(req) {
+        return this.collectionService.addToCollection(req);
+    }
+    async removeFromCollection(req) {
+        return this.collectionService.RemoveFromCollection(req);
+    }
+};
+exports.CollectionController = CollectionController;
+tslib_1.__decorate([
+    (0, common_1.Get)('user/:id'),
+    (0, common_1.UseGuards)(auth_1.AuthGuard),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
+], CollectionController.prototype, "getAllByUSer", null);
+tslib_1.__decorate([
+    (0, common_1.Get)(':id'),
+    (0, common_1.UseGuards)(auth_1.AuthGuard),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
+], CollectionController.prototype, "getOne", null);
+tslib_1.__decorate([
+    (0, common_1.Get)('movies/:id'),
+    (0, common_1.UseGuards)(auth_1.AuthGuard),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", typeof (_d = typeof Promise !== "undefined" && Promise) === "function" ? _d : Object)
+], CollectionController.prototype, "getListsWithoutMovie", null);
+tslib_1.__decorate([
+    (0, common_1.Post)(''),
+    (0, common_1.UseGuards)(auth_1.AuthGuard),
+    tslib_1.__param(0, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [typeof (_e = typeof dto_1.CreateCollectionDto !== "undefined" && dto_1.CreateCollectionDto) === "function" ? _e : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
+], CollectionController.prototype, "create", null);
+tslib_1.__decorate([
+    (0, common_1.Put)(':id'),
+    (0, common_1.UseGuards)(auth_1.AuthGuard),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__param(1, (0, common_1.Request)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String, Object]),
+    tslib_1.__metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
+], CollectionController.prototype, "update", null);
+tslib_1.__decorate([
+    (0, common_1.Delete)(':id'),
+    (0, common_1.UseGuards)(auth_1.AuthGuard),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__param(1, (0, common_1.Request)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String, Object]),
+    tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
+], CollectionController.prototype, "delete", null);
+tslib_1.__decorate([
+    (0, common_1.Put)('movies/add'),
+    (0, common_1.UseGuards)(auth_1.AuthGuard),
+    tslib_1.__param(0, (0, common_1.Request)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", typeof (_j = typeof Promise !== "undefined" && Promise) === "function" ? _j : Object)
+], CollectionController.prototype, "addToCollection", null);
+tslib_1.__decorate([
+    (0, common_1.Put)('movies/remove'),
+    (0, common_1.UseGuards)(auth_1.AuthGuard),
+    tslib_1.__param(0, (0, common_1.Request)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", typeof (_k = typeof Promise !== "undefined" && Promise) === "function" ? _k : Object)
+], CollectionController.prototype, "removeFromCollection", null);
+exports.CollectionController = CollectionController = tslib_1.__decorate([
+    (0, common_1.Controller)('collection'),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof collection_service_1.CollectionService !== "undefined" && collection_service_1.CollectionService) === "function" ? _a : Object])
+], CollectionController);
+
+
+/***/ }),
+/* 56 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.CollectionService = void 0;
+const tslib_1 = __webpack_require__(4);
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const common_1 = __webpack_require__(1);
+const dist_1 = __webpack_require__(32);
+const uuid_1 = __webpack_require__(33);
+let CollectionService = class CollectionService {
+    constructor(neo4jService) {
+        this.neo4jService = neo4jService;
+        this.TAG = 'CollectionService';
+    }
+    // Get All by user
+    async getAllByUser(userId) {
+        common_1.Logger.log(`Get all collections by user`, this.TAG);
+        const result = await this.neo4jService.write(`
+            MATCH (u:User { id: $userId })-[:MAKEDCOLLECTION]->(c:Collection)
+            RETURN c {.id, .name, .description, .privateCollection, .createDate, .updatedDate}
+            `, { userId });
+        const collections = result.records.map((record) => record.get('c'));
+        return collections;
+    }
+    // Get by id
+    async getOne(collectionId) {
+        common_1.Logger.log(`Get collection by id`, this.TAG);
+        const result = await this.neo4jService.write(`
+            MATCH (c:Collection { id: $collectionId })
+            RETURN c {.id, .name, .description, .privateCollection, .createDate, .updatedDate}
+            `, { collectionId });
+        if (result.records.length === 0) {
+            throw new Error(`Review with ID ${collectionId} not found`);
+        }
+        return result.records[0]?.get('c');
+    }
+    // Get list where movie doesn't is included
+    async getListsWithoutMovie(movieId) {
+        common_1.Logger.log(`Get collections without movie ${movieId}`, this.TAG);
+        const result = await this.neo4jService.write(`
+            MATCH (c:Collection)
+            WHERE NOT (c)-[:CONTAINS]->(:Movie { id: $movieId })
+            RETURN c {.id, .name, .description, .privateCollection, .createDate, .updatedDate}
+            `, { movieId });
+        const collections = result.records.map((record) => record.get('c'));
+        return collections;
+    }
+    // Post create
+    async create(collection) {
+        common_1.Logger.log(`Create collection`, this.TAG);
+        const { name, description, privateCollection } = collection;
+        const id = (0, uuid_1.v4)();
+        const createDate = new Date().toDateString();
+        const createdCollection = await this.neo4jService.write(`
+            CREATE (c:Collection {
+                id: $id,
+                name: $name,
+                description: $description,
+                private: $privateCollection,
+                createDate: $createDate,
+                updatedDate: $createDate
+            })
+            return c {.id, .name, .description, .private, .createDate, .updatedDate}
+            `, { id, name, description, privateCollection, createDate });
+        const newCollection = createdCollection.records[0]?.get('c');
+        if (!newCollection) {
+            throw new Error('Failed to create review');
+        }
+        const userId = collection.userId;
+        const collectionId = newCollection.id;
+        await this.neo4jService.write(`
+            MATCH (u:User), (c:Collection)
+            WHERE u.id = $userId and c.id = $collectionId
+            MERGE (u)-[:MAKEDCOLLECTION]->(c)
+            `, { userId: userId, collectionId: collectionId });
+        return newCollection;
+    }
+    // Put update
+    async update(id, req) {
+        common_1.Logger.log(`Update collection`, this.TAG);
+        const collection = req.body;
+        const userId = req.user.user_id;
+        common_1.Logger.debug(userId, collection.userId);
+        if (userId === collection.userId) {
+            const updatedDate = new Date().toDateString();
+            const result = await this.neo4jService.write(`
+                MATCH (c:Collection {id: $id})
+                RETURN c {.id, .name, .description, .privateCollection, .createDate, .updatedDate}
+                `, { id: id });
+            if (!result.records[0]) {
+                common_1.Logger.debug('Collection not found');
+                return null;
+            }
+            ;
+            const updatedCollection = {
+                name: collection.name,
+                description: collection.description,
+                privateCollection: collection.privateCollection,
+                updatedDate: updatedDate
+            };
+            const updateResult = await this.neo4jService.write(`
+                MATCH (c:Collection {id: $id})
+                SET c += $updatedCollection
+                RETURN c {.id, .name, .description, .privateCollection, .createDate, .updatedDate}
+                `, { id: id, updatedCollection: updatedCollection });
+            if (!updateResult.records[0]) {
+                throw new Error('Failed to update collection');
+            }
+            ;
+            const updatedResult = updateResult.records[0].get('c');
+            const updatedCollectionInfo = {
+                id: updatedResult.id,
+                name: updatedResult.name,
+                description: updatedResult.description,
+                privateCollection: updatedResult.privateCollection,
+                createDate: updatedResult.createDate,
+                updatedDate: updatedResult.updatedDate
+            };
+            return updatedCollectionInfo;
+        }
+        throw new common_1.UnauthorizedException();
+    }
+    // Delete
+    async delete(id, req) {
+        common_1.Logger.log('delete', this.TAG);
+        const collectionThatDeleted = req.body;
+        const userId = req.user.user_id;
+        if (collectionThatDeleted.userId === userId) {
+            const deleteResult = await this.neo4jService.write(`
+                MATCH (c:Collection {id: $id})
+                DETACH DELETE c
+                `, { id: id });
+            const containsUpdates = deleteResult.summary.updateStatistics.containsUpdates();
+            if (!containsUpdates) {
+                common_1.Logger.debug('Failed to delete collection');
+                throw new Error('Failed to delete collection');
+            }
+            return 'Success';
+        }
+        throw new common_1.UnauthorizedException();
+    }
+    async addToCollection(req) {
+        const data = req.body;
+        const userIdLoggedInUser = req.user.user_id;
+        common_1.Logger.log(`User ${data.userId} puts movie ${data.movieId} to collection ${data.collectionId}`, this.TAG);
+        const userId = data.userId;
+        const movieId = data.movieId;
+        const collectionId = data.collectionId;
+        if (userIdLoggedInUser === userId) {
+            const result = await this.neo4jService.write(`
+                MATCH (c:Collection), (m:Movie)
+                WHERE c.id = $collectionId AND m.id = $movieId
+                MERGE (c)-[:CONTAINS]->(m)
+                `, { collectionId, movieId });
+            const containsUpdates = result.summary.updateStatistics.containsUpdates();
+            if (!containsUpdates) {
+                common_1.Logger.debug('Failed to contain movie');
+                return 'Failed';
+            }
+            return 'Succes';
+        }
+        throw new common_1.UnauthorizedException();
+    }
+    async RemoveFromCollection(req) {
+        const data = req.body;
+        const userIdLoggedInUser = req.user.user_id;
+        common_1.Logger.log(`User ${data.userId} removes movie ${data.movieId} from collection ${data.collectionId}`, this.TAG);
+        const userId = data.userId;
+        const movieId = data.movieId;
+        const collectionId = data.collectionId;
+        if (userIdLoggedInUser === userId) {
+            const result = await this.neo4jService.write(`
+                MATCH (c:Collection)-[r:CONTAINS]->(m:Movie)
+                WHERE c.id = $collectionId AND m.id = $movieId
+                DELETE r
+                `, { collectionId, movieId });
+            const containsUpdates = result.summary.updateStatistics.containsUpdates();
+            if (!containsUpdates) {
+                common_1.Logger.debug('Failed to remove movie');
+                return 'Failed';
+            }
+            return 'Succes';
+        }
+        throw new common_1.UnauthorizedException();
+    }
+};
+exports.CollectionService = CollectionService;
+exports.CollectionService = CollectionService = tslib_1.__decorate([
+    (0, common_1.Injectable)(),
+    tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof dist_1.Neo4jService !== "undefined" && dist_1.Neo4jService) === "function" ? _a : Object])
+], CollectionService);
 
 
 /***/ })
