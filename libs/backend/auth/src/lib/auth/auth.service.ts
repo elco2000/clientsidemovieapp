@@ -49,7 +49,8 @@ export class AuthService {
             if (result && result.get('u').properties.password === credentials.password) {
                 const userProperties = result.get('u').properties;
                 const payload = {
-                    user_id: userProperties.id // Using identity as the ID
+                    user_id: userProperties.id, // Using identity as the ID
+                    role: userProperties.role
                 };
                 const userIdentity: IUserIdentity = {
                     id: userProperties.id,
