@@ -66,6 +66,20 @@ export class CollectionService {
         return collections;
     }
 
+    async getMovieIdsOfCollection(collectionId: string): Promise<string[]> {
+        Logger.log(`Get movie IDs of collection ${collectionId}`, this.TAG);
+    
+        const result = await this.neo4jService.write(
+            `
+            MATCH (c:Collection { id: $collectionId })-[:CONTAINS]->(m:Movie)
+            RETURN COLLECT(m.id) AS movieIds
+            `,
+            { collectionId }
+        );
+    
+        return result.records[0]?.get('movieIds') ?? [];
+    }
+
     // Post create
     async create(collection: CreateCollectionDto): Promise<ICollection> {
         Logger.log(`Create collection`, this.TAG);

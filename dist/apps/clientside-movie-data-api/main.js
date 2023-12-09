@@ -162,7 +162,7 @@ module.exports = require("@nestjs/mongoose");
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MovieController = void 0;
 const tslib_1 = __webpack_require__(4);
@@ -180,6 +180,9 @@ let MovieController = class MovieController {
     }
     async getSmallInformationByActorId(id) {
         return this.movieService.getSmallInformationByActorId(id);
+    }
+    async getMoviesByIds(data) {
+        return this.movieService.getMoviesByIds(data);
     }
     async getOne(id) {
         return this.movieService.getOne(id);
@@ -209,32 +212,39 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
 ], MovieController.prototype, "getSmallInformationByActorId", null);
 tslib_1.__decorate([
+    (0, common_2.Get)('collection'),
+    tslib_1.__param(0, (0, common_2.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Array]),
+    tslib_1.__metadata("design:returntype", typeof (_d = typeof Promise !== "undefined" && Promise) === "function" ? _d : Object)
+], MovieController.prototype, "getMoviesByIds", null);
+tslib_1.__decorate([
     (0, common_2.Get)(':id'),
     tslib_1.__param(0, (0, common_2.Param)('id')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String]),
-    tslib_1.__metadata("design:returntype", typeof (_d = typeof Promise !== "undefined" && Promise) === "function" ? _d : Object)
+    tslib_1.__metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
 ], MovieController.prototype, "getOne", null);
 tslib_1.__decorate([
     (0, common_2.Post)(''),
     tslib_1.__param(0, (0, common_2.Body)()),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [typeof (_e = typeof dto_1.CreateMovieDto !== "undefined" && dto_1.CreateMovieDto) === "function" ? _e : Object]),
-    tslib_1.__metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
+    tslib_1.__metadata("design:paramtypes", [typeof (_f = typeof dto_1.CreateMovieDto !== "undefined" && dto_1.CreateMovieDto) === "function" ? _f : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
 ], MovieController.prototype, "create", null);
 tslib_1.__decorate([
     (0, common_1.Put)(':id'),
     tslib_1.__param(0, (0, common_2.Body)()),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [typeof (_g = typeof movie_schema_1.Movie !== "undefined" && movie_schema_1.Movie) === "function" ? _g : Object]),
-    tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
+    tslib_1.__metadata("design:paramtypes", [typeof (_h = typeof movie_schema_1.Movie !== "undefined" && movie_schema_1.Movie) === "function" ? _h : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_j = typeof Promise !== "undefined" && Promise) === "function" ? _j : Object)
 ], MovieController.prototype, "update", null);
 tslib_1.__decorate([
     (0, common_1.Delete)(':id'),
     tslib_1.__param(0, (0, common_2.Param)('id')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String]),
-    tslib_1.__metadata("design:returntype", typeof (_j = typeof Promise !== "undefined" && Promise) === "function" ? _j : Object)
+    tslib_1.__metadata("design:returntype", typeof (_k = typeof Promise !== "undefined" && Promise) === "function" ? _k : Object)
 ], MovieController.prototype, "delete", null);
 exports.MovieController = MovieController = tslib_1.__decorate([
     (0, common_1.Controller)('movie'),
@@ -269,6 +279,20 @@ let MovieService = class MovieService {
     async getSmallInformationByActorId(id) {
         common_1.Logger.log(`getSmallInformationByActorId(${id})`, this.TAG);
         return this.movieModel.find({ actors: id }).select({ title: 1, photo: 1 }).exec();
+    }
+    async getMoviesByIds(ids) {
+        common_1.Logger.log(`getMoviesByIds`, this.TAG);
+        try {
+            const movies = await this.movieModel.find({ _id: { $in: ids } }).exec();
+            if (!movies || movies.length === 0) {
+                throw new common_1.NotFoundException(`No movies found for the given IDs`);
+            }
+            return movies;
+        }
+        catch (error) {
+            common_1.Logger.error(`Error fetching movies: ${error}`);
+            throw new Error(`Error fetching movies: ${error}`);
+        }
     }
     async getOne(id) {
         common_1.Logger.log(`getOne(${id})`, this.TAG);
@@ -2111,7 +2135,7 @@ exports.BackendFeaturesCollectionModule = BackendFeaturesCollectionModule = tsli
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CollectionController = void 0;
 const tslib_1 = __webpack_require__(4);
@@ -2132,6 +2156,9 @@ let CollectionController = class CollectionController {
     }
     async getListsWithoutMovie(id) {
         return this.collectionService.getListsWithoutMovie(id);
+    }
+    async getMovieIdsOfCollection(id) {
+        return this.collectionService.getMovieIdsOfCollection(id);
     }
     async create(data) {
         return this.collectionService.create(data);
@@ -2167,7 +2194,7 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
 ], CollectionController.prototype, "getOne", null);
 tslib_1.__decorate([
-    (0, common_1.Get)('movies/:id'),
+    (0, common_1.Get)('without/:id'),
     (0, common_1.UseGuards)(auth_1.AuthGuard),
     tslib_1.__param(0, (0, common_1.Param)('id')),
     tslib_1.__metadata("design:type", Function),
@@ -2175,12 +2202,20 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", typeof (_d = typeof Promise !== "undefined" && Promise) === "function" ? _d : Object)
 ], CollectionController.prototype, "getListsWithoutMovie", null);
 tslib_1.__decorate([
+    (0, common_1.Get)(':id/movies'),
+    (0, common_1.UseGuards)(auth_1.AuthGuard),
+    tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
+], CollectionController.prototype, "getMovieIdsOfCollection", null);
+tslib_1.__decorate([
     (0, common_1.Post)(''),
     (0, common_1.UseGuards)(auth_1.AuthGuard),
     tslib_1.__param(0, (0, common_1.Body)()),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [typeof (_e = typeof dto_1.CreateCollectionDto !== "undefined" && dto_1.CreateCollectionDto) === "function" ? _e : Object]),
-    tslib_1.__metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
+    tslib_1.__metadata("design:paramtypes", [typeof (_f = typeof dto_1.CreateCollectionDto !== "undefined" && dto_1.CreateCollectionDto) === "function" ? _f : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
 ], CollectionController.prototype, "create", null);
 tslib_1.__decorate([
     (0, common_1.Put)(':id'),
@@ -2189,7 +2224,7 @@ tslib_1.__decorate([
     tslib_1.__param(1, (0, common_1.Request)()),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String, Object]),
-    tslib_1.__metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
+    tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
 ], CollectionController.prototype, "update", null);
 tslib_1.__decorate([
     (0, common_1.Delete)(':id'),
@@ -2198,7 +2233,7 @@ tslib_1.__decorate([
     tslib_1.__param(1, (0, common_1.Request)()),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String, Object]),
-    tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
+    tslib_1.__metadata("design:returntype", typeof (_j = typeof Promise !== "undefined" && Promise) === "function" ? _j : Object)
 ], CollectionController.prototype, "delete", null);
 tslib_1.__decorate([
     (0, common_1.Put)('movies/add'),
@@ -2206,7 +2241,7 @@ tslib_1.__decorate([
     tslib_1.__param(0, (0, common_1.Request)()),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [Object]),
-    tslib_1.__metadata("design:returntype", typeof (_j = typeof Promise !== "undefined" && Promise) === "function" ? _j : Object)
+    tslib_1.__metadata("design:returntype", typeof (_k = typeof Promise !== "undefined" && Promise) === "function" ? _k : Object)
 ], CollectionController.prototype, "addToCollection", null);
 tslib_1.__decorate([
     (0, common_1.Put)('movies/remove'),
@@ -2214,7 +2249,7 @@ tslib_1.__decorate([
     tslib_1.__param(0, (0, common_1.Request)()),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [Object]),
-    tslib_1.__metadata("design:returntype", typeof (_k = typeof Promise !== "undefined" && Promise) === "function" ? _k : Object)
+    tslib_1.__metadata("design:returntype", typeof (_l = typeof Promise !== "undefined" && Promise) === "function" ? _l : Object)
 ], CollectionController.prototype, "removeFromCollection", null);
 exports.CollectionController = CollectionController = tslib_1.__decorate([
     (0, common_1.Controller)('collection'),
@@ -2272,6 +2307,14 @@ let CollectionService = class CollectionService {
             `, { movieId });
         const collections = result.records.map((record) => record.get('c'));
         return collections;
+    }
+    async getMovieIdsOfCollection(collectionId) {
+        common_1.Logger.log(`Get movie IDs of collection ${collectionId}`, this.TAG);
+        const result = await this.neo4jService.write(`
+            MATCH (c:Collection { id: $collectionId })-[:CONTAINS]->(m:Movie)
+            RETURN COLLECT(m.id) AS movieIds
+            `, { collectionId });
+        return result.records[0]?.get('movieIds') ?? [];
     }
     // Post create
     async create(collection) {

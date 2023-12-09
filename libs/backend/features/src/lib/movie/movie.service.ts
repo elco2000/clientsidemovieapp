@@ -21,6 +21,21 @@ export class MovieService {
     return this.movieModel.find({ actors: id}).select({title: 1, photo: 1}).exec();
   }
 
+  async getMoviesByIds(ids: string[]): Promise<Movie[]> {
+    Logger.log(`getMoviesByIds`, this.TAG);
+  
+    try {
+      const movies = await this.movieModel.find({ _id: { $in: ids } }).exec();
+      if (!movies || movies.length === 0) {
+        throw new NotFoundException(`No movies found for the given IDs`);
+      }
+      return movies;
+    } catch (error) {
+      Logger.error(`Error fetching movies: ${error}`);
+      throw new Error(`Error fetching movies: ${error}`);
+    }
+  }
+
   async getOne(id: string): Promise<Movie> {
     Logger.log(`getOne(${id})`, this.TAG);
     try {

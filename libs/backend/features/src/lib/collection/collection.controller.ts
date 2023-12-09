@@ -21,10 +21,16 @@ export class CollectionController {
         return this.collectionService.getOne(id);
     }
 
-    @Get('movies/:id')
+    @Get('without/:id')
     @UseGuards(AuthGuard)
     async getListsWithoutMovie(@Param('id') id: string): Promise<ICollection[]> {
         return this.collectionService.getListsWithoutMovie(id);
+    }
+
+    @Get(':id/movies')
+    @UseGuards(AuthGuard)
+    async getMovieIdsOfCollection(@Param('id') id: string): Promise<string[]> {
+        return this.collectionService.getMovieIdsOfCollection(id);
     }
 
     @Post('')
