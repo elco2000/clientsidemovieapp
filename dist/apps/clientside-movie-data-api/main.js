@@ -712,11 +712,6 @@ tslib_1.__decorate([
     (0, class_validator_1.IsOptional)(),
     tslib_1.__metadata("design:type", String)
 ], CreateUserDto.prototype, "description", void 0);
-tslib_1.__decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    tslib_1.__metadata("design:type", String)
-], CreateUserDto.prototype, "role", void 0);
 class UpdateUserDto {
 }
 exports.UpdateUserDto = UpdateUserDto;
@@ -1870,7 +1865,8 @@ let AuthService = AuthService_1 = class AuthService {
             if (result && result.get('u').properties.password === credentials.password) {
                 const userProperties = result.get('u').properties;
                 const payload = {
-                    user_id: userProperties.id // Using identity as the ID
+                    user_id: userProperties.id,
+                    role: userProperties.role
                 };
                 const userIdentity = {
                     id: userProperties.id,
@@ -1894,7 +1890,7 @@ let AuthService = AuthService_1 = class AuthService {
     }
     async register(user) {
         this.logger.log(`Register user ${user.username}`);
-        const { username, password, birthdate, country, description, role } = user;
+        const { username, password, birthdate, country, description } = user;
         const userResult = await this.neo4jService.read(`MATCH (u:User {username: $username})
             RETURN u {.id, .username, .password, .birthdate, .country, .description}`, { username });
         const existingUser = userResult.records[0]?.get('u');
@@ -1915,7 +1911,7 @@ let AuthService = AuthService_1 = class AuthService {
                 role: 'Guest'
             })
             RETURN u {.id, .username, .password, .birthdate, .country, .description, .role}
-            `, { id, username, password, birthdate, country, description, role });
+            `, { id, username, password, birthdate, country, description });
         const newUser = createdUser.records[0]?.get('u');
         if (!newUser) {
             throw new Error('Failed to create user');

@@ -12,5 +12,9 @@ export const routes: Route[] = [
     {
         path: 'about',
         loadChildren: () => import('@org/clientside-movie-web/features').then(m => m.AboutModule)
+    },
+    {
+        path: 'auth',
+        loadChildren: () => import('@org/clientside-movie-web/web-auth').then(m => m.AuthModule)
     }
 ];

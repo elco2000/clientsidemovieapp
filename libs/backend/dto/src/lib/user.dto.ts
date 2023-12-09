@@ -20,10 +20,6 @@ export class CreateUserDto {
     @IsString()
     @IsOptional()
     description!: string
-
-    @IsString()
-    @IsNotEmpty()
-    role!: string;
 }
 
 export class UpdateUserDto implements IUpdateUser {

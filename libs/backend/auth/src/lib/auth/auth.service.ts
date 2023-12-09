@@ -73,7 +73,7 @@ export class AuthService {
 
     async register(user: CreateUserDto): Promise<IUserIdentity> {
         this.logger.log(`Register user ${user.username}`);
-        const { username, password, birthdate, country, description, role } = user;
+        const { username, password, birthdate, country, description } = user;
 
         const userResult = await this.neo4jService.read(
             `MATCH (u:User {username: $username})
@@ -102,7 +102,7 @@ export class AuthService {
             })
             RETURN u {.id, .username, .password, .birthdate, .country, .description, .role}
             `,
-            { id, username, password, birthdate, country, description, role }
+            { id, username, password, birthdate, country, description }
         );
 
         const newUser = createdUser.records[0]?.get('u');

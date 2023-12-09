@@ -27,7 +27,8 @@
       ],
       "@org/shared/api": ["libs/shared/api/src/index.ts"],
       "@org/shared/util-env": ["libs/shared/util-env/src/index.ts"],
-      "@org/ui": ["libs/clientside-movie-web/ui/src/index.ts"]
+      "@org/ui": ["libs/clientside-movie-web/ui/src/index.ts"],
+      "@org/clientside-movie-web/web-auth": ["libs/clientside-movie-web/web-auth/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

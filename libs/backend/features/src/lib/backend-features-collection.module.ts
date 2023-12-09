@@ -1,8 +1,8 @@
 import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { AuthModule } from "@org/backend/auth";
-import { CollectionController } from "./collection/collection.controller";
-import { CollectionService } from "./collection/collection.service";
+import { CollectionController } from "./list/collection.controller";
+import { CollectionService } from "./list/collection.service";
 
 @Module({
     controllers: [CollectionController],
