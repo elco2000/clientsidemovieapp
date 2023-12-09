@@ -1,4 +1,5 @@
-import { Injectable, Logger } from "@nestjs/common";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Injectable, Logger, UnauthorizedException } from "@nestjs/common";
 import { CreateReviewDto, UpdateReviewDto } from "@org/backend/dto";
 import { IReview, IReviewInfo } from "@org/shared/api";
 import { Neo4jService } from "nest-neo4j/dist";
@@ -99,79 +100,92 @@ export class ReviewService {
     }
 
     // PUT update
-    async update(id: string, review: UpdateReviewDto): Promise<IReview | null> {
+    async update(id: string, req: any): Promise<IReview | null> {
         Logger.log(`Update review`, this.TAG);
+        const review = req.body;
+        const userId = req.user.user_id;
 
-        const date = new Date().toDateString();
+        if( userId === review.userId) {
+            const date = new Date().toDateString();
 
-        const result = await this.neo4jService.write(
-            `
-            MATCH (r:Review {id: $id})
-            RETURN r {.id, .title, .text, .rating, .date }
-            `,
-            { id: id }
-        )
+            const result = await this.neo4jService.write(
+                `
+                MATCH (r:Review {id: $id})
+                RETURN r {.id, .title, .text, .rating, .date }
+                `,
+                { id: id }
+            )
+    
+            if (!result.records[0]) {
+                Logger.debug('User not found');
+                return null;
+            };
+    
+            const updatedReview: Partial<IReview> = {
+                title: review.title,
+                text: review.text,
+                rating: review.rating,
+                date: date
+            };
+    
+            const updateResult = await this.neo4jService.write(
+                `
+                MATCH (r:Review {id: $id})
+                SET r += $updatedReview
+                RETURN r {.id, .title, .text, .rating, .date} as review
+                `,
+                { id: id, updatedReview: updatedReview }
+            );
+    
+            if (!updateResult.records[0]) {
+                throw new Error('Failed to update review');
+            };
+    
+            const updatedResult = updateResult.records[0].get('review');
+    
+            const updatedReviewInfo: IReview = {
+                id: updatedResult.id,
+                title: updatedResult.title,
+                text: updatedResult.text,
+                rating: updatedResult.rating,
+                date: updatedResult.date,
+                userId: review.userId
+            };
+    
+            return updatedReviewInfo;
+        }
 
-        if (!result.records[0]) {
-            Logger.debug('User not found');
-            return null;
-        };
-
-        const updatedReview: Partial<IReview> = {
-            title: review.title,
-            text: review.text,
-            rating: review.rating,
-            date: date
-        };
-
-        const updateResult = await this.neo4jService.write(
-            `
-            MATCH (r:Review {id: $id})
-            SET r += $updatedReview
-            RETURN r {.id, .title, .text, .rating, .date} as review
-            `,
-            { id: id, updatedReview: updatedReview }
-        );
-
-        if (!updateResult.records[0]) {
-            throw new Error('Failed to update review');
-        };
-
-        const updatedResult = updateResult.records[0].get('review');
-
-        const updatedReviewInfo: IReview = {
-            id: updatedResult.id,
-            title: updatedResult.title,
-            text: updatedResult.text,
-            rating: updatedResult.rating,
-            date: updatedResult.date,
-            userId: review.userId
-        };
-
-        return updatedReviewInfo;
+        throw new UnauthorizedException();
+       
     }   
 
 
     // DELETE
 
-    async delete(id: string): Promise<string> {
+    async delete(id: string, req: any): Promise<string> {
         Logger.log('delete', this.TAG);
+        const userThatDeleted = req.body;
+        const userId = req.user.user_id;
 
-        const deleteResult = await this.neo4jService.write(
-            `
-            MATCH (r:Review {id: $id})
-            DETACH DELETE r
-            `,
-            { id: id }
-        );
-
-        const containsUpdates = deleteResult.summary.updateStatistics.containsUpdates();
-
-        if (!containsUpdates) {
-            Logger.debug('Failed to delete review');
-            throw new Error('Failed to delete review');
+        if(userThatDeleted.userId === userId) {
+            const deleteResult = await this.neo4jService.write(
+                `
+                MATCH (r:Review {id: $id})
+                DETACH DELETE r
+                `,
+                { id: id }
+            );
+    
+            const containsUpdates = deleteResult.summary.updateStatistics.containsUpdates();
+    
+            if (!containsUpdates) {
+                Logger.debug('Failed to delete review');
+                throw new Error('Failed to delete review');
+            }
+    
+            return 'Success';
         }
 
-        return 'Success';
+        throw new UnauthorizedException();
     }
 }

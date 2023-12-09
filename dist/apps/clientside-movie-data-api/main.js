@@ -1051,6 +1051,8 @@ const mongoose_1 = __webpack_require__(9);
 const common_1 = __webpack_require__(1);
 const review_controller_1 = __webpack_require__(29);
 const review_service_1 = __webpack_require__(30);
+const auth_1 = __webpack_require__(33);
+const jwt_1 = __webpack_require__(35);
 let BackendFeaturesReviewModule = class BackendFeaturesReviewModule {
 };
 exports.BackendFeaturesReviewModule = BackendFeaturesReviewModule;
@@ -1058,7 +1060,9 @@ exports.BackendFeaturesReviewModule = BackendFeaturesReviewModule = tslib_1.__de
     (0, common_1.Module)({
         controllers: [review_controller_1.ReviewController],
         providers: [review_service_1.ReviewService],
-        imports: [mongoose_1.MongooseModule.forRoot('mongodb+srv://elcoAdmin:Admin123Database@clusterlocaldataapi.m0cwagc.mongodb.net/')],
+        imports: [mongoose_1.MongooseModule.forRoot('mongodb+srv://elcoAdmin:Admin123Database@clusterlocaldataapi.m0cwagc.mongodb.net/'),
+            auth_1.AuthModule,
+            jwt_1.JwtModule],
         exports: [review_service_1.ReviewService]
     })
 ], BackendFeaturesReviewModule);
@@ -1069,13 +1073,15 @@ exports.BackendFeaturesReviewModule = BackendFeaturesReviewModule = tslib_1.__de
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c, _d, _e, _f, _g, _h;
+var _a, _b, _c, _d, _e, _f, _g;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ReviewController = void 0;
 const tslib_1 = __webpack_require__(4);
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const common_1 = __webpack_require__(1);
 const review_service_1 = __webpack_require__(30);
 const dto_1 = __webpack_require__(15);
+const auth_1 = __webpack_require__(33);
 let ReviewController = class ReviewController {
     constructor(reviewService) {
         this.reviewService = reviewService;
@@ -1089,11 +1095,11 @@ let ReviewController = class ReviewController {
     async create(data) {
         return this.reviewService.create(data);
     }
-    async update(id, data) {
-        return this.reviewService.update(id, data);
+    async update(id, req) {
+        return this.reviewService.update(id, req);
     }
-    async delete(id) {
-        return this.reviewService.delete(id);
+    async delete(id, req) {
+        return this.reviewService.delete(id, req);
     }
 };
 exports.ReviewController = ReviewController;
@@ -1113,6 +1119,7 @@ tslib_1.__decorate([
 ], ReviewController.prototype, "getOne", null);
 tslib_1.__decorate([
     (0, common_1.Post)(''),
+    (0, common_1.UseGuards)(auth_1.AuthGuard),
     tslib_1.__param(0, (0, common_1.Body)()),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [typeof (_d = typeof dto_1.CreateReviewDto !== "undefined" && dto_1.CreateReviewDto) === "function" ? _d : Object]),
@@ -1120,18 +1127,21 @@ tslib_1.__decorate([
 ], ReviewController.prototype, "create", null);
 tslib_1.__decorate([
     (0, common_1.Put)(':id'),
+    (0, common_1.UseGuards)(auth_1.AuthGuard),
     tslib_1.__param(0, (0, common_1.Param)('id')),
-    tslib_1.__param(1, (0, common_1.Body)()),
+    tslib_1.__param(1, (0, common_1.Request)()),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [String, typeof (_f = typeof dto_1.UpdateReviewDto !== "undefined" && dto_1.UpdateReviewDto) === "function" ? _f : Object]),
-    tslib_1.__metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
+    tslib_1.__metadata("design:paramtypes", [String, Object]),
+    tslib_1.__metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
 ], ReviewController.prototype, "update", null);
 tslib_1.__decorate([
     (0, common_1.Delete)(':id'),
+    (0, common_1.UseGuards)(auth_1.AuthGuard),
     tslib_1.__param(0, (0, common_1.Param)('id')),
+    tslib_1.__param(1, (0, common_1.Request)()),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [String]),
-    tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
+    tslib_1.__metadata("design:paramtypes", [String, Object]),
+    tslib_1.__metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
 ], ReviewController.prototype, "delete", null);
 exports.ReviewController = ReviewController = tslib_1.__decorate([
     (0, common_1.Controller)('review'),
@@ -1148,6 +1158,7 @@ var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ReviewService = void 0;
 const tslib_1 = __webpack_require__(4);
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const common_1 = __webpack_require__(1);
 const dist_1 = __webpack_require__(31);
 const uuid_1 = __webpack_require__(32);
@@ -1213,57 +1224,67 @@ let ReviewService = class ReviewService {
         return newReview;
     }
     // PUT update
-    async update(id, review) {
+    async update(id, req) {
         common_1.Logger.log(`Update review`, this.TAG);
-        const date = new Date().toDateString();
-        const result = await this.neo4jService.write(`
-            MATCH (r:Review {id: $id})
-            RETURN r {.id, .title, .text, .rating, .date }
-            `, { id: id });
-        if (!result.records[0]) {
-            common_1.Logger.debug('User not found');
-            return null;
+        const review = req.body;
+        const userId = req.user.user_id;
+        if (userId === review.userId) {
+            const date = new Date().toDateString();
+            const result = await this.neo4jService.write(`
+                MATCH (r:Review {id: $id})
+                RETURN r {.id, .title, .text, .rating, .date }
+                `, { id: id });
+            if (!result.records[0]) {
+                common_1.Logger.debug('User not found');
+                return null;
+            }
+            ;
+            const updatedReview = {
+                title: review.title,
+                text: review.text,
+                rating: review.rating,
+                date: date
+            };
+            const updateResult = await this.neo4jService.write(`
+                MATCH (r:Review {id: $id})
+                SET r += $updatedReview
+                RETURN r {.id, .title, .text, .rating, .date} as review
+                `, { id: id, updatedReview: updatedReview });
+            if (!updateResult.records[0]) {
+                throw new Error('Failed to update review');
+            }
+            ;
+            const updatedResult = updateResult.records[0].get('review');
+            const updatedReviewInfo = {
+                id: updatedResult.id,
+                title: updatedResult.title,
+                text: updatedResult.text,
+                rating: updatedResult.rating,
+                date: updatedResult.date,
+                userId: review.userId
+            };
+            return updatedReviewInfo;
         }
-        ;
-        const updatedReview = {
-            title: review.title,
-            text: review.text,
-            rating: review.rating,
-            date: date
-        };
-        const updateResult = await this.neo4jService.write(`
-            MATCH (r:Review {id: $id})
-            SET r += $updatedReview
-            RETURN r {.id, .title, .text, .rating, .date} as review
-            `, { id: id, updatedReview: updatedReview });
-        if (!updateResult.records[0]) {
-            throw new Error('Failed to update review');
-        }
-        ;
-        const updatedResult = updateResult.records[0].get('review');
-        const updatedReviewInfo = {
-            id: updatedResult.id,
-            title: updatedResult.title,
-            text: updatedResult.text,
-            rating: updatedResult.rating,
-            date: updatedResult.date,
-            userId: review.userId
-        };
-        return updatedReviewInfo;
+        throw new common_1.UnauthorizedException();
     }
     // DELETE
-    async delete(id) {
+    async delete(id, req) {
         common_1.Logger.log('delete', this.TAG);
-        const deleteResult = await this.neo4jService.write(`
-            MATCH (r:Review {id: $id})
-            DETACH DELETE r
-            `, { id: id });
-        const containsUpdates = deleteResult.summary.updateStatistics.containsUpdates();
-        if (!containsUpdates) {
-            common_1.Logger.debug('Failed to delete review');
-            throw new Error('Failed to delete review');
+        const userThatDeleted = req.body;
+        const userId = req.user.user_id;
+        if (userThatDeleted.userId === userId) {
+            const deleteResult = await this.neo4jService.write(`
+                MATCH (r:Review {id: $id})
+                DETACH DELETE r
+                `, { id: id });
+            const containsUpdates = deleteResult.summary.updateStatistics.containsUpdates();
+            if (!containsUpdates) {
+                common_1.Logger.debug('Failed to delete review');
+                throw new Error('Failed to delete review');
+            }
+            return 'Success';
         }
-        return 'Success';
+        throw new common_1.UnauthorizedException();
     }
 };
 exports.ReviewService = ReviewService;

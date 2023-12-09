@@ -1,7 +1,9 @@
-import { Body, Controller, Param, Post, Put, Delete, Get } from "@nestjs/common";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Body, Controller, Param, Post, Put, Delete, Get, UseGuards, Request } from "@nestjs/common";
 import { ReviewService } from "./review.service";
-import { CreateReviewDto, UpdateReviewDto } from "@org/backend/dto";
+import { CreateReviewDto } from "@org/backend/dto";
 import { IReview, IReviewInfo } from "@org/shared/api";
+import { AuthGuard } from "@org/backend/auth";
 
 @Controller('review')
 export class ReviewController {
@@ -18,17 +20,20 @@ export class ReviewController {
     }
 
     @Post('')
+    @UseGuards(AuthGuard)
     async create(@Body() data: CreateReviewDto): Promise<IReview> {
         return this.reviewService.create(data);
     }
 
     @Put(':id')
-    async update(@Param('id') id: string, @Body() data: UpdateReviewDto): Promise<IReview | null> {
-        return this.reviewService.update(id, data);
+    @UseGuards(AuthGuard)
+    async update(@Param('id') id: string, @Request() req: any): Promise<IReview | null> {
+        return this.reviewService.update(id, req);
     }
 
     @Delete(':id')
-    async delete (@Param('id') id: string): Promise<string> {
-        return this.reviewService.delete(id);
+    @UseGuards(AuthGuard)
+    async delete (@Param('id') id: string, @Request() req: any): Promise<string> {
+        return this.reviewService.delete(id, req);
     }
 }
