@@ -9,6 +9,27 @@ export class UserService {
 
   constructor(private neo4jService: Neo4jService) {}
 
+  async getAll(): Promise<IUser[]> {
+    this.logger.log(`Getting all users`);
+  
+    const result = await this.neo4jService.read(
+      `
+        MATCH (u:User)
+        RETURN u {.id, .username, .birthdate, .country, .description} as user
+      `
+    );
+  
+    const users: IUser[] = result.records.map((record) => ({
+      id: record.get('user').id,
+      username: record.get('user').username,
+      birthdate: record.get('user').birthdate,
+      country: record.get('user').country,
+      description: record.get('user').description,
+    }));
+  
+    return users;
+  }
+
   async findById(id: string): Promise<IUser | null> {
     this.logger.log(`Finding user with id ${id}`);
     const item = await this.neo4jService.read(

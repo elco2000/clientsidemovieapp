@@ -6,8 +6,14 @@ import { RouterModule, Routes } from "@angular/router";
 import { ProfileService } from "./profile.service";
 import { ProfileDetailComponent } from "./profile-detail/profile-detail.component";
 import { ProfileEditComponent } from "./profile-edit/profile-edit.component";
+import { ProfileListComponent } from "./profile-list/profile.list.component";
 
 const routes: Routes = [
+    {
+        path: '',
+        pathMatch: 'full',
+        component: ProfileListComponent
+    },
     {
         path: 'edit/:id',
         pathMatch: 'full',
@@ -22,8 +28,8 @@ const routes: Routes = [
 
 @NgModule({
     imports: [CommonModule, ReactiveFormsModule, HttpClientModule, RouterModule.forChild(routes)],
-    declarations: [ProfileDetailComponent, ProfileEditComponent],
+    declarations: [ProfileDetailComponent, ProfileEditComponent, ProfileListComponent],
     providers: [ProfileService],
-    exports: [RouterModule, ProfileDetailComponent, ProfileEditComponent]
+    exports: [RouterModule, ProfileDetailComponent, ProfileEditComponent, ProfileListComponent]
 })
 export class ProfileModule {}

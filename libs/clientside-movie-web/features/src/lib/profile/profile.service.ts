@@ -18,6 +18,9 @@ export class ProfileService {
     private userSubject: BehaviorSubject<IUser> = new BehaviorSubject<IUser>(initialUser);
     public readonly user$: Observable<IUser> = this.userSubject.asObservable();
 
+    private userListSubject: BehaviorSubject<IUser[] | null> = new BehaviorSubject<IUser[] | null>(null);
+    public readonly userList$: Observable<IUser[] | null> = this.userListSubject.asObservable();
+
     private followersListSubject: BehaviorSubject<IUser[] | null> = new BehaviorSubject<IUser[] | null>(null);
     public readonly followersList$: Observable<IUser[] | null> = this.followersListSubject.asObservable();
 
@@ -48,6 +51,27 @@ export class ProfileService {
                 Authorization: token ? `Bearer ${token}` : ''
             })
         };
+    }
+
+    /**
+     * Get all items.
+     *
+     * @options options - optional URL queryparam options
+     */
+    public list(options?: any): Observable<IUser[] | null> {
+        return this.http
+            .get<ApiResponse<IUser[]>>(this.endpoint, {
+                ...options,
+                ...this.httpOptions
+            })
+            .pipe(
+                map((response: any) => response.results as IUser[]),
+                tap((users: IUser[]) => {
+                    this.userListSubject.next(users);
+                  }),
+                tap(console.log),
+                catchError(this.handleError)
+            );
     }
 
     /**

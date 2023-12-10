@@ -6,7 +6,7 @@
 
     <div class="flex flex-col justify-between flex-1 mt-6">
         <nav>
-            <a class="flex items-center px-4 py-2 text-gray-700 bg-gray-100 rounded-md" [routerLink]="['/movies']">
+            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-gray-700" [routerLink]="['/movies']" [class.active]="isActiveRoute('/movies')">
                 <svg class="w-[20px] h-[20px] text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 14">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 1H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Zm7 11-6-2V4l6-2v10Z"/>
                   </svg>
@@ -14,7 +14,7 @@
                 <span class="mx-4 font-medium">Movie list</span>
             </a>
 
-            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-gray-700" [routerLink]="['/movies/create']">
+            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-gray-700" [routerLink]="['/movies/create']" [class.active]="isActiveRoute('/movies/create')">
                 <svg class="w-[20px] h-[20px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 1v16M1 9h16"/>
                   </svg>
@@ -22,7 +22,7 @@
                 <span class="mx-4 font-medium">Create movie</span>
             </a>
 
-            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-gray-700" [routerLink]="['/actors']">
+            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-gray-700" [routerLink]="['/actors']" [class.active]="isActiveRoute('/actors')">
                 <svg class="w-[20px] h-[20px] text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 14">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 1H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Zm7 11-6-2V4l6-2v10Z"/>
                   </svg>
@@ -30,7 +30,7 @@
                 <span class="mx-4 font-medium">Actor list</span>
             </a>
 
-            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-gray-700" [routerLink]="['/actors/create']">
+            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-gray-700" [routerLink]="['/actors/create']" [class.active]="isActiveRoute('/actors/create')">
                 <svg class="w-[20px] h-[20px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 1v16M1 9h16"/>
                   </svg>
@@ -38,7 +38,15 @@
                 <span class="mx-4 font-medium">Create actor</span>
             </a>
 
-            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-gray-700" [routerLink]="['/about']">
+            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-gray-700" [routerLink]="['/profile']" [class.active]="isActiveRoute('/profile')">
+                <svg  class="w-[20px] h-[20px] text-gray-800 dark:text-white" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 24 24">
+                    <path d="M 12 2 C 7.593562 2 4 5.593562 4 10 L 4 11 L 4 11.902344 C 3.426291 12.449411 3 13.153146 3 14 C 3 15.241968 3.8575508 16.162904 4.9433594 16.613281 C 6.2443933 19.723094 8.8502365 22 12 22 C 15.149764 22 17.755607 19.723094 19.056641 16.613281 C 20.142449 16.162904 21 15.241968 21 14 C 21 13.153146 20.573709 12.449411 20 11.902344 L 20 11 L 20 10 C 20 5.593562 16.406438 2 12 2 z M 12 4 C 14.655588 4 16.890622 5.7073783 17.685547 8.0878906 C 17.464195 8.0350364 17.236504 8 17 8 L 7 8 C 6.7634959 8 6.5358051 8.0350364 6.3144531 8.0878906 C 7.1093779 5.7073783 9.3444124 4 12 4 z M 7 10 L 17 10 C 17.56503 10 18 10.43497 18 11 L 18 12 L 18 12.851562 L 18.501953 13.138672 C 18.805591 13.312973 19 13.615008 19 14 C 19 14.515121 18.631169 14.912712 18.138672 14.980469 L 17.552734 15.0625 L 17.339844 15.613281 C 16.309043 18.299503 14.258448 20 12 20 C 9.7415517 20 7.6909574 18.299502 6.6601562 15.613281 L 6.4472656 15.0625 L 5.8613281 14.980469 C 5.3688308 14.912712 5 14.515121 5 14 C 5 13.615008 5.1944088 13.312973 5.4980469 13.138672 L 6 12.851562 L 6 12 L 6 11 C 6 10.43497 6.4349698 10 7 10 z"></path>
+                </svg>
+
+                <span class="mx-4 font-medium">Profile list</span>
+            </a>
+
+            <a class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-gray-700" [routerLink]="['/about']" [class.active]="isActiveRoute('/about')">
                 <svg class="w-[20px] h-[20px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 9h2v5m-2 0h4M9.408 5.5h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                   </svg>
@@ -47,8 +55,8 @@
             </a>
         </nav>
 
-        <a href="#" class="flex items-center px-4 -mx-2">
-            <span class="mx-2 font-medium text-gray-800">..gebruikersnaam...</span>
+        <a [routerLink]="['profile/' + getTokenId()]" class="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-gray-700">
+            <span class="mx-2 font-medium text-gray-800">{{getUsername()}}</span>
         </a>
     </div>
 </aside>

@@ -123,7 +123,8 @@ export class ProfileDetailComponent implements OnInit, OnDestroy {
 
     // Controleer of de huidige gebruiker al in de lijst van gebruikers voorkomt
     const foundUser = userList.find((user) => user.id === userId);
-    if(foundUser === null) {
+    console.log(foundUser);
+    if(foundUser === null || foundUser === undefined) {
       this.followsAlready = false;
     } else {
       this.followsAlready = true;

@@ -1,0 +1,6 @@
+.active {
+    background-color: #f3f4f6; /* Bijvoorbeeld een lichtgrijze achtergrond */
+    color: #1f2937; /* Donkere tekstkleur */
+    font-weight: bold; /* Eventueel vetgedrukte tekst voor de actieve link */
+    /* Andere stijlen die je wilt toepassen op de actieve link */
+  }

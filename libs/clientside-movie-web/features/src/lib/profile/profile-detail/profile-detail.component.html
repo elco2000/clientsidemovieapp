@@ -1,166 +1,259 @@
 <div class="pl-6 h-screen">
-    <h1 class="mt-2 text-2xl font-medium text-gray-800 capitalize lg:text-3xl">Profile page</h1>
-    <p>Name: {{user?.username}}</p>
-    <p>Birthdate: {{user?.birthdate | date}}</p>
-    <p>Country: {{user?.country}}</p>
-    <p>Description: {{user?.description}}</p>
+  <h1 class="mt-2 text-2xl font-medium text-gray-800 capitalize lg:text-3xl">
+    Profile page
+  </h1>
+  <p>Name: {{ user?.username }}</p>
+  <p>Birthdate: {{ user?.birthdate | date }}</p>
+  <p>Country: {{ user?.country }}</p>
+  <p>Description: {{ user?.description }}</p>
 
-    <button *ngIf="!followsAlready && !ownInfo" (click)="onFollowActionButton()" class="mt-2 px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
-        Follow
-    </button>
-    <button *ngIf="followsAlready && !ownInfo" (click)="onFollowActionButton()" class="mt-2 px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
-        Unfollow
-    </button>
-    <button [routerLink]="['/profile/edit/' + getTokenId()]" *ngIf="ownInfo" class="mt-2 px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
-        Edit
-    </button>
+  <button
+    *ngIf="!followsAlready && !ownInfo"
+    (click)="onFollowActionButton()"
+    class="mt-2 px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80"
+  >
+    Follow
+  </button>
+  <button
+    *ngIf="followsAlready && !ownInfo"
+    (click)="onFollowActionButton()"
+    class="mt-2 px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80"
+  >
+    Unfollow
+  </button>
+  <button
+    [routerLink]="['/profile/edit/' + getTokenId()]"
+    *ngIf="ownInfo"
+    class="mt-2 px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80"
+  >
+    Edit
+  </button>
 
-    <div class="grid grid-rows-2 grid-flow-col gap-4 m-6">
+  <div class="grid grid-rows-2 grid-flow-col gap-4 m-6">
+    <div class="row-span-3">
+      <h1
+        class="mt-2 text-2xl font-medium text-gray-800 capitalize lg:text-3xl"
+      >
+        Collections
+      </h1>
 
-        <div class="row-span-3">
-            <h1 class="mt-2 text-2xl font-medium text-gray-800 capitalize lg:text-3xl">Collections</h1>
+      <button
+        *ngIf="ownInfo"
+        [routerLink]="['/collections/create']"
+        class="mt-2 px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80"
+      >
+        Add
+      </button>
 
-            <button *ngIf="ownInfo" [routerLink]="['/collections/create']" class="mt-2 px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
-                Add
-            </button>
+      <div class="flex flex-col mt-6">
+        <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div
+            class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8"
+          >
+            <div
+              class="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg"
+            >
+              <table
+                class="min-w-full divide-y divide-gray-200 dark:divide-gray-700"
+              >
+                <thead class="bg-gray-50 dark:bg-gray-800">
+                  <tr>
+                    <th
+                      scope="col"
+                      class="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                    >
+                      Name
+                    </th>
 
-              <div class="flex flex-col mt-6">
-                <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                    <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                        <div class="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
-        
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-800">
-                                    <tr>
-        
-                                        <th scope="col" class="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                            Name
-                                        </th>
-        
-                                        <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                            Create date
-                                        </th>
+                    <th
+                      scope="col"
+                      class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                    >
+                      Create date
+                    </th>
 
-                                        <th scope="col" class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                            Updated date
-                                        </th>
+                    <th
+                      scope="col"
+                      class="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                    >
+                      Updated date
+                    </th>
 
-                                        <th *ngIf="ownInfo" scope="col" class="relative py-3.5 px-4">
-                                            <span class="sr-only">Edit</span>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                                    <tr *ngFor="let collection of collections">
-                                        <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
-                                            <div>
-                                                <p class="text-sm font-normal text-gray-600 dark:text-gray-400">{{collection?.name}}</p>
-                                            </div>
-                                        </td>
-                                        <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
-                                            <div>
-                                                <p class="text-sm font-normal text-gray-600 dark:text-gray-400">{{collection?.createDate}}</p>
-                                            </div>
-                                        </td>
-                                        <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
-                                            <div>
-                                                <p class="text-sm font-normal text-gray-600 dark:text-gray-400">{{collection?.updatedDate}}</p>
-                                            </div>
-                                        </td>
-        
-                                        <td *ngIf="ownInfo" class="px-4 py-4 text-sm whitespace-nowrap">
-                                            <button [routerLink]="['/collections/' + collection.id]" class="px-1 py-1 text-gray-500 transition-colors duration-200 rounded-lg dark:text-gray-300 hover:bg-gray-100">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
-                                                </svg>
-                                            </button>
-                                        </td>
-                                    </tr>
-        
-                                </tbody>
-                            </table>
-        
-                        </div>
-                    </div>
-                </div>
+                    <th
+                      scope="col"
+                      class="relative py-3.5 px-4"
+                    >
+                      <span class="sr-only">Detail</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody
+                  class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900"
+                >
+                  <tr *ngFor="let collection of collections">
+                    <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
+                      <div>
+                        <p
+                          class="text-sm font-normal text-gray-600 dark:text-gray-400"
+                        >
+                          {{ collection?.name }}
+                        </p>
+                      </div>
+                    </td>
+                    <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
+                      <div>
+                        <p
+                          class="text-sm font-normal text-gray-600 dark:text-gray-400"
+                        >
+                          {{ collection?.createDate }}
+                        </p>
+                      </div>
+                    </td>
+                    <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
+                      <div>
+                        <p
+                          class="text-sm font-normal text-gray-600 dark:text-gray-400"
+                        >
+                          {{ collection?.updatedDate }}
+                        </p>
+                      </div>
+                    </td>
+
+                    <td
+                      class="px-4 py-4 text-sm whitespace-nowrap"
+                    >
+                      <button
+                        [routerLink]="['/collections/' + collection.id]"
+                        class="px-1 py-1 text-gray-500 transition-colors duration-200 rounded-lg dark:text-gray-300 hover:bg-gray-100"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="w-6 h-6"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
+                          />
+                        </svg>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
+          </div>
         </div>
-
-        <div class="col-span-1">
-
-            <h1 class="mt-2 text-2xl font-medium text-gray-800 capitalize lg:text-3xl">Followers</h1>
-
-              <div class="flex flex-col mt-6">
-                <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                    <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                        <div class="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
-        
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-800">
-                                    <tr>
-        
-                                        <th scope="col" class="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                            Name
-                                        </th>
-        
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                                    <tr *ngFor="let followUser of followers">
-                                        <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
-                                            <div>
-                                                <p [routerLink]="['/profile/' + getTokenId()]" class="text-sm font-normal text-gray-600 dark:text-gray-400"><a [routerLink]="['/profile/' + followUser.id]">{{followUser?.username}}</a></p>
-                                            </div>
-                                        </td>
-        
-                                    </tr>
-        
-                                </tbody>
-                            </table>
-        
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="row-span-2 col-span-1">
-
-            <h1 class="mt-2 text-2xl font-medium text-gray-800 capitalize lg:text-3xl">Following</h1>
-
-              <div class="flex flex-col mt-6">
-                <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                    <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                        <div class="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
-        
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-800">
-                                    <tr>
-        
-                                        <th scope="col" class="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                            Name
-                                        </th>
-        
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                                    <tr *ngFor="let followingUser of following">
-                                        <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
-                                            <div>
-                                                <p class="text-sm font-normal text-gray-600 dark:text-gray-400"><a [routerLink]="['/profile/' + followingUser.id]">{{followingUser?.username}}</a></p>
-                                            </div>
-                                        </td>
-        
-                                    </tr>
-        
-                                </tbody>
-                            </table>
-        
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+      </div>
     </div>
+
+    <div class="col-span-1">
+      <h1
+        class="mt-2 text-2xl font-medium text-gray-800 capitalize lg:text-3xl"
+      >
+        Followers
+      </h1>
+
+      <div class="flex flex-col mt-6">
+        <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div
+            class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8"
+          >
+            <div
+              class="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg"
+            >
+              <table
+                class="min-w-full divide-y divide-gray-200 dark:divide-gray-700"
+              >
+                <thead class="bg-gray-50 dark:bg-gray-800">
+                  <tr>
+                    <th
+                      scope="col"
+                      class="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                    >
+                      Name
+                    </th>
+                  </tr>
+                </thead>
+                <tbody
+                  class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900"
+                >
+                  <tr *ngFor="let followUser of followers">
+                    <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
+                      <div>
+                        <p
+                          [routerLink]="['/profile/' + getTokenId()]"
+                          class="text-sm font-normal text-gray-600 dark:text-gray-400"
+                        >
+                          <a [routerLink]="['/profile/' + followUser.id]">{{
+                            followUser?.username
+                          }}</a>
+                        </p>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row-span-2 col-span-1">
+      <h1
+        class="mt-2 text-2xl font-medium text-gray-800 capitalize lg:text-3xl"
+      >
+        Following
+      </h1>
+
+      <div class="flex flex-col mt-6">
+        <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div
+            class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8"
+          >
+            <div
+              class="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg"
+            >
+              <table
+                class="min-w-full divide-y divide-gray-200 dark:divide-gray-700"
+              >
+                <thead class="bg-gray-50 dark:bg-gray-800">
+                  <tr>
+                    <th
+                      scope="col"
+                      class="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                    >
+                      Name
+                    </th>
+                  </tr>
+                </thead>
+                <tbody
+                  class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900"
+                >
+                  <tr *ngFor="let followingUser of following">
+                    <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
+                      <div>
+                        <p
+                          class="text-sm font-normal text-gray-600 dark:text-gray-400"
+                        >
+                          <a [routerLink]="['/profile/' + followingUser.id]">{{
+                            followingUser?.username
+                          }}</a>
+                        </p>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

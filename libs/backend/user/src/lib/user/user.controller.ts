@@ -8,6 +8,11 @@ import { UpdateUserDto } from '@org/backend/dto';
 export class UserController {
     constructor(private readonly userService: UserService) {}
 
+        @Get('')
+        async getAll(): Promise<IUser[]> {
+            return this.userService.getAll();
+        }
+
         @Get(':id')
         async findOne(@Param('id') userid: string): Promise<IUser | null> {
             return this.userService.findById(userid);

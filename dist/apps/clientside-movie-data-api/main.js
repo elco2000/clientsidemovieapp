@@ -1496,7 +1496,7 @@ exports.UserModule = UserModule = tslib_1.__decorate([
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c, _d, _e, _f, _g, _h;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserController = void 0;
 const tslib_1 = __webpack_require__(4);
@@ -1507,6 +1507,9 @@ const dto_1 = __webpack_require__(15);
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
+    }
+    async getAll() {
+        return this.userService.getAll();
     }
     async findOne(userid) {
         return this.userService.findById(userid);
@@ -1529,19 +1532,25 @@ let UserController = class UserController {
 };
 exports.UserController = UserController;
 tslib_1.__decorate([
+    (0, common_1.Get)(''),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", []),
+    tslib_1.__metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
+], UserController.prototype, "getAll", null);
+tslib_1.__decorate([
     (0, common_1.Get)(':id'),
     tslib_1.__param(0, (0, common_2.Param)('id')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String]),
-    tslib_1.__metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
+    tslib_1.__metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
 ], UserController.prototype, "findOne", null);
 tslib_1.__decorate([
     (0, common_1.Put)(':id'),
     tslib_1.__param(0, (0, common_2.Param)('id')),
     tslib_1.__param(1, (0, common_1.Body)()),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [String, typeof (_c = typeof dto_1.UpdateUserDto !== "undefined" && dto_1.UpdateUserDto) === "function" ? _c : Object]),
-    tslib_1.__metadata("design:returntype", typeof (_d = typeof Promise !== "undefined" && Promise) === "function" ? _d : Object)
+    tslib_1.__metadata("design:paramtypes", [String, typeof (_d = typeof dto_1.UpdateUserDto !== "undefined" && dto_1.UpdateUserDto) === "function" ? _d : Object]),
+    tslib_1.__metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
 ], UserController.prototype, "update", null);
 tslib_1.__decorate([
     (0, common_1.Put)(':userid/follow/:followuserid'),
@@ -1549,7 +1558,7 @@ tslib_1.__decorate([
     tslib_1.__param(1, (0, common_2.Param)('followuserid')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String, String]),
-    tslib_1.__metadata("design:returntype", typeof (_e = typeof Promise !== "undefined" && Promise) === "function" ? _e : Object)
+    tslib_1.__metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
 ], UserController.prototype, "follow", null);
 tslib_1.__decorate([
     (0, common_1.Put)(':userid/unfollow/:unfollowuserid'),
@@ -1557,21 +1566,21 @@ tslib_1.__decorate([
     tslib_1.__param(1, (0, common_2.Param)('unfollowuserid')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String, String]),
-    tslib_1.__metadata("design:returntype", typeof (_f = typeof Promise !== "undefined" && Promise) === "function" ? _f : Object)
+    tslib_1.__metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
 ], UserController.prototype, "unfollow", null);
 tslib_1.__decorate([
     (0, common_1.Get)(':id/followers'),
     tslib_1.__param(0, (0, common_2.Param)('id')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String]),
-    tslib_1.__metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
+    tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
 ], UserController.prototype, "getFollowers", null);
 tslib_1.__decorate([
     (0, common_1.Get)(':id/following'),
     tslib_1.__param(0, (0, common_2.Param)('id')),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String]),
-    tslib_1.__metadata("design:returntype", typeof (_h = typeof Promise !== "undefined" && Promise) === "function" ? _h : Object)
+    tslib_1.__metadata("design:returntype", typeof (_j = typeof Promise !== "undefined" && Promise) === "function" ? _j : Object)
 ], UserController.prototype, "getFollowing", null);
 exports.UserController = UserController = tslib_1.__decorate([
     (0, common_2.Controller)('user'),
@@ -1595,6 +1604,21 @@ let UserService = UserService_1 = class UserService {
     constructor(neo4jService) {
         this.neo4jService = neo4jService;
         this.logger = new common_1.Logger(UserService_1.name);
+    }
+    async getAll() {
+        this.logger.log(`Getting all users`);
+        const result = await this.neo4jService.read(`
+        MATCH (u:User)
+        RETURN u {.id, .username, .birthdate, .country, .description} as user
+      `);
+        const users = result.records.map((record) => ({
+            id: record.get('user').id,
+            username: record.get('user').username,
+            birthdate: record.get('user').birthdate,
+            country: record.get('user').country,
+            description: record.get('user').description,
+        }));
+        return users;
     }
     async findById(id) {
         this.logger.log(`Finding user with id ${id}`);
