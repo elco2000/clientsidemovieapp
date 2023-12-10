@@ -1,17 +1,21 @@
 import { CommonModule } from "@angular/common";
+import { HttpClientModule } from "@angular/common/http";
 import { Component } from "@angular/core";
 import { Router, RouterModule } from "@angular/router";
+import { AuthService } from "@org/clientside-movie-web/web-auth";
+
 
 @Component({
     selector: 'org-nav',
     standalone: true,
-    imports: [CommonModule, RouterModule],
+    imports: [CommonModule, RouterModule, HttpClientModule],
     templateUrl: './nav.component.html',
     styleUrls: ['./nav.component.css']
 })
 export class NavComponent {
 
-    constructor(private router: Router) {}
+
+    constructor(private router: Router, private authService: AuthService) {}
 
     isActiveRoute(route: string): boolean {
       return this.router.url === route;
@@ -27,8 +31,11 @@ export class NavComponent {
         return username;
     }
 
-    getTokenId(): string {
+    getTokenId(): string | null {
         const userString = localStorage.getItem('user');
+        if (userString === undefined || userString === null) {
+          return null;
+        }
         let tokenId = '';
         if (userString) {
           const user = JSON.parse(userString);
@@ -36,4 +43,9 @@ export class NavComponent {
         }
         return tokenId;
       }
+    
+      onLogout() {
+        this.authService.logout();
+      }
+      
 }
