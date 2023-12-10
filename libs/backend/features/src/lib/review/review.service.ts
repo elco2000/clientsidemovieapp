@@ -13,7 +13,6 @@ export class ReviewService {
         private neo4jService: Neo4jService
     ) {}
 
-    // GET All
     async getAll(movieId: string): Promise<IReviewInfo[]> {
         Logger.log(`Get all reviews for movie ID: ${movieId}`, this.TAG);
 
@@ -28,7 +27,6 @@ export class ReviewService {
         return result.records.map((record) => record.get('r'));
     }
 
-    // GET by id
     async getOne(reviewId: string): Promise<IReviewInfo> {
         Logger.log(`Get review ${reviewId}`, this.TAG);
 
@@ -47,7 +45,6 @@ export class ReviewService {
         return result.records[0].get('r');
     }
 
-    // POST create
     async create(review: CreateReviewDto): Promise<IReview> {
         Logger.log(`Create review`, this.TAG);
         const { title, text, rating } = review;
@@ -75,7 +72,7 @@ export class ReviewService {
         }
 
         const userId = review.userId;
-        const reviewId = newReview.id; // Verander '.Id' naar '.id'
+        const reviewId = newReview.id;
 
         await this.neo4jService.write(
             `
@@ -99,7 +96,6 @@ export class ReviewService {
         return newReview;
     }
 
-    // PUT update
     async update(id: string, req: any): Promise<IReview | null> {
         Logger.log(`Update review`, this.TAG);
         const review = req.body;
@@ -158,9 +154,6 @@ export class ReviewService {
         throw new UnauthorizedException();
        
     }   
-
-
-    // DELETE
 
     async delete(id: string, req: any): Promise<string> {
         Logger.log('delete', this.TAG);

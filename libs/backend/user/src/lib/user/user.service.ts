@@ -38,7 +38,7 @@ export class UserService {
             RETURN u {.id, .username, .birthdate, .country, .description} as user
         `,
       { id }
-    ); // Voeg de id toe als parameter in het query-object
+    );
     if (!item.records[0]) {
       this.logger.debug('User not found');
       return null;
@@ -145,7 +145,7 @@ export class UserService {
             RETURN u {.id, .username, .birthdate, .country, .description} as user
         `,
       { userId }
-    ); // Voeg de id toe als parameter in het query-object
+    );
     return item.records[0]?.get('user');
   }
 
@@ -174,7 +174,7 @@ export class UserService {
             RETURN u {.id, .username, .birthdate, .country, .description} as user
         `,
       { userId }
-    ); // Voeg de id toe als parameter in het query-object
+    );
     return item.records[0]?.get('user');
   }
 

@@ -11,7 +11,7 @@ export class UserExistsGuard implements CanActivate {
         const user = request.body as CreateUserDto;
         const username = user.username;
         if (!username) {
-            return false; // Voeg een logica toe voor het geval de gebruikersnaam niet is gevonden
+            return false;
         }
         const userResult = await this.neo4jService.read(`
             MATCH (u:User {username: $username})

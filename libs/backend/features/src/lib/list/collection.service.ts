@@ -107,7 +107,6 @@ export class CollectionService {
         return result.records[0]?.get('movieIds') ?? [];
     }
 
-    // Post create
     async create(collection: CreateCollectionDto): Promise<ICollection> {
         Logger.log(`Create collection`, this.TAG);
         const { name, description, privateCollection } = collection;
@@ -150,7 +149,6 @@ export class CollectionService {
         return newCollection;
     }
 
-    // Put update
     async update(id: string, req: any): Promise<ICollection | null> {
         Logger.log(`Update collection`, this.TAG);
         const collection = req.body;
@@ -212,7 +210,6 @@ export class CollectionService {
         throw new UnauthorizedException();
     }
 
-    // Delete
     async delete(id: string) {
         Logger.log('delete', this.TAG);
 
