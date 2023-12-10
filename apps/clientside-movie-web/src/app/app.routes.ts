@@ -16,5 +16,9 @@ export const routes: Route[] = [
     {
         path: 'auth',
         loadChildren: () => import('@org/clientside-movie-web/web-auth').then(m => m.AuthModule)
+    },
+    {
+        path: 'profile',
+        loadChildren: () => import('@org/clientside-movie-web/features').then(m => m.ProfileModule)
     }
 ];

@@ -11,7 +11,7 @@ export class CollectionController {
 
     @Get('user/:id')
     @UseGuards(AuthGuard)
-    async getAllByUSer(@Param('id') id: string): Promise<ICollection[]> {
+    async getAllByUser(@Param('id') id: string): Promise<ICollection[]> {
         return this.collectionService.getAllByUser(id);
     }
 

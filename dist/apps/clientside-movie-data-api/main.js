@@ -2144,7 +2144,7 @@ let CollectionController = class CollectionController {
     constructor(collectionService) {
         this.collectionService = collectionService;
     }
-    async getAllByUSer(id) {
+    async getAllByUser(id) {
         return this.collectionService.getAllByUser(id);
     }
     async getOne(id) {
@@ -2180,7 +2180,7 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [String]),
     tslib_1.__metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
-], CollectionController.prototype, "getAllByUSer", null);
+], CollectionController.prototype, "getAllByUser", null);
 tslib_1.__decorate([
     (0, common_1.Get)(':id'),
     (0, common_1.UseGuards)(auth_1.AuthGuard),
