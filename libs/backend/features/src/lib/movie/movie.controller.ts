@@ -18,7 +18,7 @@ export class MovieController {
         return this.movieService.getSmallInformationByActorId(id);
     }
 
-    @Get('collection')
+    @Put('collection')
     async getMoviesByIds(@Body() data: string[]): Promise<Movie[]> {
         return this.movieService.getMoviesByIds(data);
     }

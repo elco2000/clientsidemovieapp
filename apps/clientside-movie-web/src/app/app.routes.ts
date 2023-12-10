@@ -20,5 +20,9 @@ export const routes: Route[] = [
     {
         path: 'profile',
         loadChildren: () => import('@org/clientside-movie-web/features').then(m => m.ProfileModule)
+    },
+    {
+        path: 'collections',
+        loadChildren: () => import('@org/clientside-movie-web/features').then(m => m.CollectionModule)
     }
 ];

@@ -5,6 +5,7 @@ export interface ICollection {
     privateCollection: boolean;
     createDate: string;
     updatedDate: string;
+    userId: string; 
 }
 
 export type ICreateCollection = Pick<ICollection, 'name' | 'description' | 'privateCollection'>;

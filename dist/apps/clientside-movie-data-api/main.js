@@ -212,7 +212,7 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", typeof (_c = typeof Promise !== "undefined" && Promise) === "function" ? _c : Object)
 ], MovieController.prototype, "getSmallInformationByActorId", null);
 tslib_1.__decorate([
-    (0, common_2.Get)('collection'),
+    (0, common_1.Put)('collection'),
     tslib_1.__param(0, (0, common_2.Body)()),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [Array]),
@@ -2176,8 +2176,8 @@ let CollectionController = class CollectionController {
     async update(id, req) {
         return this.collectionService.update(id, req);
     }
-    async delete(id, req) {
-        return this.collectionService.delete(id, req);
+    async delete(id) {
+        return this.collectionService.delete(id);
     }
     async addToCollection(req) {
         return this.collectionService.addToCollection(req);
@@ -2240,9 +2240,8 @@ tslib_1.__decorate([
     (0, common_1.Delete)(':id'),
     (0, common_1.UseGuards)(auth_1.AuthGuard),
     tslib_1.__param(0, (0, common_1.Param)('id')),
-    tslib_1.__param(1, (0, common_1.Request)()),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [String, Object]),
+    tslib_1.__metadata("design:paramtypes", [String]),
     tslib_1.__metadata("design:returntype", typeof (_j = typeof Promise !== "undefined" && Promise) === "function" ? _j : Object)
 ], CollectionController.prototype, "delete", null);
 tslib_1.__decorate([
@@ -2285,6 +2284,15 @@ let CollectionService = class CollectionService {
         this.neo4jService = neo4jService;
         this.TAG = 'CollectionService';
     }
+    async getUserIdOfCollection(collectionId) {
+        common_1.Logger.log(`Get user ID of collection ${collectionId}`, this.TAG);
+        const result = await this.neo4jService.write(`
+            MATCH (u:User)-[:MAKEDCOLLECTION]->(c:Collection { id: $collectionId })
+            RETURN u.id AS userId
+            `, { collectionId });
+        const userId = result.records[0]?.get('userId');
+        return userId ?? null;
+    }
     // Get All by user
     async getAllByUser(userId) {
         common_1.Logger.log(`Get all collections by user`, this.TAG);
@@ -2295,17 +2303,27 @@ let CollectionService = class CollectionService {
         const collections = result.records.map((record) => record.get('c'));
         return collections;
     }
-    // Get by id
     async getOne(collectionId) {
         common_1.Logger.log(`Get collection by id`, this.TAG);
+        const userId = await this.getUserIdOfCollection(collectionId);
         const result = await this.neo4jService.write(`
             MATCH (c:Collection { id: $collectionId })
-            RETURN c {.id, .name, .description, .privateCollection, .createDate, .updatedDate}
+            RETURN c.id as id, c.name as name, c.description as description, c.privateCollection as privateCollection, c.createDate as createDate, c.updatedDate as updatedDate
             `, { collectionId });
         if (result.records.length === 0) {
-            throw new Error(`Review with ID ${collectionId} not found`);
+            throw new Error(`Collection with ID ${collectionId} not found`);
         }
-        return result.records[0]?.get('c');
+        const record = result.records[0];
+        const collection = {
+            id: record.get('id'),
+            name: record.get('name'),
+            description: record.get('description'),
+            privateCollection: record.get('privateCollection'),
+            createDate: record.get('createDate'),
+            updatedDate: record.get('updatedDate'),
+            userId: userId
+        };
+        return collection;
     }
     // Get list where movie doesn't is included
     async getListsWithoutMovie(movieId) {
@@ -2395,30 +2413,26 @@ let CollectionService = class CollectionService {
                 description: updatedResult.description,
                 privateCollection: updatedResult.privateCollection,
                 createDate: updatedResult.createDate,
-                updatedDate: updatedResult.updatedDate
+                updatedDate: updatedResult.updatedDate,
+                userId: userId
             };
             return updatedCollectionInfo;
         }
         throw new common_1.UnauthorizedException();
     }
     // Delete
-    async delete(id, req) {
+    async delete(id) {
         common_1.Logger.log('delete', this.TAG);
-        const collectionThatDeleted = req.body;
-        const userId = req.user.user_id;
-        if (collectionThatDeleted.userId === userId) {
-            const deleteResult = await this.neo4jService.write(`
+        const deleteResult = await this.neo4jService.write(`
                 MATCH (c:Collection {id: $id})
                 DETACH DELETE c
                 `, { id: id });
-            const containsUpdates = deleteResult.summary.updateStatistics.containsUpdates();
-            if (!containsUpdates) {
-                common_1.Logger.debug('Failed to delete collection');
-                throw new Error('Failed to delete collection');
-            }
-            return 'Success';
+        const containsUpdates = deleteResult.summary.updateStatistics.containsUpdates();
+        if (!containsUpdates) {
+            common_1.Logger.debug('Failed to delete collection');
+            throw new Error('Failed to delete collection');
         }
-        throw new common_1.UnauthorizedException();
+        return 'Success';
     }
     async addToCollection(req) {
         const data = req.body;

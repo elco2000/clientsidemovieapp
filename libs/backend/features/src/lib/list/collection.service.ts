@@ -14,6 +14,21 @@ export class CollectionService {
         private neo4jService: Neo4jService
     ) {}
 
+    async getUserIdOfCollection(collectionId: string): Promise<string> {
+        Logger.log(`Get user ID of collection ${collectionId}`, this.TAG);
+
+        const result = await this.neo4jService.write(
+            `
+            MATCH (u:User)-[:MAKEDCOLLECTION]->(c:Collection { id: $collectionId })
+            RETURN u.id AS userId
+            `,
+            { collectionId }
+        );
+
+        const userId = result.records[0]?.get('userId');
+        return userId ?? null;
+    }
+
     // Get All by user
     async getAllByUser(userId: string): Promise<ICollection[]> {
         Logger.log(`Get all collections by user`, this.TAG);
@@ -30,23 +45,35 @@ export class CollectionService {
         return collections;
     }    
 
-    // Get by id
     async getOne(collectionId: string): Promise<ICollection> {
         Logger.log(`Get collection by id`, this.TAG);
     
+        const userId = await this.getUserIdOfCollection(collectionId);
+
         const result = await this.neo4jService.write(
             `
             MATCH (c:Collection { id: $collectionId })
-            RETURN c {.id, .name, .description, .privateCollection, .createDate, .updatedDate}
+            RETURN c.id as id, c.name as name, c.description as description, c.privateCollection as privateCollection, c.createDate as createDate, c.updatedDate as updatedDate
             `,
             { collectionId }
         );
     
         if (result.records.length === 0) {
-            throw new Error(`Review with ID ${collectionId} not found`);
+            throw new Error(`Collection with ID ${collectionId} not found`);
         }
-
-        return result.records[0]?.get('c');
+    
+        const record = result.records[0];
+        const collection: ICollection = {
+            id: record.get('id'),
+            name: record.get('name'),
+            description: record.get('description'),
+            privateCollection: record.get('privateCollection'),
+            createDate: record.get('createDate'),
+            updatedDate: record.get('updatedDate'),
+            userId: userId
+        };
+    
+        return collection;
     }
 
     // Get list where movie doesn't is included
@@ -175,7 +202,8 @@ export class CollectionService {
                 description: updatedResult.description,
                 privateCollection: updatedResult.privateCollection,
                 createDate: updatedResult.createDate,
-                updatedDate: updatedResult.updatedDate
+                updatedDate: updatedResult.updatedDate,
+                userId: userId
             };
 
             return updatedCollectionInfo;
@@ -185,12 +213,9 @@ export class CollectionService {
     }
 
     // Delete
-    async delete(id: string, req: any) {
+    async delete(id: string) {
         Logger.log('delete', this.TAG);
-        const collectionThatDeleted = req.body;
-        const userId = req.user.user_id;
 
-        if(collectionThatDeleted.userId === userId) {
             const deleteResult = await this.neo4jService.write(
                 `
                 MATCH (c:Collection {id: $id})
@@ -207,9 +232,6 @@ export class CollectionService {
             }
     
             return 'Success';
-        }
-
-        throw new UnauthorizedException();
     }
 
 

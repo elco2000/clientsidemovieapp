@@ -1,17 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { map, catchError, tap } from 'rxjs/operators';
-import { ApiResponse, IActor, IMovie } from '@org/shared/api';
+import { ApiResponse, IActor, ICollection, IMovie } from '@org/shared/api';
 import { Injectable } from '@angular/core';
 import { environment } from '@org/shared/util-env';
 import { CreateMovieDto } from '@org/backend/dto';
 import { Actor, Movie } from '@org/backend/features';
-
-export const httpOptions = {
-    observe: 'body',
-    responseType: 'json'
-};
 
 /**
  *
@@ -21,14 +16,39 @@ export const httpOptions = {
 export class MovieService {
     endpoint = environment.dataApiUrl + '/api/movie';
     actorEndpoint = environment.dataApiUrl + '/api/actor';
+    collectionEndpoint = environment.dataApiUrl + '/api/collection';
 
     private movieListSubject: BehaviorSubject<Movie[] | null> = new BehaviorSubject<Movie[] | null>(null);
     public readonly movieList$: Observable<Movie[] | null> = this.movieListSubject.asObservable();
+
+    private collectionListSubject: BehaviorSubject<ICollection[] | null> = new BehaviorSubject<ICollection[] | null>(null);
+    public readonly collectionList$: Observable<ICollection[] | null> = this.collectionListSubject.asObservable();
 
     private actorLookupListSubject: BehaviorSubject<Actor[] | null> = new BehaviorSubject<Actor[] | null>(null);
     public readonly actorLookupList$: Observable<Actor[] | null> = this.actorLookupListSubject.asObservable();
 
     constructor(private readonly http : HttpClient) {}
+
+    private getTokenFromLocalStorage(): string | null {
+        const userString = localStorage.getItem('user');
+        if (userString) {
+          const user = JSON.parse(userString);
+          return user?.results?.token || null;
+        }
+        return null;
+      }
+    
+      private get httpOptions(): any {
+        const token = this.getTokenFromLocalStorage();
+    
+        return {
+          observe: 'body',
+          responseType: 'json',
+          headers: new HttpHeaders({
+            Authorization: token ? `Bearer ${token}` : '',
+          }),
+        };
+      }
 
     /**
      * Get all items.
@@ -39,7 +59,7 @@ export class MovieService {
         return this.http
             .get<ApiResponse<IMovie[]>>(this.endpoint, {
                 ...options,
-                ...httpOptions
+                ...this.httpOptions
             })
             .pipe(
                 map((response: any) => response.results as Movie[]),
@@ -59,7 +79,7 @@ export class MovieService {
         return this.http
             .get<ApiResponse<Movie>>(`${this.endpoint}/${id}`, {
                 ...options,
-                ...httpOptions
+                ...this.httpOptions
             })
             .pipe(
                 map((response: any) => response.results as IMovie),
@@ -81,7 +101,7 @@ export class MovieService {
         return this.http
             .post<ApiResponse<IMovie>>(this.endpoint, movieDto, {
                 ...options,
-                ...httpOptions,
+                ...this.httpOptions,
             })
             .pipe(
                 map((response: any) => response.results as IMovie),
@@ -102,7 +122,7 @@ export class MovieService {
         return this.http
             .put<ApiResponse<Movie>>(`${this.endpoint}/${movie._id}`, movie, {
                 ...options,
-                ...httpOptions,
+                ...this.httpOptions,
             })
             .pipe(
                 map((response: any) => response.results as Movie),
@@ -122,7 +142,7 @@ export class MovieService {
         return this.http
             .delete<ApiResponse<Movie>>(`${this.endpoint}/${id}`, {
                 ...options,
-                ...httpOptions
+                ...this.httpOptions
             })
             .pipe(
                 map((response: any) => response.results as IMovie),
@@ -143,12 +163,51 @@ export class MovieService {
         return this.http
             .get<ApiResponse<IActor[]>>(this.actorEndpoint + "/lookup", {
                 ...options,
-                ...httpOptions
+                ...this.httpOptions
             })
             .pipe(
                 map((response: any) => response.results as Actor[]),
                 tap((actors: Actor[]) => {
                     this.actorLookupListSubject.next(actors);
+                  }),
+                tap(console.log),
+                catchError(this.handleError)
+            );
+    }
+
+    /**
+     * Add movie to your collection of choose.
+     *
+     */
+    public addMovieToCollection(collectionId: string, movieId: string, userId: string, options?: any): Observable<string> {
+        return this.http
+          .put<ApiResponse<string>>(`${this.collectionEndpoint}/movies/add`, {userId: userId, movieId: movieId, collectionId: collectionId}, {
+            ...options,
+            ...this.httpOptions,
+          })
+          .pipe(
+            map((response: any) => response.results as string),
+            tap((result: string) => {
+              console.log('Update collection:', result);
+            }),
+            catchError(this.handleError)
+          );
+    }
+
+    /**
+     * Add get collections that doesn't include this movie
+     *
+     */
+    public collections(id: string | null, options?: any): Observable<ICollection[] | null> {
+        return this.http
+            .get<ApiResponse<ICollection[]>>(`${this.collectionEndpoint}/without/${id}`, {
+                ...options,
+                ...this.httpOptions
+            })
+            .pipe(
+                map((response: any) => response.results as ICollection[]),
+                tap((collections: ICollection[]) => {
+                    this.collectionListSubject.next(collections);
                   }),
                 tap(console.log),
                 catchError(this.handleError)
