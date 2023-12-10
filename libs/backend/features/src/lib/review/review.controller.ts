@@ -10,8 +10,8 @@ export class ReviewController {
     constructor(private reviewService: ReviewService) {}
 
     @Get('movie/:movieId')
-    async getAll(@Param('movieId') movieId: string): Promise<IReviewInfo[]> {
-        return this.reviewService.getAll(movieId);
+    async getAllByMovie(@Param('movieId') movieId: string): Promise<IReviewInfo[]> {
+        return this.reviewService.getAllByMovie(movieId);
     }
 
     @Get(':id')

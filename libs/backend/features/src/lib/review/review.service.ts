@@ -13,7 +13,7 @@ export class ReviewService {
         private neo4jService: Neo4jService
     ) {}
 
-    async getAll(movieId: string): Promise<IReviewInfo[]> {
+    async getAllByMovie(movieId: string): Promise<IReviewInfo[]> {
         Logger.log(`Get all reviews for movie ID: ${movieId}`, this.TAG);
 
         const result = await this.neo4jService.read(
