@@ -19,12 +19,12 @@ export class UserController {
         }
 
         @Put(':userid/follow/:followuserid')
-        async follow(@Param('userid') userid: string, @Param('followuserid') followuserid: string): Promise<string> {
+        async follow(@Param('userid') userid: string, @Param('followuserid') followuserid: string): Promise<IUser | null> {
             return this.userService.follow(userid, followuserid);
         }
 
         @Put(':userid/unfollow/:unfollowuserid')
-        async unfollow(@Param('userid') userid: string, @Param('unfollowuserid') unfollowuserid: string): Promise<string> {
+        async unfollow(@Param('userid') userid: string, @Param('unfollowuserid') unfollowuserid: string): Promise<IUser | null> {
             return this.userService.unfollow(userid, unfollowuserid);
         }
 

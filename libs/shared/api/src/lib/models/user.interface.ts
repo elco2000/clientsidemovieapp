@@ -29,6 +29,13 @@ export interface IUser {
     description?: string;
 }
 
+export const initialUser = {
+    id: '',
+    username: '',
+    birthdate: '',
+    country: '',
+}
+
 export type ICreateUser = Pick<IUserInfo, 'username' | 'password' | 'birthdate' | 'country' | 'description'>;
 export type IUpdateUser = Partial<Omit<IUserInfo, 'id'>>;
 export type IUpsertUser = IUserInfo;

@@ -30,6 +30,7 @@ export class ProfileDetailComponent implements OnInit, OnDestroy {
       const idParam = params.get('id');
       if (idParam !== null) {
         this.id = idParam;
+        this.loadUserData(idParam);
         this.checkForOwn(idParam, this.getTokenId());
       }
     });
@@ -79,9 +80,38 @@ export class ProfileDetailComponent implements OnInit, OnDestroy {
       });
   }
 
+  loadUserData(userId: string) {
+    this.profileService.read(userId).subscribe((result) => {
+      if (result) {
+        this.user = result;
+      }
+    });
+  
+    this.profileService.getFollowers(userId).subscribe((followers) => {
+      if (followers) {
+        this.followers = followers;
+      }
+    });
+  
+    this.profileService.getFollowing(userId).subscribe((following) => {
+      if (following) {
+        this.following = following;
+      }
+    });
+  
+    this.profileService.collectionsOfUser(userId).subscribe((collections) => {
+      if (collections) {
+        this.collections = collections;
+      }
+    });
+  }
+  
+
   checkForOwn(urlId: string, tokenId: string): void {
     if (urlId === tokenId) {
       this.ownInfo = true;
+    } else {
+      this.ownInfo = false;
     }
   }
 
@@ -93,7 +123,11 @@ export class ProfileDetailComponent implements OnInit, OnDestroy {
 
     // Controleer of de huidige gebruiker al in de lijst van gebruikers voorkomt
     const foundUser = userList.find((user) => user.id === userId);
-    this.followsAlready = !!foundUser;
+    if(foundUser === null) {
+      this.followsAlready = false;
+    } else {
+      this.followsAlready = true;
+    }
   }
 
   getTokenId(): string {
@@ -104,6 +138,18 @@ export class ProfileDetailComponent implements OnInit, OnDestroy {
       tokenId = user?.results?.id || null;
     }
     return tokenId;
+  }
+
+  public onFollowActionButton() {
+    if (!this.followsAlready) {
+      this.profileService.follow(this.getTokenId(), this.user?.id).subscribe( () => {
+        this.router.navigateByUrl('/profile/' + this.getTokenId())
+      })
+    } else {
+      this.profileService.unfollow(this.getTokenId(), this.user?.id).subscribe( () => {
+        this.router.navigateByUrl('/profile/' + this.getTokenId())
+      })
+    }
   }
 
   ngOnDestroy(): void {

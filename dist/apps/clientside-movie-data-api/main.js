@@ -1614,7 +1614,7 @@ let UserService = UserService_1 = class UserService {
             username: resultProperties.username,
             birthdate: resultProperties.birthdate,
             country: resultProperties.country,
-            description: resultProperties.description
+            description: resultProperties.description,
         };
         return user;
     }
@@ -1671,9 +1671,13 @@ let UserService = UserService_1 = class UserService {
         const containsUpdates = result.summary.updateStatistics.containsUpdates();
         if (!containsUpdates) {
             this.logger.debug('Failed to follow user');
-            return 'Failed';
+            return null;
         }
-        return 'Succes';
+        const item = await this.neo4jService.read(`
+            MATCH (u:User { id: $userId })
+            RETURN u {.id, .username, .birthdate, .country, .description} as user
+        `, { userId }); // Voeg de id toe als parameter in het query-object
+        return item.records[0]?.get('user');
     }
     async unfollow(userId, followUserId) {
         this.logger.log(`User ${userId} unfollows user ${followUserId}`);
@@ -1685,9 +1689,13 @@ let UserService = UserService_1 = class UserService {
         const containsUpdates = result.summary.updateStatistics.containsUpdates();
         if (!containsUpdates) {
             this.logger.debug('Failed to unfollow user');
-            return 'Failed';
+            return null;
         }
-        return 'Succes';
+        const item = await this.neo4jService.read(`
+            MATCH (u:User { id: $userId })
+            RETURN u {.id, .username, .birthdate, .country, .description} as user
+        `, { userId }); // Voeg de id toe als parameter in het query-object
+        return item.records[0]?.get('user');
     }
     async getFollowers(userId) {
         this.logger.log(`Getting followers for user with ID ${userId}`);
@@ -2009,13 +2017,19 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.UserRole = void 0;
+exports.initialUser = exports.UserRole = void 0;
 var UserRole;
 (function (UserRole) {
     UserRole["Guest"] = "Guest";
     UserRole["Admin"] = "Admin";
     UserRole["Unknown"] = "Unknown";
 })(UserRole || (exports.UserRole = UserRole = {}));
+exports.initialUser = {
+    id: '',
+    username: '',
+    birthdate: '',
+    country: '',
+};
 
 
 /***/ }),

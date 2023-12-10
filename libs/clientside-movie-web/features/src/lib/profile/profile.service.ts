@@ -2,7 +2,7 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { UpdateUserDto } from "@org/backend/dto";
-import { ApiResponse, ICollection, IUser, IUserInfo } from "@org/shared/api";
+import { ApiResponse, ICollection, IUser, IUserInfo, initialUser } from "@org/shared/api";
 import { environment } from "@org/shared/util-env";
 import { BehaviorSubject, Observable, catchError, map, tap, throwError } from "rxjs";
 
@@ -14,6 +14,9 @@ import { BehaviorSubject, Observable, catchError, map, tap, throwError } from "r
 export class ProfileService {
     endpoint = environment.dataApiUrl + '/api/user';
     collectionEndpoint = environment.dataApiUrl + '/api/collection';
+
+    private userSubject: BehaviorSubject<IUser> = new BehaviorSubject<IUser>(initialUser);
+    public readonly user$: Observable<IUser> = this.userSubject.asObservable();
 
     private followersListSubject: BehaviorSubject<IUser[] | null> = new BehaviorSubject<IUser[] | null>(null);
     public readonly followersList$: Observable<IUser[] | null> = this.followersListSubject.asObservable();
@@ -59,6 +62,9 @@ export class ProfileService {
             })
             .pipe(
                 map((response: any) => response.results as IUser),
+                tap((user: IUser) => {
+                    this.userSubject.next(user);
+                  }),
                 catchError(this.handleError)
             );
     }
@@ -127,7 +133,7 @@ export class ProfileService {
      * Follow User
      * 
      */
-    public follow(ownId: string, userToFollowId: string, options?: any): Observable<string>{
+    public follow(ownId: string, userToFollowId: string | undefined, options?: any): Observable<IUser>{
 
         return this.http
             .put<ApiResponse<IUserInfo>>(`${this.endpoint}/${ownId}/follow/${userToFollowId}`, {
@@ -135,7 +141,11 @@ export class ProfileService {
                 ...this.httpOptions,
             })
             .pipe(
-                map((response: any) => console.log('Followed user status:', response)),
+                map((response: any) => response.results as IUser),
+                tap((user: IUser) => {
+                    this.userSubject.next(user);
+                    this.updateFollowersAndFollowing(ownId); // Na het ontvolgen, update de volgers en gevolgden
+                }),
                 catchError(this.handleError)
             )
     }
@@ -144,7 +154,7 @@ export class ProfileService {
      * Unfollow User
      * 
      */
-    public unfollow(ownId: string, userToUnfollowId: string, options?: any): Observable<string>{
+    public unfollow(ownId: string, userToUnfollowId: string | undefined, options?: any): Observable<IUser>{
 
         return this.http
             .put<ApiResponse<IUserInfo>>(`${this.endpoint}/${ownId}/unfollow/${userToUnfollowId}`, {
@@ -152,7 +162,11 @@ export class ProfileService {
                 ...this.httpOptions,
             })
             .pipe(
-                map((response: any) => console.log('Unfollow user status:', response)),
+                map((response: any) => response.results as IUser),
+                tap((user: IUser) => {
+                    this.userSubject.next(user);
+                    this.updateFollowersAndFollowing(ownId); // Na het ontvolgen, update de volgers en gevolgden
+                }),
                 catchError(this.handleError)
             )
     }
@@ -175,6 +189,28 @@ export class ProfileService {
                 catchError(this.handleError)
             );
     }
+
+    private updateFollowersAndFollowing(id: string) {
+        // Haal de volgers opnieuw op
+        this.getFollowers(id).subscribe((followers) => {
+          if (followers) {
+            this.followersListSubject.next(followers);
+          }
+        });
+    
+        // Haal de gevolgden opnieuw op
+        this.getFollowing(id).subscribe((following) => {
+          if (following) {
+            this.followingListSubject.next(following);
+          }
+        });
+
+        this.collectionsOfUser(id).subscribe((collections) => {
+            if (collections) {
+              this.collectionsOfUserListSubject.next(collections);
+            }
+          });
+      }
 
      /**
      * Handle errors.
