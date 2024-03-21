@@ -41,10 +41,10 @@ exports.AppModule = AppModule = tslib_1.__decorate([
             user_1.UserModule,
             nest_neo4j_1.Neo4jModule.forRoot({
                 scheme: 'neo4j+s',
-                host: '80f65338.databases.neo4j.io',
+                host: '57dd0e36.databases.neo4j.io',
                 port: 7687,
                 username: 'neo4j',
-                password: '5nJgIGtl_bhK4gG2wKZwVvIkvpAOqWfZF770r33nvAE',
+                password: 'DOq-5mAbC5PtybNu5OpsRCOdrgRyBcTAT08FKKWdzHk',
             }),],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
