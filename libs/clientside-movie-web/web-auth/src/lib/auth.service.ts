@@ -7,7 +7,7 @@ import { environment } from "@org/shared/util-env";
 import { BehaviorSubject, Observable, map } from "rxjs";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'any'
 })
 export class AuthService {
     private authUrl = environment.dataApiUrl + '/api/';
