@@ -57,9 +57,22 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
     let tokenId = '';
     if (userString) {
       const user = JSON.parse(userString);
-      tokenId = user?.results?.id || null;
+      tokenId = user?.id || null;
     }
     return tokenId;
+  }
+
+  getTokenRole(): string | null {
+    const userString = localStorage.getItem('user');
+    if (userString === undefined || userString === null) {
+      return null;
+    }
+    let tokenRole = '';
+    if (userString) {
+      const user = JSON.parse(userString);
+      tokenRole = user?.role || null;
+    }
+    return tokenRole;
   }
 
   onAddMovieToCollection(collectionId: string | undefined, movieId: string) {

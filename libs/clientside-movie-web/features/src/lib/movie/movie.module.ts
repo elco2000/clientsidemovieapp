@@ -8,6 +8,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { MovieCreateComponent } from "./movie-create/movie-create.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MovieEditComponent } from "./movie-edit/movie-edit.component";
+import { RoleGuard } from "@org/clientside-movie-web/web-auth";
 
 const routes: Routes = [
     {
@@ -18,11 +19,13 @@ const routes: Routes = [
     {
         path: 'create',
         pathMatch: 'full',
+        canActivate: [RoleGuard],
         component: MovieCreateComponent
     },
     {
         path: 'edit/:id',
         pathMatch: 'full',
+        canActivate: [RoleGuard],
         component: MovieEditComponent
     },
     {

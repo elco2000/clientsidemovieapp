@@ -44,7 +44,7 @@ export class CollectionService {
     const userString = localStorage.getItem('user');
     if (userString) {
       const user = JSON.parse(userString);
-      return user?.results?.token || null;
+      return user?.token || null;
     }
     return null;
   }
@@ -155,8 +155,7 @@ export class CollectionService {
       })
       .pipe(
         map((response: any) => response.results as ICollection),
-        tap((updateCollection: ICollection) => {
-          console.log('Update collection:', updateCollection);
+        tap(() => {
           this.getMovieIds(collectionId);
         }),
         catchError(this.handleError)

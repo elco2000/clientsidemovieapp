@@ -26,7 +26,7 @@ export class NavComponent {
         let username = '';
         if (userString) {
           const user = JSON.parse(userString);
-          username = user?.results?.username || null;
+          username = user?.username || null;
         }
         return username;
     }
@@ -39,10 +39,23 @@ export class NavComponent {
         let tokenId = '';
         if (userString) {
           const user = JSON.parse(userString);
-          tokenId = user?.results?.id || null;
+          tokenId = user?.id || null;
         }
         return tokenId;
       }
+
+    getTokenRole(): string | null {
+      const userString = localStorage.getItem('user');
+      if (userString === undefined || userString === null) {
+        return null;
+      }
+      let tokenRole = '';
+      if (userString) {
+        const user = JSON.parse(userString);
+        tokenRole = user?.role || null;
+      }
+      return tokenRole;
+    }
     
       onLogout() {
         this.authService.logout();

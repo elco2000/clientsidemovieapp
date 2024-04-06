@@ -15,7 +15,7 @@ export class CollectionDetailComponent implements OnInit, OnDestroy {
   collection: ICollection | null = null;
   user: IUser | null = null;
   movies: Movie[] | null = null;
-  subscription: Subscription | undefined = undefined;
+  subscription: Subscription = new Subscription();
   ownInfo: boolean = false;
 
   constructor(
@@ -34,7 +34,7 @@ export class CollectionDetailComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.subscription = this.collectionService
+    const collectionSubscription = this.collectionService
       .read(this.id)
       .subscribe((result) => {
         if (result) {
@@ -44,13 +44,16 @@ export class CollectionDetailComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.subscription = this.collectionService
+    const movieSubscription = this.collectionService
       .getMovies(this.id)
       .subscribe((result) => {
         if (result) {
             this.movies = result
         }
-      })
+      });
+
+    this.subscription.add(collectionSubscription);
+    this.subscription.add(movieSubscription);
   }
 
   loadCollectionData(userId: string) {
@@ -70,9 +73,13 @@ export class CollectionDetailComponent implements OnInit, OnDestroy {
   }
 
   loadMovieData() {
-    this.collectionService.movieList$.subscribe((result) => {
-      this.movies = result;
-    })
+    this.collectionService
+      .getMovies(this.id)
+      .subscribe((result) => {
+        if (result) {
+            this.movies = result
+        }
+      });
   }
 
   checkForOwn(urlId: string, tokenId: string): void {
@@ -88,13 +95,13 @@ export class CollectionDetailComponent implements OnInit, OnDestroy {
     let tokenId = '';
     if (userString) {
       const user = JSON.parse(userString);
-      tokenId = user?.results?.id || null;
+      tokenId = user?.id || null;
     }
     return tokenId;
   }
 
   ngOnDestroy(): void {
-    if (this.subscription) this.subscription.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   onDelete(id: string): void {

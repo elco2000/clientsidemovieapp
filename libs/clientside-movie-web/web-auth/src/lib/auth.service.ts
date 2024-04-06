@@ -26,7 +26,9 @@ export class AuthService {
     
       login(username: string, password: string) {
         return this.http.post<IUserIdentity>(this.authUrl + "auth/login", {username, password})
-          .pipe(map((user: IUserIdentity) => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          .pipe(map((response: any) => {
+            const user = response.results;
             localStorage.setItem('user', JSON.stringify(user));
             this.userSubject.next(user);
             return user;
@@ -46,6 +48,14 @@ export class AuthService {
       public getToken(): string {
         if (this.userValue !== null && this.userValue !== undefined) {
           return this.userValue.token || "";
+        } else {
+          return "";
+        }
+      } 
+
+      public getRole(): string {
+        if (this.userValue !== null && this.userValue !== undefined) {
+          return this.userValue.role;
         } else {
           return "";
         }

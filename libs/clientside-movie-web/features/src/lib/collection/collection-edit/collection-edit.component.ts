@@ -68,7 +68,7 @@ export class CollectionEditComponent implements OnInit, OnDestroy {
     let tokenId = '';
     if (userString) {
       const user = JSON.parse(userString);
-      tokenId = user?.results?.id || null;
+      tokenId = user?.id || null;
     }
     return tokenId;
   }

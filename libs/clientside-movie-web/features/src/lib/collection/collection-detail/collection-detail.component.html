@@ -33,7 +33,7 @@
             <div class="mt-2">
                 <h3 class="text-lg font-medium text-gray-700 dark:text-gray-200">{{movie.title}}</h3>
                 <span class="mt-1 font-medium text-gray-600 dark:text-gray-300">{{movie.releaseDate | date}}</span>
-                <p *ngIf="ownInfo" class="text-red-600 cursor-pointer"><a [routerLink]="['/profile/' + getTokenId()]" (click)="onRemoveMovie(collection.id, movie._id)">Remove</a></p>
+                <p *ngIf="ownInfo" class="text-red-600 cursor-pointer"><a (click)="onRemoveMovie(collection.id, movie._id)">Remove</a></p>
             </div>
             
         </div>

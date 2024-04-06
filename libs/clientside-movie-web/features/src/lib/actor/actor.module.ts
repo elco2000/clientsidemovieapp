@@ -8,6 +8,7 @@ import { ActorCreateComponent } from "./actor-create/actor-create.component";
 import { ActorListComponent } from "./actor-list/actor-list.component";
 import { ActorDetailComponent } from "./actor-detail/actor-detail.component";
 import { ActorEditComponent } from "./actor-edit/actor-edit.component";
+import { RoleGuard } from "@org/clientside-movie-web/web-auth";
 
 const routes: Routes = [
     {
@@ -18,11 +19,13 @@ const routes: Routes = [
     {
         path: 'create',
         pathMatch: 'full',
+        canActivate: [RoleGuard],
         component: ActorCreateComponent
     },
     {
         path: 'edit/:id',
         pathMatch: 'full',
+        canActivate: [RoleGuard],
         component: ActorEditComponent
     },
     {

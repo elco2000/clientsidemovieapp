@@ -23,6 +23,10 @@ export class MovieService {
 
   async getMoviesByIds(ids: string[]): Promise<Movie[]> {
     Logger.log(`getMoviesByIds`, this.TAG);
+
+    if (!ids || ids.length === 0) {
+      return [];
+    }
   
     try {
       const movies = await this.movieModel.find({ _id: { $in: ids } }).exec();
