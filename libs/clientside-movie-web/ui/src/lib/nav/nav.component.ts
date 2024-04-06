@@ -46,6 +46,7 @@ export class NavComponent {
     
       onLogout() {
         this.authService.logout();
+        this.router.navigateByUrl('');
       }
       
 }
