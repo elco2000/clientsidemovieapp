@@ -223,4 +223,70 @@ export class UserService {
 
     return following;
   }
+
+  async deleteUser(userId: string): Promise<void> {
+    this.logger.log(`Deleting user with ID ${userId}`);
+  
+    // Verwijder relaties tussen films en de lijsten van de gebruiker: CONTAINS
+    await this.neo4jService.write(
+      `
+      MATCH (u:User)-[:MAKEDCOLLECTION]->(c:Collection)-[r:CONTAINS]->(m:Movie)
+      WHERE u.id = $userId
+      DELETE r
+      `,
+      { userId }
+    );
+  
+    // Verwijder lijsten die een relatie hebben met die user: MAKEDCOLLECTION
+    await this.neo4jService.write(
+      `
+      MATCH (u:User)-[r:MAKEDCOLLECTION]->(c:Collection)
+      WHERE u.id = $userId
+      DELETE r, c
+      `,
+      { userId }
+    );
+  
+    // Verwijder volg relaties die aan de user gekoppeld staan: FOLLOWS
+    await this.neo4jService.write(
+      `
+      MATCH (u:User)-[r:FOLLOWS]->(f:User)
+      WHERE u.id = $userId
+      DELETE r
+      `,
+      { userId }
+    );
+  
+    // Verwijder volg relaties die aan de user gekoppeld staan: FOLLOWS
+    await this.neo4jService.write(
+      `
+      MATCH (u:User)<-[r:FOLLOWS]-(f:User)
+      WHERE u.id = $userId
+      DELETE r
+      `,
+      { userId }
+    );  
+
+    // Verwijder alle reviews van de user: MAKEDREVIEW
+    await this.neo4jService.write(
+      `
+      MATCH (u:User)-[r:MAKEDREVIEW]->(m:Movie)
+      WHERE u.id = $userId
+      DELETE r
+      `,
+      { userId }
+    );
+  
+    // Verwijder de user zelf
+    await this.neo4jService.write(
+      `
+      MATCH (u:User)
+      WHERE u.id = $userId
+      DELETE u
+      `,
+      { userId }
+    );
+  
+    this.logger.log(`User with ID ${userId} deleted successfully`);
+  }
 }

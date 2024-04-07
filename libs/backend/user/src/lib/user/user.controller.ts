@@ -1,4 +1,4 @@
-import { Body, Get, Put } from '@nestjs/common';
+import { Body, Get, Put, Delete } from '@nestjs/common';
 import { Controller, Param } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { IUser, IUserInfo } from "@org/shared/api";
@@ -41,5 +41,10 @@ export class UserController {
         @Get(':id/following')
         async getFollowing(@Param('id') userid: string): Promise<IUser[]> {
             return this.userService.getFollowing(userid);
+        }
+
+        @Delete(':id')
+        async deleteUser(@Param('id') userid: string): Promise<void> {
+            return this.userService.deleteUser(userid);
         }
 }

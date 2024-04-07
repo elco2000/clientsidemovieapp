@@ -3,6 +3,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { ICollection, IUser } from '@org/shared/api';
 import { Subscription } from 'rxjs';
 import { ProfileService } from '../profile.service';
+import { AuthService } from '@org/clientside-movie-web/web-auth';
 
 @Component({
   selector: 'org-profile-detail',
@@ -22,6 +23,7 @@ export class ProfileDetailComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private profileService: ProfileService,
+    private authService: AuthService,
     private router: Router
   ) {}
 
@@ -151,6 +153,13 @@ export class ProfileDetailComponent implements OnInit, OnDestroy {
         this.router.navigateByUrl('/profile/' + this.getTokenId())
       })
     }
+  }
+
+  public onDeleteButton(userId: string) {
+    this.authService.logout();
+    this.profileService.deleteUser(userId).subscribe(() => {
+      this.router.navigateByUrl('/');
+    })
   }
 
   ngOnDestroy(): void {

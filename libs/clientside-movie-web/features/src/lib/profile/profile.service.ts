@@ -236,6 +236,25 @@ export class ProfileService {
           });
       }
 
+      public deleteUser(id: string | null, options?: any): Observable<void> {
+        return this.http
+            .delete<ApiResponse<void>>(`${this.endpoint}/${id}`, {
+                ...options,
+                ...this.httpOptions,
+            })
+            .pipe(
+                tap(() => {
+                    console.log(`User with ID ${id} deleted successfully`);
+                    this.userSubject.next(initialUser);
+                    this.userListSubject.next(null);
+                    this.followersListSubject.next(null);
+                    this.followingListSubject.next(null);
+                    this.collectionsOfUserListSubject.next(null);
+                }),
+                catchError(this.handleError)
+            );
+    }
+
      /**
      * Handle errors.
      */
