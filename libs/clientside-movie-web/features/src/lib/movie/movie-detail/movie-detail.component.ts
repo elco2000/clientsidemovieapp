@@ -3,7 +3,8 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Movie } from '@org/backend/features';
 import { Subscription } from 'rxjs';
 import { MovieService } from '../movie.service';
-import { ICollection } from '@org/shared/api';
+import { ICollection, IReviewInfo } from '@org/shared/api';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'org-movie-detail',
@@ -17,6 +18,11 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
   collections: ICollection[] | null = null;
   subscription: Subscription | undefined = undefined;
   selectedCollectionId: string | undefined;
+  reviews: IReviewInfo[] | null = null;
+
+  collectionForm = new FormGroup({
+    collection: new FormControl()
+  })
 
   constructor(private route: ActivatedRoute, private movieService: MovieService, private router: Router) {}
 
@@ -37,6 +43,11 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
         this.collections = result;
       }
     })
+    this.subscription = this.movieService.getMovieReviews(this.id).subscribe((result) => {
+      if (result) {
+        this.reviews = result;
+      }
+    })
 
   }
 
@@ -50,6 +61,10 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
         this.router.navigateByUrl('/movies');
       }
     );
+  }
+
+  onAddReview(id: string): void {
+    this.router.navigateByUrl('/reviews/create/' + id);
   }
 
   getTokenId(): string {

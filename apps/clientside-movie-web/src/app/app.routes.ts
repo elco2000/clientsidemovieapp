@@ -24,5 +24,9 @@ export const routes: Route[] = [
     {
         path: 'collections',
         loadChildren: () => import('@org/clientside-movie-web/features').then(m => m.CollectionModule)
+    },
+    {
+        path: 'reviews',
+        loadChildren: () => import('@org/clientside-movie-web/features').then(m => m.ReviewModule)
     }
 ];

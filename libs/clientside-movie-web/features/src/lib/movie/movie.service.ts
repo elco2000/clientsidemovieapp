@@ -2,7 +2,7 @@
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { map, catchError, tap } from 'rxjs/operators';
-import { ApiResponse, IActor, ICollection, IMovie } from '@org/shared/api';
+import { ApiResponse, IActor, ICollection, IMovie, IReviewInfo } from '@org/shared/api';
 import { Injectable } from '@angular/core';
 import { environment } from '@org/shared/util-env';
 import { CreateMovieDto } from '@org/backend/dto';
@@ -26,6 +26,9 @@ export class MovieService {
 
     private actorLookupListSubject: BehaviorSubject<Actor[] | null> = new BehaviorSubject<Actor[] | null>(null);
     public readonly actorLookupList$: Observable<Actor[] | null> = this.actorLookupListSubject.asObservable();
+
+    private reviewListSubject: BehaviorSubject<IReviewInfo[] | null> = new BehaviorSubject<IReviewInfo[] | null>(null);
+    public readonly reviewList$: Observable<IReviewInfo[] | null> = this.reviewListSubject.asObservable();
 
     constructor(private readonly http : HttpClient) {}
 
@@ -222,5 +225,25 @@ export class MovieService {
 
         return throwError(() => new Error(error.message));
     }
+
+     /**
+     * Get reviews for a movie.
+     * 
+     */
+     public getMovieReviews(movieId: string | null, options?: any): Observable<IReviewInfo[]> {
+      const url = `${environment.dataApiUrl}/api/review/movie/${movieId}`;
+      return this.http
+          .get<ApiResponse<IReviewInfo[]>>(url, {
+              ...options,
+              ...this.httpOptions
+          })
+          .pipe(
+              map((response: any) => response.results as IReviewInfo[]),
+              tap((reviews: IReviewInfo[]) => {
+                this.reviewListSubject.next(reviews);
+              }),
+              catchError(this.handleError)
+          );
+  }
 
 }

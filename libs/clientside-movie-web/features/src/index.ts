@@ -4,3 +4,4 @@ export * from './lib/actor/actor.module';
 export * from './lib/about/about.module';
 export * from './lib/profile/profile.module';
 export * from './lib/collection/collection.module';
+export * from './lib/review/review.module';
