@@ -1014,7 +1014,7 @@ exports.UserModule = UserModule = tslib_1.__decorate([
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
-var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserController = void 0;
 const tslib_1 = __webpack_require__(4);
@@ -1046,6 +1046,9 @@ let UserController = class UserController {
     }
     async getFollowing(userid) {
         return this.userService.getFollowing(userid);
+    }
+    async deleteUser(userid) {
+        return this.userService.deleteUser(userid);
     }
 };
 exports.UserController = UserController;
@@ -1100,6 +1103,13 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [String]),
     tslib_1.__metadata("design:returntype", typeof (_j = typeof Promise !== "undefined" && Promise) === "function" ? _j : Object)
 ], UserController.prototype, "getFollowing", null);
+tslib_1.__decorate([
+    (0, common_1.Delete)(':id'),
+    tslib_1.__param(0, (0, common_2.Param)('id')),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [String]),
+    tslib_1.__metadata("design:returntype", typeof (_k = typeof Promise !== "undefined" && Promise) === "function" ? _k : Object)
+], UserController.prototype, "deleteUser", null);
 exports.UserController = UserController = tslib_1.__decorate([
     (0, common_2.Controller)('user'),
     tslib_1.__metadata("design:paramtypes", [typeof (_a = typeof user_service_1.UserService !== "undefined" && user_service_1.UserService) === "function" ? _a : Object])
@@ -1270,6 +1280,46 @@ let UserService = UserService_1 = class UserService {
             description: record.get('description'),
         }));
         return following;
+    }
+    async deleteUser(userId) {
+        this.logger.log(`Deleting user with ID ${userId}`);
+        // Verwijder relaties tussen films en de lijsten van de gebruiker: CONTAINS
+        await this.neo4jService.write(`
+      MATCH (u:User)-[:MAKEDCOLLECTION]->(c:Collection)-[r:CONTAINS]->(m:Movie)
+      WHERE u.id = $userId
+      DELETE r
+      `, { userId });
+        // Verwijder lijsten die een relatie hebben met die user: MAKEDCOLLECTION
+        await this.neo4jService.write(`
+      MATCH (u:User)-[r:MAKEDCOLLECTION]->(c:Collection)
+      WHERE u.id = $userId
+      DELETE r, c
+      `, { userId });
+        // Verwijder volg relaties die aan de user gekoppeld staan: FOLLOWS
+        await this.neo4jService.write(`
+      MATCH (u:User)-[r:FOLLOWS]->(f:User)
+      WHERE u.id = $userId
+      DELETE r
+      `, { userId });
+        // Verwijder volg relaties die aan de user gekoppeld staan: FOLLOWS
+        await this.neo4jService.write(`
+      MATCH (u:User)<-[r:FOLLOWS]-(f:User)
+      WHERE u.id = $userId
+      DELETE r
+      `, { userId });
+        // Verwijder alle reviews van de user: MAKEDREVIEW
+        await this.neo4jService.write(`
+      MATCH (u:User)-[r:MAKEDREVIEW]->(m:Movie)
+      WHERE u.id = $userId
+      DELETE r
+      `, { userId });
+        // Verwijder de user zelf
+        await this.neo4jService.write(`
+      MATCH (u:User)
+      WHERE u.id = $userId
+      DELETE u
+      `, { userId });
+        this.logger.log(`User with ID ${userId} deleted successfully`);
     }
 };
 exports.UserService = UserService;
@@ -1946,8 +1996,8 @@ let ReviewController = class ReviewController {
     async update(id, req) {
         return this.reviewService.update(id, req);
     }
-    async delete(id, req) {
-        return this.reviewService.delete(id, req);
+    async delete(id) {
+        return this.reviewService.delete(id);
     }
 };
 exports.ReviewController = ReviewController;
@@ -1986,9 +2036,8 @@ tslib_1.__decorate([
     (0, common_1.Delete)(':id'),
     (0, common_1.UseGuards)(auth_1.AuthGuard),
     tslib_1.__param(0, (0, common_1.Param)('id')),
-    tslib_1.__param(1, (0, common_1.Request)()),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [String, Object]),
+    tslib_1.__metadata("design:paramtypes", [String]),
     tslib_1.__metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
 ], ReviewController.prototype, "delete", null);
 exports.ReviewController = ReviewController = tslib_1.__decorate([
@@ -2111,23 +2160,19 @@ let ReviewService = class ReviewService {
         }
         throw new common_1.UnauthorizedException();
     }
-    async delete(id, req) {
+    async delete(id) {
         common_1.Logger.log('delete', this.TAG);
-        const userThatDeleted = req.body;
-        const userId = req.user.user_id;
-        if (userThatDeleted.userId === userId) {
-            const deleteResult = await this.neo4jService.write(`
+        // const userId = req.user.user_id;
+        const deleteResult = await this.neo4jService.write(`
                 MATCH (r:Review {id: $id})
                 DETACH DELETE r
                 `, { id: id });
-            const containsUpdates = deleteResult.summary.updateStatistics.containsUpdates();
-            if (!containsUpdates) {
-                common_1.Logger.debug('Failed to delete review');
-                throw new Error('Failed to delete review');
-            }
-            return 'Success';
+        const containsUpdates = deleteResult.summary.updateStatistics.containsUpdates();
+        if (!containsUpdates) {
+            common_1.Logger.debug('Failed to delete review');
+            throw new Error('Failed to delete review');
         }
-        throw new common_1.UnauthorizedException();
+        return 'Success';
     }
 };
 exports.ReviewService = ReviewService;
