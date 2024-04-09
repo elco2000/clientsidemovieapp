@@ -3,7 +3,7 @@
 import { environment } from "@org/shared/util-env";
 import { Actor, Movie } from "@org/backend/features";
 import { BehaviorSubject, Observable, catchError, map, tap, throwError } from "rxjs";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
 import { ApiResponse, IActor, IMovie } from "@org/shared/api";
 import { CreateActorDto } from "@org/backend/dto";
 import { Injectable } from "@angular/core";
@@ -27,6 +27,27 @@ export class ActorService {
 
     constructor(private readonly http : HttpClient) {}
 
+    private getTokenFromLocalStorage(): string | null {
+        const userString = localStorage.getItem('user');
+        if (userString) {
+          const user = JSON.parse(userString);
+          return user?.token || null;
+        }
+        return null;
+      }
+
+    private get httpOptions(): any {
+        const token = this.getTokenFromLocalStorage();
+    
+        return {
+          observe: 'body',
+          responseType: 'json',
+          headers: new HttpHeaders({
+            Authorization: token ? `Bearer ${token}` : '',
+          }),
+        };
+      }
+
     /**
      * Get all items.
      *
@@ -36,7 +57,7 @@ export class ActorService {
         return this.http
             .get<ApiResponse<IActor[]>>(this.endpoint, {
                 ...options,
-                ...httpOptions
+                ...this.httpOptions
             })
             .pipe(
                 map((response: any) => response.results as Actor[]),
@@ -56,7 +77,7 @@ export class ActorService {
         return this.http
             .get<ApiResponse<Actor>>(`${this.endpoint}/${id}`, {
                 ...options,
-                ...httpOptions
+                ...this.httpOptions
             })
             .pipe(
                 map((response: any) => response.results as IActor),
@@ -78,7 +99,7 @@ export class ActorService {
         return this.http
             .post<ApiResponse<IActor>>(this.endpoint, actorDto, {
                 ...options,
-                ...httpOptions,
+                ...this.httpOptions
             })
             .pipe(
                 map((response: any) => response.results as IActor),
@@ -99,7 +120,7 @@ export class ActorService {
         return this.http
             .put<ApiResponse<Actor>>(`${this.endpoint}/${actor._id}`, actor, {
                 ...options,
-                ...httpOptions,
+                ...this.httpOptions
             })
             .pipe(
                 map((response: any) => response.results as Actor),
@@ -119,7 +140,7 @@ export class ActorService {
         return this.http
             .delete<ApiResponse<Actor>>(`${this.endpoint}/${id}`, {
                 ...options,
-                ...httpOptions
+                ...this.httpOptions
             })
             .pipe(
                 map((response: any) => response.results as IActor),
@@ -141,7 +162,7 @@ export class ActorService {
         return this.http
             .get<ApiResponse<Movie>>(`${this.endpointMovie}/actor/${id}`, {
                 ...options,
-                ...httpOptions
+                ...this.httpOptions
             })
             .pipe(
                 map((response: any) => response.results as IMovie),
@@ -153,7 +174,7 @@ export class ActorService {
      * Handle errors.
      */
     public handleError(error: HttpErrorResponse): Observable<any> {
-        console.log('handleError in MealService', error);
+        console.log('handleError in ActorService', error);
 
         return throwError(() => new Error(error.message));
     }
