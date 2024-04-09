@@ -38,6 +38,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
       .subscribe((result) => {
         if (result) {
           this.user = result;
+          if(this.getTokenId() !== result.id) {
+            this.router.navigateByUrl('/');
+          }
           this.patchFormWithUserData();
         }
       });
@@ -67,7 +70,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     let tokenId = '';
     if (userString) {
       const user = JSON.parse(userString);
-      tokenId = user?.results?.id || null;
+      tokenId = user?.id || null;
     }
     return tokenId;
   }

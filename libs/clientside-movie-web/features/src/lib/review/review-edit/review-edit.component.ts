@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ReviewService } from '../review.service';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { IReview } from '@org/shared/api';
 import { Location } from '@angular/common';
 
@@ -20,6 +20,7 @@ export class ReviewEditComponent implements OnInit, OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
+    private router: Router,
     private location: Location,
     private reviewService: ReviewService
   ) {}
@@ -37,6 +38,9 @@ export class ReviewEditComponent implements OnInit, OnDestroy {
       .subscribe((result) => {
         if (result) {
           this.review = result;
+          if(this.getTokenId() !== result.userId) {
+            this.router.navigateByUrl('/');
+          }
           this.patchFormWithReviewData();
         }
       });
@@ -46,6 +50,16 @@ export class ReviewEditComponent implements OnInit, OnDestroy {
       text: ['', Validators.required],
       rating: ['', Validators.required],
     });
+  }
+
+  getTokenId(): string {
+    const userString = localStorage.getItem('user');
+    let tokenId = '';
+    if (userString) {
+      const user = JSON.parse(userString);
+      tokenId = user?.id || null;
+    }
+    return tokenId;
   }
 
   ngOnDestroy(): void {
