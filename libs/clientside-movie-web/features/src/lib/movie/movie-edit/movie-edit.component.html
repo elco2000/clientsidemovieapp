@@ -1,30 +1,31 @@
 <div *ngIf="movie !== null" class="mx-20 h-screen">
+    <div class="max-w mt-10 mb-10 p-5 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
 
 
         <div>
-            <h2 class="text-lg text-white font-medium">Update movie: {{movie.title}}</h2>
+            <h2 class="text-lg text-black font-medium">Update movie: {{movie.title}}</h2>
         </div>
 
         <br>
 
         <div>
-            <label for="title" class="block text-sm text-white">Title</label>
+            <label for="title" class="block text-sm text-black">Title</label>
         
             <input type="text" formControlName="title" placeholder="John Doe" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
             <div *ngIf="form.get('title')?.errors?.['required']" class="text-red-500">Title is required</div>
         </div>
 
         <div>
-            <label for="photo" class="block text-sm text-white">Photo</label>
+            <label for="photo" class="block text-sm text-black">Photo</label>
         
             <input type="text" formControlName="photo" placeholder="url" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
             <div *ngIf="form.get('photo')?.errors?.['required']" class="text-red-500">Photo is required</div>
         </div>
 
         <div>
-            <label for="number" class="block text-sm text-white">Length (minutes)</label>
+            <label for="number" class="block text-sm text-black">Length (minutes)</label>
         
             <input type="number" formControlName="length" placeholder="... minutes" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
             <div *ngIf="form.get('length')?.errors?.['required']" class="text-red-500">Length is required</div>
@@ -32,13 +33,13 @@
         </div>
 
         <div>
-            <label for="relaseDate" class="block text-sm text-white">Release date</label>
+            <label for="relaseDate" class="block text-sm text-black">Release date</label>
         
             <input type="date" formControlName="releaseDate" placeholder="John Doe" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
         </div>
 
         <div>
-            <label for="advicedAge" class="block text-sm text-white">Adviced age</label>
+            <label for="advicedAge" class="block text-sm text-black">Adviced age</label>
         
             <input type="number" formControlName="advicedAge" placeholder="18+" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
             <div *ngIf="form.get('advicedAge')?.errors?.['required']" class="text-red-500">Adviced age is required</div>
@@ -46,7 +47,7 @@
         </div>
 
         <div>
-            <label for="genre" class="block text-sm text-white">Genre</label>
+            <label for="genre" class="block text-sm text-black">Genre</label>
             <select  id="genre" formControlName="genre" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300">
             
                 <option *ngFor="let genre of genreList" [value]="genre">
@@ -58,7 +59,7 @@
         </div>
 
         <div>
-            <label for="language" class="block text-sm text-white">Language</label>
+            <label for="language" class="block text-sm text-black">Language</label>
             <select  id="language" formControlName="language" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300">
             
                 <option *ngFor="let language of languageList" [value]="language">
@@ -70,14 +71,14 @@
         </div>
 
         <div>
-            <label for="director"  class="block text-sm text-white">Director</label>
+            <label for="director"  class="block text-sm text-black">Director</label>
         
             <input type="text" formControlName="director" placeholder="John Doe" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
             <div *ngIf="form.get('director')?.errors?.['required']" class="text-red-500">Director is required</div>
         </div>
 
         <div>
-            <label for="actors"  class="block text-sm text-white">Actors</label>
+            <label for="actors"  class="block text-sm text-black">Actors</label>
 
             <!-- Dropdown menu -->
             <div id="dropdownSearch" class="z-10 bg-white rounded-lg shadow w-60 dark:bg-gray-700">
@@ -106,5 +107,5 @@
     
     </form>
 
-
+</div>
 </div>

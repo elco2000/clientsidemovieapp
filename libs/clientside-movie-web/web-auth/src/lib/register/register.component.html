@@ -1,44 +1,44 @@
 <div class="mx-20 h-screen">
-
+    <div class="max-w mt-10 mb-10 p-5 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
 
 
         <div>
-            <h2 class="text-lg text-white font-medium">Register</h2>
+            <h2 class="text-lg text-black font-medium">Register</h2>
         </div>
 
         <br>
 
         <div>
-            <label for="username" class="block text-sm text-white">Username</label>
+            <label for="username" class="block text-sm text-black">Username</label>
         
             <input type="text" formControlName="username" placeholder="" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
             <div *ngIf="registerForm.get('username')?.errors?.['required']" class="text-red-500">Username is required</div>
         </div>
 
         <div>
-            <label for="password" class="block text-sm text-white">Password</label>
+            <label for="password" class="block text-sm text-black">Password</label>
         
             <input type="password" formControlName="password" placeholder="" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
             <div *ngIf="registerForm.get('password')?.errors?.['required']" class="text-red-500">Password is required</div>
         </div>
 
         <div>
-            <label for="birthdate" class="block text-sm text-white">Birthdate</label>
+            <label for="birthdate" class="block text-sm text-black">Birthdate</label>
         
             <input type="date" formControlName="birthdate" placeholder="" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
             <div *ngIf="registerForm.get('birthdate')?.errors?.['required']" class="text-red-500">Birthdate is required</div>
         </div>
 
         <div>
-            <label for="country" class="block text-sm text-white">Country</label>
+            <label for="country" class="block text-sm text-black">Country</label>
         
             <input type="text" formControlName="country" placeholder="" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
             <div *ngIf="registerForm.get('country')?.errors?.['required']" class="text-red-500">Country is required</div>
         </div>
 
         <div>
-            <label for="description" class="block text-sm text-white">Description</label>
+            <label for="description" class="block text-sm text-black">Description</label>
         
             <input type="text" formControlName="description" placeholder="" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
         </div>
@@ -51,5 +51,5 @@
     
     </form>
 
-
+</div>
 </div>
