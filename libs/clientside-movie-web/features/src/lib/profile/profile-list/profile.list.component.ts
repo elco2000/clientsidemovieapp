@@ -1,9 +1,7 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { IUser } from "@org/shared/api";
-import { Subscription } from "rxjs";
-import { ProfileService } from "../profile.service";
-
-
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { IUser } from '@org/shared/api';
+import { Subscription } from 'rxjs';
+import { ProfileService } from '../profile.service';
 
 @Component({
   selector: 'org-profile-list',
@@ -25,6 +23,6 @@ export class ProfileListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-      if (this.subscription) this.subscription.unsubscribe();
+    if (this.subscription) this.subscription.unsubscribe();
   }
 }

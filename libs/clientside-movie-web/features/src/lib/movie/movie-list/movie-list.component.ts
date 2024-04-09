@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MovieService } from '../movie.service';
-import { Movie } from '@org/backend/features'
-
+import { Movie } from '@org/backend/features';
 
 @Component({
   selector: 'org-movie-list',
@@ -24,6 +23,6 @@ export class MovieListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-      if (this.subscription) this.subscription.unsubscribe();
+    if (this.subscription) this.subscription.unsubscribe();
   }
 }

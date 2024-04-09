@@ -1,7 +1,7 @@
-import { Component } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { CollectionService } from "../collection.service";
-import { Router } from "@angular/router";
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CollectionService } from '../collection.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'org-collection-create',
@@ -9,15 +9,18 @@ import { Router } from "@angular/router";
   styleUrls: ['./collection-create.component.css'],
 })
 export class CollectionCreateComponent {
-
   collectionForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private collectionService: CollectionService, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private collectionService: CollectionService,
+    private router: Router
+  ) {
     this.collectionForm = this.fb.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
-      privateCollection: ['']
-    })
+      privateCollection: [''],
+    });
   }
 
   getTokenId(): string {
@@ -29,20 +32,17 @@ export class CollectionCreateComponent {
     }
     return tokenId;
   }
-  
-  public onSubmit() {
 
+  public onSubmit() {
     this.collectionService
       .create({
         name: this.collectionForm.value.name,
         description: this.collectionForm.value.description,
         privateCollection: this.collectionForm.value.privateCollection,
-        userId: this.getTokenId()
+        userId: this.getTokenId(),
       })
-      .subscribe(
-        () => {
-          this.router.navigateByUrl('/profile/' + this.getTokenId());
-        }
-      );
+      .subscribe(() => {
+        this.router.navigateByUrl('/profile/' + this.getTokenId());
+      });
   }
 }

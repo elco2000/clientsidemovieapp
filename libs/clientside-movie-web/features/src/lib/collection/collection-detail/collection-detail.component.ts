@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute, ParamMap, Router } from "@angular/router";
-import { ICollection, IUser } from "@org/shared/api";
-import { Subscription } from "rxjs";
-import { CollectionService } from "../collection.service";
-import { Movie } from "@org/backend/features";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ICollection, IUser } from '@org/shared/api';
+import { Subscription } from 'rxjs';
+import { CollectionService } from '../collection.service';
+import { Movie } from '@org/backend/features';
 
 @Component({
   selector: 'org-collection-detail',
@@ -40,7 +40,7 @@ export class CollectionDetailComponent implements OnInit, OnDestroy {
         if (result) {
           this.collection = result;
           this.checkForOwn(this.collection.userId, this.getTokenId());
-          this.loadUserData(this.collection?.userId)
+          this.loadUserData(this.collection?.userId);
         }
       });
 
@@ -48,7 +48,7 @@ export class CollectionDetailComponent implements OnInit, OnDestroy {
       .getMovies(this.id)
       .subscribe((result) => {
         if (result) {
-            this.movies = result
+          this.movies = result;
         }
       });
 
@@ -73,13 +73,11 @@ export class CollectionDetailComponent implements OnInit, OnDestroy {
   }
 
   loadMovieData() {
-    this.collectionService
-      .getMovies(this.id)
-      .subscribe((result) => {
-        if (result) {
-            this.movies = result
-        }
-      });
+    this.collectionService.getMovies(this.id).subscribe((result) => {
+      if (result) {
+        this.movies = result;
+      }
+    });
   }
 
   checkForOwn(urlId: string, tokenId: string): void {
@@ -105,18 +103,16 @@ export class CollectionDetailComponent implements OnInit, OnDestroy {
   }
 
   onDelete(id: string): void {
-    this.collectionService.delete(id).subscribe(
-      () => {
-        this.router.navigateByUrl('/profile/' + this.getTokenId());
-      }
-    );
+    this.collectionService.delete(id).subscribe(() => {
+      this.router.navigateByUrl('/profile/' + this.getTokenId());
+    });
   }
 
   onRemoveMovie(collectionId: string, movieId: string) {
-    this.collectionService.removeMovie(collectionId, movieId, this.getTokenId()).subscribe(
-      () => {
+    this.collectionService
+      .removeMovie(collectionId, movieId, this.getTokenId())
+      .subscribe(() => {
         this.loadMovieData();
-      }
-    )
+      });
   }
 }

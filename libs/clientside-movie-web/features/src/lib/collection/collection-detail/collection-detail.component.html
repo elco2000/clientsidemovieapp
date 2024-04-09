@@ -3,41 +3,60 @@
 </div> -->
 
 <div *ngIf="collection !== null" class="pl-6 pt-2 h-screen">
-    <h1 class="text-2xl font-medium text-gray-800 capitalize lg:text-3xl">{{collection.name}}</h1>
-    <p>Description: {{collection.description}}</p>
-    <p>Create date: {{collection.createDate}}</p>
-    <p>Updated date: {{collection.updatedDate}}</p>
-    <p>Owner: <a [routerLink]="['/profile/' + getTokenId()]">{{user?.username}}</a></p>
+  <h1 class="text-2xl font-medium text-gray-800 capitalize lg:text-3xl">
+    {{ collection.name }}
+  </h1>
+  <p>Description: {{ collection.description }}</p>
+  <p>Create date: {{ collection.createDate }}</p>
+  <p>Updated date: {{ collection.updatedDate }}</p>
+  <p>
+    Owner:
+    <a [routerLink]="['/profile/' + getTokenId()]">{{ user?.username }}</a>
+  </p>
 
-    <button [routerLink]="['/collections/edit/' + collection.id]" *ngIf="ownInfo" class="mt-2 px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
-        Edit
-    </button>
+  <button
+    [routerLink]="['/collections/edit/' + collection.id]"
+    *ngIf="ownInfo"
+    class="mt-2 px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80"
+  >
+    Edit
+  </button>
 
-    <button (click)="onDelete(collection.id)" *ngIf="ownInfo" class="ml-2 mt-2 px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-red-600 rounded-lg hover:bg-red-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
-        Delete
-    </button>
+  <button
+    (click)="onDelete(collection.id)"
+    *ngIf="ownInfo"
+    class="ml-2 mt-2 px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-red-600 rounded-lg hover:bg-red-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80"
+  >
+    Delete
+  </button>
 
-
-<div  class="container px-6 py-8 mx-auto">
-
-    
-
+  <div class="container px-6 py-8 mx-auto">
     <div class="grid gap-8 mt-8 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-        <p *ngIf="movies === null"><i>No movies in the collection.</i></p>
-        <div *ngFor="let movie of movies" class="w-full max-w-xs text-center mb-7 group">
+      <p *ngIf="movies === null"><i>No movies in the collection.</i></p>
+      <div
+        *ngFor="let movie of movies"
+        class="w-full max-w-xs text-center mb-7 group"
+      >
+        <a [routerLink]="['/movies/' + movie._id]" class="">
+          <img
+            class="object-center w-full h-9 mx-auto rounded-lg group-hover:scale-105"
+            [src]="movie.photo"
+            alt="picture"
+          />
+        </a>
 
-            <a [routerLink]="['/movies/' + movie._id]" class="">
-                <img class="object-center w-full h-9 mx-auto rounded-lg group-hover:scale-105" [src]="movie.photo" alt="picture" />
-            </a>    
-
-            <div class="mt-2">
-                <h3 class="text-lg font-medium text-gray-700 dark:text-gray-200">{{movie.title}}</h3>
-                <span class="mt-1 font-medium text-gray-600 dark:text-gray-300">{{movie.releaseDate | date}}</span>
-                <p *ngIf="ownInfo" class="text-red-600 cursor-pointer"><a (click)="onRemoveMovie(collection.id, movie._id)">Remove</a></p>
-            </div>
-            
+        <div class="mt-2">
+          <h3 class="text-lg font-medium text-gray-700 dark:text-gray-200">
+            {{ movie.title }}
+          </h3>
+          <span class="mt-1 font-medium text-gray-600 dark:text-gray-300">{{
+            movie.releaseDate | date
+          }}</span>
+          <p *ngIf="ownInfo" class="text-red-600 cursor-pointer">
+            <a (click)="onRemoveMovie(collection.id, movie._id)">Remove</a>
+          </p>
         </div>
+      </div>
     </div>
-
+  </div>
 </div>
-</div>  

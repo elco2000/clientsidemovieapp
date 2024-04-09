@@ -1,10 +1,10 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ActivatedRoute, ParamMap, Router } from "@angular/router";
-import { ICollection } from "@org/shared/api";
-import { Subscription } from "rxjs";
-import { CollectionService } from "../collection.service";
-import { EditCollectionDto } from "@org/backend/dto";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ICollection } from '@org/shared/api';
+import { Subscription } from 'rxjs';
+import { CollectionService } from '../collection.service';
+import { EditCollectionDto } from '@org/backend/dto';
 
 @Component({
   selector: 'org-collection-edit',
@@ -45,7 +45,7 @@ export class CollectionEditComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
-      privateCollection: ['']
+      privateCollection: [''],
     });
   }
 
@@ -58,7 +58,7 @@ export class CollectionEditComponent implements OnInit, OnDestroy {
       this.form.patchValue({
         name: this.collection.name,
         description: this.collection.description,
-        privateCollection: this.collection.privateCollection
+        privateCollection: this.collection.privateCollection,
       });
     }
   }
@@ -80,7 +80,7 @@ export class CollectionEditComponent implements OnInit, OnDestroy {
       const updatedCollection: EditCollectionDto = {
         id: this.id,
         ...formValues,
-        userId: this.getTokenId()
+        userId: this.getTokenId(),
       };
 
       this.collectionService.update(updatedCollection).subscribe(

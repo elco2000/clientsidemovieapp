@@ -38,7 +38,7 @@ export class ReviewEditComponent implements OnInit, OnDestroy {
       .subscribe((result) => {
         if (result) {
           this.review = result;
-          if(this.getTokenId() !== result.userId) {
+          if (this.getTokenId() !== result.userId) {
             this.router.navigateByUrl('/');
           }
           this.patchFormWithReviewData();
@@ -78,7 +78,6 @@ export class ReviewEditComponent implements OnInit, OnDestroy {
 
   public onSubmit() {
     if (this.form && this.form.valid && this.review) {
-
       const formValues = this.form.value;
 
       const updatedReview: IReview = {
@@ -99,11 +98,9 @@ export class ReviewEditComponent implements OnInit, OnDestroy {
   }
 
   onDelete(id: string): void {
-    this.reviewService.delete(id).subscribe(
-        () => {
-            console.log("Test");
-            this.location.back();
-        }
-    )
+    this.reviewService.delete(id).subscribe(() => {
+      console.log('Test');
+      this.location.back();
+    });
   }
 }

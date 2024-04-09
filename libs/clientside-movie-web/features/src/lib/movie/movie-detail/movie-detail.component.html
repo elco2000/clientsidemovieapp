@@ -169,7 +169,7 @@
         Reviews
       </div>
       <button
-      *ngIf="!isUserReviewed(reviews)"
+        *ngIf="!isUserReviewed(reviews)"
         (click)="onAddReview(movie._id)"
         class="px-6 py-2 h-10 mt-3 mb-3 ml-2 mr-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-stone-400 rounded-lg hover:bg-stone-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80"
       >
@@ -217,7 +217,7 @@
           </svg>
         </div>
         <p class="mb-2 text-white-500 dark:text-white-400">{{ review.text }}</p>
-        <hr class="mb-2"/>
+        <hr class="mb-2" />
       </div>
     </section>
   </div>

@@ -12,7 +12,6 @@ import { FormControl, FormGroup } from '@angular/forms';
   styleUrls: ['./movie-detail.component.css'],
 })
 export class MovieDetailComponent implements OnInit, OnDestroy {
-
   id: string | null = null;
   movie: Movie | null = null;
   collections: ICollection[] | null = null;
@@ -21,10 +20,14 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
   reviews: IReviewInfo[] | null = null;
 
   collectionForm = new FormGroup({
-    collection: new FormControl()
-  })
+    collection: new FormControl(),
+  });
 
-  constructor(private route: ActivatedRoute, private movieService: MovieService, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute,
+    private movieService: MovieService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
@@ -37,18 +40,21 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
       if (result) {
         this.movie = result;
       }
-    })
-    this.subscription = this.movieService.collections(this.id).subscribe((result) => {
-      if (result) {
-        this.collections = result;
-      }
-    })
-    this.subscription = this.movieService.getMovieReviews(this.id).subscribe((result) => {
-      if (result) {
-        this.reviews = result;
-      }
-    })
-
+    });
+    this.subscription = this.movieService
+      .collections(this.id)
+      .subscribe((result) => {
+        if (result) {
+          this.collections = result;
+        }
+      });
+    this.subscription = this.movieService
+      .getMovieReviews(this.id)
+      .subscribe((result) => {
+        if (result) {
+          this.reviews = result;
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -56,11 +62,9 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
   }
 
   onDelete(id: string): void {
-    this.movieService.delete(id).subscribe(
-      () => {
-        this.router.navigateByUrl('/movies');
-      }
-    );
+    this.movieService.delete(id).subscribe(() => {
+      this.router.navigateByUrl('/movies');
+    });
   }
 
   onAddReview(id: string): void {
@@ -91,26 +95,27 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
   }
 
   onAddMovieToCollection(collectionId: string | undefined, movieId: string) {
-    if (collectionId) { // Controleer of collectionId niet undefined is
-      this.movieService.addMovieToCollection(collectionId, movieId, this.getTokenId()).subscribe(
-        () => {
+    if (collectionId) {
+      // Controleer of collectionId niet undefined is
+      this.movieService
+        .addMovieToCollection(collectionId, movieId, this.getTokenId())
+        .subscribe(() => {
           if (collectionId) {
             this.router.navigateByUrl('/colllections/' + collectionId);
           }
-        }
-      )
+        });
     } else {
       // Behandel het geval waarin collectionId undefined is
       // Dit kan een foutafhandeling zijn of een andere logica
     }
   }
-  
+
   onCollectionChange(event: Event) {
     const target = event.target as HTMLSelectElement;
     this.selectedCollectionId = target.value || '';
   }
 
-  isOwnReview(userId: string) : boolean {
+  isOwnReview(userId: string): boolean {
     if (userId === this.getTokenId()) {
       return true;
     }
@@ -124,6 +129,6 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    return reviews.some(review => review.userId === tokenId);
+    return reviews.some((review) => review.userId === tokenId);
   }
 }

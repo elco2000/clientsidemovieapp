@@ -45,7 +45,9 @@ export class MovieCreateComponent implements OnInit, OnDestroy {
     this.subscription = this.movieService.actorLookup().subscribe((results) => {
       if (results) {
         this.actors = results;
-        this.actors.forEach((actor) => (this.selectedActors[actor._id] = false));
+        this.actors.forEach(
+          (actor) => (this.selectedActors[actor._id] = false)
+        );
       }
     });
   }
