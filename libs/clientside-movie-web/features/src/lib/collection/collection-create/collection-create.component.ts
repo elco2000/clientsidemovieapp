@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CollectionService } from "../collection.service";
 import { Router } from "@angular/router";
 
@@ -10,13 +10,15 @@ import { Router } from "@angular/router";
 })
 export class CollectionCreateComponent {
 
-  collectionForm = new FormGroup({
-    name: new FormControl(),
-    description: new FormControl(),
-    privateCollection: new FormControl(),
-  });
+  collectionForm: FormGroup;
 
-  constructor(private collectionService: CollectionService, private router: Router) {}
+  constructor(private fb: FormBuilder, private collectionService: CollectionService, private router: Router) {
+    this.collectionForm = this.fb.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      privateCollection: ['']
+    })
+  }
 
   getTokenId(): string {
     const userString = localStorage.getItem('user');

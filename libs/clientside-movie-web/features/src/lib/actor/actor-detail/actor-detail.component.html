@@ -30,11 +30,11 @@
                             </div>
 
                             <div class="mt-4">
-                                <button [routerLink]="['/actors/edit/' + actor._id]" class="px-6 py-2 ml-2 mr-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-stone-400 rounded-lg hover:bg-stone-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+                                <button [routerLink]="['/actors/edit/' + actor._id]" *ngIf="getTokenRole() === 'Admin'" class="px-6 py-2 ml-2 mr-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-stone-400 rounded-lg hover:bg-stone-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
                                     Update
                                 </button>
     
-                                <button (click)="onDelete(actor._id)" [routerLink]="['/actors']" class="px-6 py-2 ml-2 mr-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-stone-400 rounded-lg hover:bg-stone-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+                                <button (click)="onDelete(actor._id)" [routerLink]="['/actors']" *ngIf="getTokenRole() === 'Admin'" class="px-6 py-2 ml-2 mr-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-stone-400 rounded-lg hover:bg-stone-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
                                     Delete
                                 </button>
                             </div>

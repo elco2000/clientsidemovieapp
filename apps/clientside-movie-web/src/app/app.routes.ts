@@ -28,5 +28,9 @@ export const routes: Route[] = [
     {
         path: 'reviews',
         loadChildren: () => import('@org/clientside-movie-web/features').then(m => m.ReviewModule)
+    },
+    { 
+        path: '**',
+        loadChildren: () => import('@org/clientside-movie-web/features').then(m => m.MovieModule)
     }
 ];

@@ -54,7 +54,7 @@ export class MovieEditComponent implements OnInit, OnDestroy {
             title: ['', Validators.required],
             photo: ['', Validators.required],
             length: ['', Validators.required],
-            releaseDate: ['', Validators.required],
+            releaseDate: [''],
             advicedAge: ['', Validators.required],
             genre: ['', Validators.required],
             language: ['', Validators.required],

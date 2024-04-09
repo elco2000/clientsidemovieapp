@@ -48,4 +48,18 @@ export class ActorDetailComponent implements OnInit, OnDestroy {
             }
         )
     }
+
+    getTokenRole(): string | null {
+        const userString = localStorage.getItem('user');
+        if (userString === undefined || userString === null) {
+          return null;
+        }
+        let tokenRole = '';
+        if (userString) {
+          const user = JSON.parse(userString);
+          tokenRole = user?.role || null;
+        }
+        console.log(tokenRole);
+        return tokenRole;
+      }
 }

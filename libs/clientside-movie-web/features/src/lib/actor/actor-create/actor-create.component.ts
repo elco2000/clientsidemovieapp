@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Nationality } from "@org/shared/api";
 import { ActorService } from "../actor.service";
 import { Router } from "@angular/router";
@@ -13,14 +13,16 @@ import { initFlowbite } from "flowbite";
 export class ActorCreateComponent implements OnInit {
     nationalityList = Object.values(Nationality);
 
-    actorForm = new FormGroup({
-        name: new FormControl(),
-        birthdate: new FormControl(),
-        nationality: new FormControl(),
-        photo: new FormControl()
-    });
+    actorForm: FormGroup;
 
-    constructor(private actorService: ActorService, private router: Router) {}
+    constructor(private fb: FormBuilder, private actorService: ActorService, private router: Router) {
+        this.actorForm = this.fb.group({
+            name: ['', Validators.required],
+            birthdate: ['', Validators.required],
+            nationality: ['', Validators.required],
+            photo: ['', Validators.required]
+          });
+    }
 
     ngOnInit(): void {
         initFlowbite();

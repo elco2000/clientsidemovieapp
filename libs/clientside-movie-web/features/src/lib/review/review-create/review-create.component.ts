@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Subscription } from "rxjs";
 import { ReviewService } from "../review.service";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
@@ -8,19 +8,21 @@ import { initFlowbite } from "flowbite";
 @Component({
     selector: 'org-review-create',
     templateUrl: './review-create.component.html',
-    styleUrls: []
+    styleUrls: ['./review-create.component.css']
 })
 export class ReviewCreateComponent implements OnInit, OnDestroy {
     subscription: Subscription | undefined = undefined;
     movieId!: string;
 
-    reviewForm = new FormGroup({
-        title: new FormControl(),
-        text: new FormControl(),
-        rating: new FormControl()
-    });
+    reviewForm: FormGroup;
 
-    constructor(private route: ActivatedRoute, private reviewService: ReviewService, private router: Router) {}
+    constructor(private fb: FormBuilder, private route: ActivatedRoute, private reviewService: ReviewService, private router: Router) {
+      this.reviewForm = this.fb.group({
+        title: ['', Validators.required],
+        text: ['', Validators.required],
+        rating: [5, [Validators.required, Validators.min(0), Validators.max(10)]]
+      });
+    }
 
     ngOnInit(): void {
         initFlowbite();

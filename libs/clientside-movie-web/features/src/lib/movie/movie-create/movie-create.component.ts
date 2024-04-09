@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MovieService } from '../movie.service';
-import { initFlowbite } from 'flowbite';
-import { Genre, Language } from '@org/shared/api';
-import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Actor } from '@org/backend/features';
 import { Subscription } from 'rxjs';
+import { initFlowbite } from 'flowbite';
+import { Genre, Language } from '@org/shared/api';
 
 @Component({
   selector: 'org-movie-create',
@@ -17,21 +17,27 @@ export class MovieCreateComponent implements OnInit, OnDestroy {
   languageList = Object.values(Language);
 
   actors: Actor[] | null = null;
-  selectedActors: { [_id: string]: boolean } = {}; // Object om geselecteerde acteurs bij te houden
+  selectedActors: { [_id: string]: boolean } = {};
   subscription: Subscription | undefined = undefined;
 
-  movieForm = new FormGroup({
-    title: new FormControl(),
-    photo: new FormControl(),
-    length: new FormControl(),
-    releaseDate: new FormControl(),
-    advicedAge: new FormControl(),
-    genre: new FormControl(),
-    language: new FormControl(),
-    director: new FormControl(),
-  });
+  movieForm: FormGroup;
 
-  constructor(private movieService: MovieService, private router: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private movieService: MovieService,
+    private router: Router
+  ) {
+    this.movieForm = this.fb.group({
+      title: ['', Validators.required],
+      photo: ['', Validators.required],
+      length: ['', [Validators.required, Validators.min(1)]],
+      releaseDate: [''],
+      advicedAge: ['', [Validators.required, Validators.min(1)]],
+      genre: ['', Validators.required],
+      language: ['', Validators.required],
+      director: ['', Validators.required],
+    });
+  }
 
   ngOnInit(): void {
     initFlowbite();
@@ -39,9 +45,9 @@ export class MovieCreateComponent implements OnInit, OnDestroy {
     this.subscription = this.movieService.actorLookup().subscribe((results) => {
       if (results) {
         this.actors = results;
-        this.actors.forEach(actor => this.selectedActors[actor._id] = false);
+        this.actors.forEach((actor) => (this.selectedActors[actor._id] = false));
       }
-    })
+    });
   }
 
   ngOnDestroy(): void {
@@ -49,9 +55,9 @@ export class MovieCreateComponent implements OnInit, OnDestroy {
   }
 
   public onSubmit() {
-
-    const selectedActorIds = Object.keys(this.selectedActors)
-    .filter(actorId => this.selectedActors[actorId])
+    const selectedActorIds = Object.keys(this.selectedActors).filter(
+      (actorId) => this.selectedActors[actorId]
+    );
 
     console.log(selectedActorIds);
 
@@ -65,17 +71,14 @@ export class MovieCreateComponent implements OnInit, OnDestroy {
         genre: this.movieForm.value.genre,
         language: this.movieForm.value.language,
         director: this.movieForm.value.director,
-        actors: selectedActorIds
+        actors: selectedActorIds,
       })
-      .subscribe(
-        () => {
-          this.router.navigateByUrl('/movies');
-        }
-      );
+      .subscribe(() => {
+        this.router.navigateByUrl('/movies');
+      });
   }
 
   toggleActorSelection(actorId: string): void {
     this.selectedActors[actorId] = !this.selectedActors[actorId];
   }
-
 }

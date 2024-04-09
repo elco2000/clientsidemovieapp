@@ -45,7 +45,7 @@ export class CollectionEditComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
-      privateCollection: ['', Validators.required]
+      privateCollection: ['']
     });
   }
 

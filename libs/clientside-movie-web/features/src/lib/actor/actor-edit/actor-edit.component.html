@@ -13,12 +13,14 @@
             <label for="name" class="block text-sm text-white">Name</label>
         
             <input type="text" formControlName="name" placeholder="John Doe" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+            <div *ngIf="form.get('name')?.errors?.['required']" class="text-red-500">Name is required</div>
         </div>
 
         <div>
             <label for="birthdate" class="block text-sm text-white">Birthdate</label>
         
             <input type="date" formControlName="birthdate" placeholder="John Doe" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+            <div *ngIf="form.get('birthdate')?.errors?.['required']" class="text-red-500">Birthdate is required</div>
         </div>
 
         <div>
@@ -30,18 +32,19 @@
                 </option>
 
             </select>
+            <div *ngIf="form.get('nationality')?.errors?.['required']" class="text-red-500">Nationality is required</div>
         </div>
 
         <div>
             <label for="photo" class="block text-sm text-white">Photo</label>
         
             <input type="text" formControlName="photo" placeholder="url" class="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
-
+            <div *ngIf="form.get('photo')?.errors?.['required']" class="text-red-500">Photo is required</div>
         </div>
 
         <br>
 
-        <button type="submit" class="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
+        <button type="submit" [disabled]="!form.valid" [class.disabled]="!form.valid" class="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-lg hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
             Submit
         </button>
     
