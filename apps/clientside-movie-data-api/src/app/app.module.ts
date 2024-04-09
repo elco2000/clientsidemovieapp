@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config'
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -14,6 +15,9 @@ import { UserModule } from '@org/backend/user';
     BackendFeaturesCollectionModule, 
     AuthModule, 
     UserModule,
+    ConfigModule.forRoot({
+      // Configuratie-opties hier...
+    }),
     Neo4jModule.forRoot({
       scheme: 'neo4j+s',
       host: '57dd0e36.databases.neo4j.io',
@@ -23,5 +27,6 @@ import { UserModule } from '@org/backend/user';
     }),],
   controllers: [AppController],
   providers: [AppService],
+  
 })
 export class AppModule {}

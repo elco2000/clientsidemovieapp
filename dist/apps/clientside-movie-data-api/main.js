@@ -22,12 +22,13 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AppModule = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const app_controller_1 = __webpack_require__(5);
-const app_service_1 = __webpack_require__(6);
-const features_1 = __webpack_require__(7);
-const auth_1 = __webpack_require__(25);
-const nest_neo4j_1 = __webpack_require__(14);
-const user_1 = __webpack_require__(28);
+const config_1 = __webpack_require__(5);
+const app_controller_1 = __webpack_require__(6);
+const app_service_1 = __webpack_require__(7);
+const features_1 = __webpack_require__(8);
+const auth_1 = __webpack_require__(26);
+const nest_neo4j_1 = __webpack_require__(15);
+const user_1 = __webpack_require__(29);
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -39,6 +40,9 @@ exports.AppModule = AppModule = tslib_1.__decorate([
             features_1.BackendFeaturesCollectionModule,
             auth_1.AuthModule,
             user_1.UserModule,
+            config_1.ConfigModule.forRoot({
+            // Configuratie-opties hier...
+            }),
             nest_neo4j_1.Neo4jModule.forRoot({
                 scheme: 'neo4j+s',
                 host: '57dd0e36.databases.neo4j.io',
@@ -60,6 +64,12 @@ module.exports = require("tslib");
 
 /***/ }),
 /* 5 */
+/***/ ((module) => {
+
+module.exports = require("@nestjs/config");
+
+/***/ }),
+/* 6 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -68,7 +78,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AppController = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const app_service_1 = __webpack_require__(6);
+const app_service_1 = __webpack_require__(7);
 let AppController = class AppController {
     constructor(appService) {
         this.appService = appService;
@@ -91,7 +101,7 @@ exports.AppController = AppController = tslib_1.__decorate([
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -111,35 +121,35 @@ exports.AppService = AppService = tslib_1.__decorate([
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
-tslib_1.__exportStar(__webpack_require__(8), exports);
-tslib_1.__exportStar(__webpack_require__(46), exports);
+tslib_1.__exportStar(__webpack_require__(9), exports);
+tslib_1.__exportStar(__webpack_require__(47), exports);
+tslib_1.__exportStar(__webpack_require__(51), exports);
+tslib_1.__exportStar(__webpack_require__(55), exports);
+tslib_1.__exportStar(__webpack_require__(13), exports);
 tslib_1.__exportStar(__webpack_require__(50), exports);
-tslib_1.__exportStar(__webpack_require__(54), exports);
-tslib_1.__exportStar(__webpack_require__(12), exports);
-tslib_1.__exportStar(__webpack_require__(49), exports);
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BackendFeaturesMovieModule = void 0;
 const tslib_1 = __webpack_require__(4);
-const mongoose_1 = __webpack_require__(9);
+const mongoose_1 = __webpack_require__(10);
 const common_1 = __webpack_require__(1);
-const movie_controller_1 = __webpack_require__(10);
-const movie_service_1 = __webpack_require__(11);
-const movie_schema_1 = __webpack_require__(12);
-const auth_1 = __webpack_require__(25);
-const jwt_1 = __webpack_require__(27);
+const movie_controller_1 = __webpack_require__(11);
+const movie_service_1 = __webpack_require__(12);
+const movie_schema_1 = __webpack_require__(13);
+const auth_1 = __webpack_require__(26);
+const jwt_1 = __webpack_require__(28);
 let BackendFeaturesMovieModule = class BackendFeaturesMovieModule {
 };
 exports.BackendFeaturesMovieModule = BackendFeaturesMovieModule;
@@ -154,13 +164,13 @@ exports.BackendFeaturesMovieModule = BackendFeaturesMovieModule = tslib_1.__deco
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ ((module) => {
 
 module.exports = require("@nestjs/mongoose");
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -170,10 +180,10 @@ exports.MovieController = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const common_2 = __webpack_require__(1);
-const movie_service_1 = __webpack_require__(11);
-const dto_1 = __webpack_require__(15);
-const movie_schema_1 = __webpack_require__(12);
-const auth_1 = __webpack_require__(25);
+const movie_service_1 = __webpack_require__(12);
+const dto_1 = __webpack_require__(16);
+const movie_schema_1 = __webpack_require__(13);
+const auth_1 = __webpack_require__(26);
 let MovieController = class MovieController {
     constructor(movieService) {
         this.movieService = movieService;
@@ -259,7 +269,7 @@ exports.MovieController = MovieController = tslib_1.__decorate([
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -268,10 +278,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MovieService = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const movie_schema_1 = __webpack_require__(12);
-const mongoose_1 = tslib_1.__importStar(__webpack_require__(13));
-const mongoose_2 = __webpack_require__(9);
-const nest_neo4j_1 = __webpack_require__(14);
+const movie_schema_1 = __webpack_require__(13);
+const mongoose_1 = tslib_1.__importStar(__webpack_require__(14));
+const mongoose_2 = __webpack_require__(10);
+const nest_neo4j_1 = __webpack_require__(15);
 let MovieService = class MovieService {
     constructor(movieModel, neo4jService) {
         this.movieModel = movieModel;
@@ -393,7 +403,7 @@ exports.MovieService = MovieService = tslib_1.__decorate([
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -401,8 +411,8 @@ var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MovieSchema = exports.Movie = void 0;
 const tslib_1 = __webpack_require__(4);
-const mongoose_1 = __webpack_require__(9);
-const mongoose_2 = tslib_1.__importDefault(__webpack_require__(13));
+const mongoose_1 = __webpack_require__(10);
+const mongoose_2 = tslib_1.__importDefault(__webpack_require__(14));
 let Movie = class Movie {
 };
 exports.Movie = Movie;
@@ -453,35 +463,35 @@ exports.MovieSchema = mongoose_1.SchemaFactory.createForClass(Movie);
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ ((module) => {
 
 module.exports = require("mongoose");
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ ((module) => {
 
 module.exports = require("nest-neo4j");
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
-tslib_1.__exportStar(__webpack_require__(16), exports);
 tslib_1.__exportStar(__webpack_require__(17), exports);
-tslib_1.__exportStar(__webpack_require__(19), exports);
+tslib_1.__exportStar(__webpack_require__(18), exports);
 tslib_1.__exportStar(__webpack_require__(20), exports);
 tslib_1.__exportStar(__webpack_require__(21), exports);
 tslib_1.__exportStar(__webpack_require__(22), exports);
 tslib_1.__exportStar(__webpack_require__(23), exports);
+tslib_1.__exportStar(__webpack_require__(24), exports);
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -502,7 +512,7 @@ exports.DtoModule = DtoModule = tslib_1.__decorate([
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -510,7 +520,7 @@ var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UpdateMovieDto = exports.CreateMovieDto = void 0;
 const tslib_1 = __webpack_require__(4);
-const class_validator_1 = __webpack_require__(18);
+const class_validator_1 = __webpack_require__(19);
 class CreateMovieDto {
     constructor(data) { Object.assign(this, data); }
 }
@@ -614,13 +624,13 @@ tslib_1.__decorate([
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ ((module) => {
 
 module.exports = require("class-validator");
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -628,7 +638,7 @@ var _a, _b;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UpdateActorDto = exports.CreateActorDto = void 0;
 const tslib_1 = __webpack_require__(4);
-const class_validator_1 = __webpack_require__(18);
+const class_validator_1 = __webpack_require__(19);
 class CreateActorDto {
     constructor(data) { Object.assign(this, data); }
 }
@@ -685,7 +695,7 @@ tslib_1.__decorate([
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -693,7 +703,7 @@ var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UpdateUserDto = exports.CreateUserDto = void 0;
 const tslib_1 = __webpack_require__(4);
-const class_validator_1 = __webpack_require__(18);
+const class_validator_1 = __webpack_require__(19);
 class CreateUserDto {
 }
 exports.CreateUserDto = CreateUserDto;
@@ -741,14 +751,14 @@ tslib_1.__decorate([
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UpdateReviewDto = exports.CreateReviewDto = void 0;
 const tslib_1 = __webpack_require__(4);
-const class_validator_1 = __webpack_require__(18);
+const class_validator_1 = __webpack_require__(19);
 class CreateReviewDto {
 }
 exports.CreateReviewDto = CreateReviewDto;
@@ -803,14 +813,14 @@ tslib_1.__decorate([
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EditCollectionMovie = exports.EditCollectionDto = exports.CreateCollectionDto = void 0;
 const tslib_1 = __webpack_require__(4);
-const class_validator_1 = __webpack_require__(18);
+const class_validator_1 = __webpack_require__(19);
 class CreateCollectionDto {
 }
 exports.CreateCollectionDto = CreateCollectionDto;
@@ -878,7 +888,7 @@ tslib_1.__decorate([
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -886,7 +896,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ApiResponseInterceptor = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const operators_1 = __webpack_require__(24);
+const operators_1 = __webpack_require__(25);
 let ApiResponseInterceptor = class ApiResponseInterceptor {
     intercept(context, next) {
         return next.handle().pipe((0, operators_1.map)((results) => {
@@ -920,21 +930,10 @@ exports.ApiResponseInterceptor = ApiResponseInterceptor = tslib_1.__decorate([
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ ((module) => {
 
 module.exports = require("rxjs/operators");
-
-/***/ }),
-/* 25 */
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const tslib_1 = __webpack_require__(4);
-tslib_1.__exportStar(__webpack_require__(26), exports);
-tslib_1.__exportStar(__webpack_require__(45), exports);
-
 
 /***/ }),
 /* 26 */
@@ -942,13 +941,24 @@ tslib_1.__exportStar(__webpack_require__(45), exports);
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const tslib_1 = __webpack_require__(4);
+tslib_1.__exportStar(__webpack_require__(27), exports);
+tslib_1.__exportStar(__webpack_require__(46), exports);
+
+
+/***/ }),
+/* 27 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthModule = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const jwt_1 = __webpack_require__(27);
-const user_1 = __webpack_require__(28);
-const auth_controller_1 = __webpack_require__(33);
-const auth_service_1 = __webpack_require__(34);
+const jwt_1 = __webpack_require__(28);
+const user_1 = __webpack_require__(29);
+const auth_controller_1 = __webpack_require__(34);
+const auth_service_1 = __webpack_require__(35);
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -969,22 +979,10 @@ exports.AuthModule = AuthModule = tslib_1.__decorate([
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ ((module) => {
 
 module.exports = require("@nestjs/jwt");
-
-/***/ }),
-/* 28 */
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const tslib_1 = __webpack_require__(4);
-tslib_1.__exportStar(__webpack_require__(29), exports);
-tslib_1.__exportStar(__webpack_require__(32), exports);
-tslib_1.__exportStar(__webpack_require__(29), exports);
-
 
 /***/ }),
 /* 29 */
@@ -992,11 +990,23 @@ tslib_1.__exportStar(__webpack_require__(29), exports);
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const tslib_1 = __webpack_require__(4);
+tslib_1.__exportStar(__webpack_require__(30), exports);
+tslib_1.__exportStar(__webpack_require__(33), exports);
+tslib_1.__exportStar(__webpack_require__(30), exports);
+
+
+/***/ }),
+/* 30 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserModule = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const user_controller_1 = __webpack_require__(30);
-const user_service_1 = __webpack_require__(31);
+const user_controller_1 = __webpack_require__(31);
+const user_service_1 = __webpack_require__(32);
 let UserModule = class UserModule {
 };
 exports.UserModule = UserModule;
@@ -1010,7 +1020,7 @@ exports.UserModule = UserModule = tslib_1.__decorate([
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1020,8 +1030,8 @@ exports.UserController = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
 const common_2 = __webpack_require__(1);
-const user_service_1 = __webpack_require__(31);
-const dto_1 = __webpack_require__(15);
+const user_service_1 = __webpack_require__(32);
+const dto_1 = __webpack_require__(16);
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
@@ -1117,7 +1127,7 @@ exports.UserController = UserController = tslib_1.__decorate([
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1127,7 +1137,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserService = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const nest_neo4j_1 = __webpack_require__(14);
+const nest_neo4j_1 = __webpack_require__(15);
 let UserService = UserService_1 = class UserService {
     constructor(neo4jService) {
         this.neo4jService = neo4jService;
@@ -1330,7 +1340,7 @@ exports.UserService = UserService = UserService_1 = tslib_1.__decorate([
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1339,7 +1349,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.UserExistsGuard = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const nest_neo4j_1 = __webpack_require__(14);
+const nest_neo4j_1 = __webpack_require__(15);
 let UserExistsGuard = class UserExistsGuard {
     constructor(neo4jService) {
         this.neo4jService = neo4jService;
@@ -1366,7 +1376,7 @@ exports.UserExistsGuard = UserExistsGuard = tslib_1.__decorate([
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1376,11 +1386,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthController = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const dto_1 = __webpack_require__(15);
-const auth_service_1 = __webpack_require__(34);
-const api_1 = __webpack_require__(36);
-const decorators_1 = __webpack_require__(44);
-const user_1 = __webpack_require__(28);
+const dto_1 = __webpack_require__(16);
+const auth_service_1 = __webpack_require__(35);
+const api_1 = __webpack_require__(37);
+const decorators_1 = __webpack_require__(45);
+const user_1 = __webpack_require__(29);
 let AuthController = AuthController_1 = class AuthController {
     constructor(authService) {
         this.authService = authService;
@@ -1420,7 +1430,7 @@ exports.AuthController = AuthController = AuthController_1 = tslib_1.__decorate(
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1431,9 +1441,9 @@ exports.AuthService = void 0;
 const tslib_1 = __webpack_require__(4);
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const common_1 = __webpack_require__(1);
-const jwt_1 = __webpack_require__(27);
-const nest_neo4j_1 = __webpack_require__(14);
-const uuid_1 = __webpack_require__(35);
+const jwt_1 = __webpack_require__(28);
+const nest_neo4j_1 = __webpack_require__(15);
+const uuid_1 = __webpack_require__(36);
 let AuthService = AuthService_1 = class AuthService {
     constructor(neo4jService, jwtService) {
         this.neo4jService = neo4jService;
@@ -1527,29 +1537,29 @@ exports.AuthService = AuthService = AuthService_1 = tslib_1.__decorate([
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ ((module) => {
 
 module.exports = require("uuid");
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const tslib_1 = __webpack_require__(4);
-tslib_1.__exportStar(__webpack_require__(37), exports);
 tslib_1.__exportStar(__webpack_require__(38), exports);
 tslib_1.__exportStar(__webpack_require__(39), exports);
 tslib_1.__exportStar(__webpack_require__(40), exports);
 tslib_1.__exportStar(__webpack_require__(41), exports);
 tslib_1.__exportStar(__webpack_require__(42), exports);
 tslib_1.__exportStar(__webpack_require__(43), exports);
+tslib_1.__exportStar(__webpack_require__(44), exports);
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -1576,7 +1586,7 @@ var Language;
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -1584,7 +1594,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -1602,7 +1612,7 @@ var Nationality;
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -1610,7 +1620,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ ((__unused_webpack_module, exports) => {
 
 
@@ -1631,14 +1641,6 @@ exports.initialUser = {
 
 
 /***/ }),
-/* 42 */
-/***/ ((__unused_webpack_module, exports) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-
-
-/***/ }),
 /* 43 */
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -1648,6 +1650,14 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 
 /***/ }),
 /* 44 */
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+
+
+/***/ }),
+/* 45 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1660,7 +1670,7 @@ exports.Public = Public;
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1670,7 +1680,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AuthGuard = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const jwt_1 = __webpack_require__(27);
+const jwt_1 = __webpack_require__(28);
 let AuthGuard = AuthGuard_1 = class AuthGuard {
     constructor(jwtService) {
         this.jwtService = jwtService;
@@ -1708,20 +1718,20 @@ exports.AuthGuard = AuthGuard = AuthGuard_1 = tslib_1.__decorate([
 
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BackendFeaturesActorModule = void 0;
 const tslib_1 = __webpack_require__(4);
-const mongoose_1 = __webpack_require__(9);
-const actor_controller_1 = __webpack_require__(47);
-const actor_schema_1 = __webpack_require__(49);
-const actor_service_1 = __webpack_require__(48);
+const mongoose_1 = __webpack_require__(10);
+const actor_controller_1 = __webpack_require__(48);
+const actor_schema_1 = __webpack_require__(50);
+const actor_service_1 = __webpack_require__(49);
 const common_1 = __webpack_require__(1);
-const jwt_1 = __webpack_require__(27);
-const auth_1 = __webpack_require__(25);
+const jwt_1 = __webpack_require__(28);
+const auth_1 = __webpack_require__(26);
 let BackendFeaturesActorModule = class BackendFeaturesActorModule {
 };
 exports.BackendFeaturesActorModule = BackendFeaturesActorModule;
@@ -1736,7 +1746,7 @@ exports.BackendFeaturesActorModule = BackendFeaturesActorModule = tslib_1.__deco
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1744,11 +1754,11 @@ var _a, _b, _c, _d, _e, _f, _g, _h, _j;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ActorController = void 0;
 const tslib_1 = __webpack_require__(4);
-const dto_1 = __webpack_require__(15);
-const actor_service_1 = __webpack_require__(48);
+const dto_1 = __webpack_require__(16);
+const actor_service_1 = __webpack_require__(49);
 const common_1 = __webpack_require__(1);
-const actor_schema_1 = __webpack_require__(49);
-const auth_1 = __webpack_require__(25);
+const actor_schema_1 = __webpack_require__(50);
+const auth_1 = __webpack_require__(26);
 let ActorController = class ActorController {
     constructor(actorService) {
         this.actorService = actorService;
@@ -1823,7 +1833,7 @@ exports.ActorController = ActorController = tslib_1.__decorate([
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1832,9 +1842,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ActorService = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const mongoose_1 = __webpack_require__(9);
-const actor_schema_1 = __webpack_require__(49);
-const mongoose_2 = tslib_1.__importStar(__webpack_require__(13));
+const mongoose_1 = __webpack_require__(10);
+const actor_schema_1 = __webpack_require__(50);
+const mongoose_2 = tslib_1.__importStar(__webpack_require__(14));
 let ActorService = class ActorService {
     constructor(actorModel) {
         this.actorModel = actorModel;
@@ -1898,7 +1908,7 @@ exports.ActorService = ActorService = tslib_1.__decorate([
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1906,8 +1916,8 @@ var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ActorSchema = exports.Actor = void 0;
 const tslib_1 = __webpack_require__(4);
-const mongoose_1 = __webpack_require__(9);
-const mongoose_2 = tslib_1.__importDefault(__webpack_require__(13));
+const mongoose_1 = __webpack_require__(10);
+const mongoose_2 = tslib_1.__importDefault(__webpack_require__(14));
 let Actor = class Actor {
 };
 exports.Actor = Actor;
@@ -1938,19 +1948,19 @@ exports.ActorSchema = mongoose_1.SchemaFactory.createForClass(Actor);
 
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BackendFeaturesReviewModule = void 0;
 const tslib_1 = __webpack_require__(4);
-const mongoose_1 = __webpack_require__(9);
+const mongoose_1 = __webpack_require__(10);
 const common_1 = __webpack_require__(1);
-const review_controller_1 = __webpack_require__(51);
-const review_service_1 = __webpack_require__(52);
-const auth_1 = __webpack_require__(25);
-const jwt_1 = __webpack_require__(27);
+const review_controller_1 = __webpack_require__(52);
+const review_service_1 = __webpack_require__(53);
+const auth_1 = __webpack_require__(26);
+const jwt_1 = __webpack_require__(28);
 let BackendFeaturesReviewModule = class BackendFeaturesReviewModule {
 };
 exports.BackendFeaturesReviewModule = BackendFeaturesReviewModule;
@@ -1967,7 +1977,7 @@ exports.BackendFeaturesReviewModule = BackendFeaturesReviewModule = tslib_1.__de
 
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -1977,9 +1987,9 @@ exports.ReviewController = void 0;
 const tslib_1 = __webpack_require__(4);
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const common_1 = __webpack_require__(1);
-const review_service_1 = __webpack_require__(52);
-const dto_1 = __webpack_require__(15);
-const auth_1 = __webpack_require__(25);
+const review_service_1 = __webpack_require__(53);
+const dto_1 = __webpack_require__(16);
+const auth_1 = __webpack_require__(26);
 let ReviewController = class ReviewController {
     constructor(reviewService) {
         this.reviewService = reviewService;
@@ -2047,7 +2057,7 @@ exports.ReviewController = ReviewController = tslib_1.__decorate([
 
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -2057,8 +2067,8 @@ exports.ReviewService = void 0;
 const tslib_1 = __webpack_require__(4);
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const common_1 = __webpack_require__(1);
-const dist_1 = __webpack_require__(53);
-const uuid_1 = __webpack_require__(35);
+const dist_1 = __webpack_require__(54);
+const uuid_1 = __webpack_require__(36);
 let ReviewService = class ReviewService {
     constructor(neo4jService) {
         this.neo4jService = neo4jService;
@@ -2183,13 +2193,13 @@ exports.ReviewService = ReviewService = tslib_1.__decorate([
 
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ ((module) => {
 
 module.exports = require("nest-neo4j/dist");
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -2197,10 +2207,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BackendFeaturesCollectionModule = void 0;
 const tslib_1 = __webpack_require__(4);
 const common_1 = __webpack_require__(1);
-const jwt_1 = __webpack_require__(27);
-const auth_1 = __webpack_require__(25);
-const collection_controller_1 = __webpack_require__(55);
-const collection_service_1 = __webpack_require__(56);
+const jwt_1 = __webpack_require__(28);
+const auth_1 = __webpack_require__(26);
+const collection_controller_1 = __webpack_require__(56);
+const collection_service_1 = __webpack_require__(57);
 let BackendFeaturesCollectionModule = class BackendFeaturesCollectionModule {
 };
 exports.BackendFeaturesCollectionModule = BackendFeaturesCollectionModule;
@@ -2218,7 +2228,7 @@ exports.BackendFeaturesCollectionModule = BackendFeaturesCollectionModule = tsli
 
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -2228,9 +2238,9 @@ exports.CollectionController = void 0;
 const tslib_1 = __webpack_require__(4);
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const common_1 = __webpack_require__(1);
-const collection_service_1 = __webpack_require__(56);
-const dto_1 = __webpack_require__(15);
-const auth_1 = __webpack_require__(25);
+const collection_service_1 = __webpack_require__(57);
+const dto_1 = __webpack_require__(16);
+const auth_1 = __webpack_require__(26);
 let CollectionController = class CollectionController {
     constructor(collectionService) {
         this.collectionService = collectionService;
@@ -2344,7 +2354,7 @@ exports.CollectionController = CollectionController = tslib_1.__decorate([
 
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
@@ -2354,8 +2364,8 @@ exports.CollectionService = void 0;
 const tslib_1 = __webpack_require__(4);
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const common_1 = __webpack_require__(1);
-const dist_1 = __webpack_require__(53);
-const uuid_1 = __webpack_require__(35);
+const dist_1 = __webpack_require__(54);
+const uuid_1 = __webpack_require__(36);
 let CollectionService = class CollectionService {
     constructor(neo4jService) {
         this.neo4jService = neo4jService;
@@ -2601,7 +2611,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const common_1 = __webpack_require__(1);
 const core_1 = __webpack_require__(2);
 const app_module_1 = __webpack_require__(3);
-const dto_1 = __webpack_require__(15);
+const dto_1 = __webpack_require__(16);
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const globalPrefix = 'api';
