@@ -54,7 +54,7 @@ export class ReviewCreateComponent implements OnInit, OnDestroy {
             .create({
                 title: this.reviewForm.value.title,
                 text: this.reviewForm.value.text,
-                rating: this.reviewForm.value.rating | 5,
+                rating: this.reviewForm.value.rating,
                 userId: this.getTokenId(),
                 movieId: this.movieId
             })
