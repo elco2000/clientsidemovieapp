@@ -215,14 +215,12 @@ export class ProfileService {
     }
 
     private updateFollowersAndFollowing(id: string) {
-        // Haal de volgers opnieuw op
         this.getFollowers(id).subscribe((followers) => {
           if (followers) {
             this.followersListSubject.next(followers);
           }
         });
     
-        // Haal de gevolgden opnieuw op
         this.getFollowing(id).subscribe((following) => {
           if (following) {
             this.followingListSubject.next(following);

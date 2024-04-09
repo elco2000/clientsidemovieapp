@@ -59,7 +59,6 @@ export class ActorDetailComponent implements OnInit, OnDestroy {
           const user = JSON.parse(userString);
           tokenRole = user?.role || null;
         }
-        console.log(tokenRole);
         return tokenRole;
       }
 }

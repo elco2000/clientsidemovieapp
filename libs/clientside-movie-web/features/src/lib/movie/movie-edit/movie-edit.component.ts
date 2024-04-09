@@ -104,10 +104,8 @@ export class MovieEditComponent implements OnInit, OnDestroy {
 
     public onSubmit() {
         if (this.form && this.form.valid && this.movie) {
-            // Haal de gegevens uit het formulier op
             const formValues = this.form.value;
         
-            // Combineer de gegevens van het formulier met de bestaande filminformatie
             const updatedMovie: Movie = {
               ...this.movie,
               ...formValues,
@@ -118,12 +116,10 @@ export class MovieEditComponent implements OnInit, OnDestroy {
             this.movieService.update(updatedMovie).subscribe(
               (updatedResult) => {
                 console.log('Film bijgewerkt:', updatedResult);
-                // Navigeer terug naar de filmlijst of een andere pagina indien nodig
                 this.router.navigateByUrl('/movies');
               },
               (error) => {
                 console.error('Fout bij bijwerken film:', error);
-                // Handel eventueel de foutafhandeling af
               }
             );
           }
