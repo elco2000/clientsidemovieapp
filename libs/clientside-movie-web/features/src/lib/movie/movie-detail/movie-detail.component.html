@@ -1,117 +1,224 @@
 <div *ngIf="movie !== null">
-    
-    <div class="container mx-auto">
+  <div class="container mx-auto">
+    <section class="">
+      <div class="max-w-6xl px-6 py-10 mx-auto">
+        <h1
+          class="mt-2 text-2xl font-medium text-gray-800 capitalize lg:text-3xl"
+        >
+          {{ movie.title }}
+        </h1>
 
-        <section class="">
-            <div class="max-w-6xl px-6 py-10 mx-auto">
+        <main
+          class="relative z-20 w-full mt-8 md:flex md:items-center xl:mt-12"
+        >
+          <div class="absolute w-full bg-white -z-10 md:h-96 rounded-2xl"></div>
 
-                <h1 class="mt-2 text-2xl font-medium text-gray-800 capitalize lg:text-3xl">
-                    {{movie.title}}
-                </h1>
+          <div
+            class="w-full p-6 bg-blue-600 md:flex md:items-center rounded-2xl md:bg-transparent md:p-0 lg:px-12 md:justify-evenly"
+          >
+            <img
+              class="h-24 w-24 md:mx-6 rounded-full shadow-md md:h-[32rem] md:w-80 lg:h-[36rem] lg:w-[26rem] md:rounded-2xl"
+              [src]="movie.photo"
+              alt="client photo"
+            />
 
-                <main class="relative z-20 w-full mt-8 md:flex md:items-center xl:mt-12">
-                    <div class="absolute w-full bg-white -z-10 md:h-96 rounded-2xl"></div>
+            <div class="mt-2 md:mx-6">
+              <div>
+                <p class="text-xl font-medium tracking-tight text-gray-800">
+                  {{ movie.releaseDate | date }}
+                </p>
+                <div
+                  class="text-xs mt-2 mb-2 mr-2 inline-flex items-center font-bold leading-sm uppercase px-3 py-1 rounded-full bg-white text-gray-700 border"
+                >
+                  <svg
+                    class="w-[16px] h-[16px] text-gray-800 dark:text-white mr-1"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 16 18"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.5"
+                      d="M1 1.984v14.032a1 1 0 0 0 1.506.845l12.006-7.016a.974.974 0 0 0 0-1.69L2.506 1.139A1 1 0 0 0 1 1.984Z"
+                    />
+                  </svg>
+                  {{ movie.genre }}
+                </div>
+                <div
+                  class="text-xs mt-2 mb-2 mr-2 inline-flex items-center font-bold leading-sm uppercase px-3 py-1 rounded-full bg-white text-gray-700 border"
+                >
+                  <svg
+                    class="w-[16px] h-[16px] text-gray-800 dark:text-white mr-1"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 21 20"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.5"
+                      d="M6.487 1.746c0 4.192 3.592 1.66 4.592 5.754 0 .828 1 1.5 2 1.5s2-.672 2-1.5a1.5 1.5 0 0 1 1.5-1.5h1.5m-16.02.471c4.02 2.248 1.776 4.216 4.878 5.645C10.18 13.61 9 19 9 19m9.366-6h-2.287a3 3 0 0 0-3 3v2m6-8a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
+                  </svg>
+                  {{ movie.language }}
+                </div>
+                <p class="text-gray-800">Length: {{ movie.length }} minutes</p>
+                <p class="text-gray-800">Adviced age: {{ movie.advicedAge }}</p>
+                <p class="text-gray-800">director: {{ movie.director }}</p>
+              </div>
 
-                    <div
-                        class="w-full p-6 bg-blue-600 md:flex md:items-center rounded-2xl md:bg-transparent md:p-0 lg:px-12 md:justify-evenly">
-                        <img class="h-24 w-24 md:mx-6 rounded-full  shadow-md md:h-[32rem] md:w-80 lg:h-[36rem] lg:w-[26rem] md:rounded-2xl"
-                            [src]="movie.photo" alt="client photo" />
+              <div class="mt-4">
+                <button
+                  *ngIf="getTokenRole() === 'Admin'"
+                  [routerLink]="['/movies/edit/' + movie._id]"
+                  class="px-6 py-2 ml-2 mr-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-stone-400 rounded-lg hover:bg-stone-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80"
+                >
+                  Update
+                </button>
 
-                        <div class="mt-2 md:mx-6">
-                            <div>
-                                <p class="text-xl font-medium tracking-tight text-gray-800">{{movie.releaseDate | date}}
-                                </p>
-                                <div
-                                    class="text-xs mt-2 mb-2 mr-2 inline-flex items-center font-bold leading-sm uppercase px-3 py-1 rounded-full bg-white text-gray-700 border">
-                                    <svg class="w-[16px] h-[16px] text-gray-800 dark:text-white mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 18">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M1 1.984v14.032a1 1 0 0 0 1.506.845l12.006-7.016a.974.974 0 0 0 0-1.69L2.506 1.139A1 1 0 0 0 1 1.984Z"/>
-                                      </svg>
-                                    {{movie.genre}}
-                                </div>
-                                <div
-                                    class="text-xs mt-2 mb-2 mr-2 inline-flex items-center font-bold leading-sm uppercase px-3 py-1 rounded-full bg-white text-gray-700 border">
-                                    <svg class="w-[16px] h-[16px] text-gray-800 dark:text-white mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 21 20">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6.487 1.746c0 4.192 3.592 1.66 4.592 5.754 0 .828 1 1.5 2 1.5s2-.672 2-1.5a1.5 1.5 0 0 1 1.5-1.5h1.5m-16.02.471c4.02 2.248 1.776 4.216 4.878 5.645C10.18 13.61 9 19 9 19m9.366-6h-2.287a3 3 0 0 0-3 3v2m6-8a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                                      </svg>
-                                    {{movie.language}}
-                                </div>
-                                <p class="text-gray-800 ">Length: {{movie.length}} minutes</p>
-                                <p class="text-gray-800 ">Adviced age: {{movie.advicedAge}}</p>
-                                <p class="text-gray-800 ">director: {{movie.director}}</p>
-                            </div>
+                <button
+                  *ngIf="getTokenRole() === 'Admin'"
+                  (click)="onDelete(movie._id)"
+                  [routerLink]="['/movies']"
+                  class="px-6 py-2 ml-2 mr-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-stone-400 rounded-lg hover:bg-stone-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80"
+                >
+                  Delete
+                </button>
 
-                            <div class="mt-4">
-                                <button *ngIf="getTokenRole() === 'Admin'" [routerLink]="['/movies/edit/' + movie._id]" class="px-6 py-2 ml-2 mr-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-stone-400 rounded-lg hover:bg-stone-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
-                                    Update
-                                </button>
-    
-                                <button *ngIf="getTokenRole() === 'Admin'" (click)="onDelete(movie._id)" [routerLink]="['/movies']" class="px-6 py-2 ml-2 mr-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-stone-400 rounded-lg hover:bg-stone-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
-                                    Delete
-                                </button>
+                <br />
+                <br />
+                <div>
+                  <label for="collection" class="block text-sm text-black"
+                    >Collections</label
+                  >
+                  <div class="inline-flex" [formGroup]="collectionForm">
+                    <select
+                      id="collection"
+                      formControlName="collection"
+                      [class.disabled]="
+                        !collections || collections.length === 0
+                      "
+                      (change)="onCollectionChange($event)"
+                      class="block mt-2 w-40 placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300"
+                    >
+                      <option
+                        *ngFor="let collection of collections"
+                        [value]="collection.id"
+                      >
+                        {{ collection.name }}
+                      </option>
+                    </select>
 
-                                <br>
-                                <br>
-                                <div>
-                                    <label for="collection" class="block text-sm text-black">Collections</label>
-                                    <div class="inline-flex" [formGroup]="collectionForm">
-                                        <select id="collection" formControlName="collection" [class.disabled]="!collections || collections.length === 0" (change)="onCollectionChange($event)" class="block  mt-2 w-40 placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300">
-                                    
-                                            <option *ngFor="let collection of collections" [value]="collection.id">
-                                                {{collection.name}}
-                                            </option>
-                            
-                                        </select>
-    
-                                        <button (click)="onAddMovieToCollection(selectedCollectionId, movie._id)" [class.disabled]="!collections || collections.length === 0 || selectedCollectionId === undefined" [routerLink]="['/profile/' + getTokenId()]" class="px-6 py-2 h-10 mt-3 ml-2 mr-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-stone-400 rounded-lg hover:bg-stone-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
-                                            Add
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                        </div>
-                    </div>
-                </main>
+                    <button
+                      (click)="
+                        onAddMovieToCollection(selectedCollectionId, movie._id)
+                      "
+                      [class.disabled]="
+                        !collections ||
+                        collections.length === 0 ||
+                        selectedCollectionId === undefined
+                      "
+                      [routerLink]="['/profile/' + getTokenId()]"
+                      class="px-6 py-2 h-10 mt-3 ml-2 mr-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-stone-400 rounded-lg hover:bg-stone-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80"
+                    >
+                      Add
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="mt-80 py-3 flex items-center text-lg font-bold text-gray-800 before:flex-[1_1_0%] before:border-t before:border-gray-200 before:me-6 after:flex-[1_1_0%] after:border-t after:border-gray-200 after:ms-6">Actors</div>
-        </section>
-        <section *ngIf="movie.actors.length !== 0" class="h-fit"> 
-            
-            <div class="grid gap-8 mt-8 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-                <div *ngFor="let actor of movie.actors" class="w-full max-w-xs text-center mb-7 group">
-        
-                    <a [routerLink]="['/actors/', actor._id]" class="">
-                        <img class="object-center w-full h-9 mx-auto rounded-lg group-hover:scale-105" [src]="actor.photo" alt="picture" />
-                    </a>    
-        
-                    <div class="mt-2">
-                        <h3 class="text-lg font-medium text-gray-700 dark:text-gray-200">{{actor.name}}</h3>
-                    </div>
-                    
-                </div>
-            </div>
-        
-            <div class="mt-5 py-3 flex items-center text-lg font-bold text-gray-800 before:flex-[1_1_0%] before:border-t before:border-gray-200 before:me-6 after:flex-[1_1_0%] after:border-t after:border-gray-200 after:ms-6">Reviews</div>
-            <button (click)="onAddReview(movie._id)" class="px-6 py-2 h-10 mt-3 mb-3 ml-2 mr-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-stone-400 rounded-lg hover:bg-stone-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80">
-                Add review
-            </button>
-        </section>
-        <section *ngIf="reviews !== null" class="h-fit">
-            <div *ngFor="let review of reviews" class="col-span-2 mt-6 md:mt-0">
-                <div class="flex items-start mb-5">
-                    <div class="pe-4">
-                        <footer>
-                            <p class="mb-2 text-sm text-white-500 dark:text-white-400">Reviewed: <time datetime="2022-01-20 19:00">{{review.date}} - {{review.username}}</time></p>
-                        </footer>
-                        <h4 class="text-xl font-bold text-gray-900 dark:text-white">{{review.title}}</h4>
-                    </div>
-                </div>
-                <div class="mb-6">
-                    <p class="bg-blue-700 text-white text-sm font-semibold inline-flex items-center p-1.5 rounded">{{review.rating}}/10</p>
-                </div>
-                <p class="mb-2 text-white-500 dark:text-white-400">{{review.text}}</p>
-                </div>
-        </section>
+          </div>
+        </main>
+      </div>
+      <div
+        class="mt-80 py-3 flex items-center text-lg font-bold text-gray-800 before:flex-[1_1_0%] before:border-t before:border-gray-200 before:me-6 after:flex-[1_1_0%] after:border-t after:border-gray-200 after:ms-6"
+      >
+        Actors
+      </div>
+    </section>
+    <section *ngIf="movie.actors.length !== 0" class="h-fit">
+      <div class="grid gap-8 mt-8 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+        <div
+          *ngFor="let actor of movie.actors"
+          class="w-full max-w-xs text-center mb-7 group"
+        >
+          <a [routerLink]="['/actors/', actor._id]" class="">
+            <img
+              class="object-center w-full h-9 mx-auto rounded-lg group-hover:scale-105"
+              [src]="actor.photo"
+              alt="picture"
+            />
+          </a>
 
-    </div>
+          <div class="mt-2">
+            <h3 class="text-lg font-medium text-gray-700 dark:text-gray-200">
+              {{ actor.name }}
+            </h3>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="mt-5 py-3 flex items-center text-lg font-bold text-gray-800 before:flex-[1_1_0%] before:border-t before:border-gray-200 before:me-6 after:flex-[1_1_0%] after:border-t after:border-gray-200 after:ms-6"
+      >
+        Reviews
+      </div>
+      <button
+      *ngIf="!isUserReviewed(reviews)"
+        (click)="onAddReview(movie._id)"
+        class="px-6 py-2 h-10 mt-3 mb-3 ml-2 mr-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-stone-400 rounded-lg hover:bg-stone-700 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-80"
+      >
+        Add review
+      </button>
+    </section>
+    <section *ngIf="reviews !== null" class="h-fit">
+      <div *ngFor="let review of reviews" class="col-span-2 mt-6 md:mt-0">
+        <div class="flex items-start mb-5">
+          <div class="pe-4">
+            <footer>
+              <p class="mb-2 text-sm text-white-500 dark:text-white-400">
+                Reviewed:
+                <time datetime="2022-01-20 19:00"
+                  >{{ review.date }} - {{ review.username }}</time
+                >
+              </p>
+            </footer>
+            <h4 class="text-xl font-bold text-gray-900 dark:text-white">
+              {{ review.title }}
+            </h4>
+          </div>
+        </div>
+        <div class="mb-6 flex">
+          <p
+            class="bg-blue-700 text-white text-sm font-semibold inline-flex items-center p-1.5 rounded"
+          >
+            {{ review.rating }}/10
+          </p>
+          <svg
+            *ngIf="isOwnReview(review.userId)"
+            [routerLink]="['/reviews/edit/' + review.id]"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1"
+            stroke="currentColor"
+            class="w-5 h-5 mt-1 ml-1"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+            />
+          </svg>
+        </div>
+        <p class="mb-2 text-white-500 dark:text-white-400">{{ review.text }}</p>
+        <hr class="mb-2"/>
+      </div>
+    </section>
+  </div>
 </div>

@@ -91,6 +91,24 @@ export class ReviewService {
     }
 
     /**
+     *  Delete review
+     * 
+     */
+    public delete(id: string | null, options?: any): Observable<IReview> {
+        return this.http
+            .delete<ApiResponse<IReview>>(`${this.endpoint}/${id}`, {
+                ...options,
+                ...this.httpOptions
+            })
+            .pipe(
+                map((response: any) => response.results as IReview),
+                tap(() => {
+                  }),
+                catchError(this.handleError)
+            );
+    }
+
+    /**
      * Handle errors.
      */
     public handleError(error: HttpErrorResponse): Observable<any> {

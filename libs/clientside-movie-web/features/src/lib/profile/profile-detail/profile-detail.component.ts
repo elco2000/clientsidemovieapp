@@ -145,13 +145,15 @@ export class ProfileDetailComponent implements OnInit, OnDestroy {
 
   public onFollowActionButton() {
     if (!this.followsAlready) {
-      this.profileService.follow(this.getTokenId(), this.user?.id).subscribe( () => {
-        this.router.navigateByUrl('/profile/' + this.getTokenId())
-      })
+      this.profileService.follow(this.getTokenId(), this.user?.id).subscribe(() => {
+        this.followsAlready = true;
+        this.router.navigateByUrl('/profile/' + this.getTokenId());
+      });
     } else {
-      this.profileService.unfollow(this.getTokenId(), this.user?.id).subscribe( () => {
-        this.router.navigateByUrl('/profile/' + this.getTokenId())
-      })
+      this.profileService.unfollow(this.getTokenId(), this.user?.id).subscribe(() => {
+        this.followsAlready = false;
+        this.router.navigateByUrl('/profile/' + this.getTokenId());
+      });
     }
   }
 

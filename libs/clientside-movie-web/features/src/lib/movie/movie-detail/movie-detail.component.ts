@@ -109,4 +109,21 @@ export class MovieDetailComponent implements OnInit, OnDestroy {
     const target = event.target as HTMLSelectElement;
     this.selectedCollectionId = target.value || '';
   }
+
+  isOwnReview(userId: string) : boolean {
+    if (userId === this.getTokenId()) {
+      return true;
+    }
+    return false;
+  }
+
+  isUserReviewed(reviews: IReviewInfo[] | null): boolean {
+    const tokenId = this.getTokenId();
+
+    if (!tokenId || !reviews) {
+      return false;
+    }
+
+    return reviews.some(review => review.userId === tokenId);
+  }
 }

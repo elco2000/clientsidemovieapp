@@ -83,4 +83,13 @@ export class ReviewEditComponent implements OnInit, OnDestroy {
       );
     }
   }
+
+  onDelete(id: string): void {
+    this.reviewService.delete(id).subscribe(
+        () => {
+            console.log("Test");
+            this.location.back();
+        }
+    )
+  }
 }

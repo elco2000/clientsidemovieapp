@@ -33,7 +33,7 @@ export class ReviewController {
 
     @Delete(':id')
     @UseGuards(AuthGuard)
-    async delete (@Param('id') id: string, @Request() req: any): Promise<string> {
-        return this.reviewService.delete(id, req);
+    async delete (@Param('id') id: string): Promise<string> {
+        return this.reviewService.delete(id);
     }
 }

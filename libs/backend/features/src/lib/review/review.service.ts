@@ -155,12 +155,10 @@ export class ReviewService {
        
     }   
 
-    async delete(id: string, req: any): Promise<string> {
+    async delete(id: string): Promise<string> {
         Logger.log('delete', this.TAG);
-        const userThatDeleted = req.body;
-        const userId = req.user.user_id;
+        // const userId = req.user.user_id;
 
-        if(userThatDeleted.userId === userId) {
             const deleteResult = await this.neo4jService.write(
                 `
                 MATCH (r:Review {id: $id})
@@ -177,8 +175,5 @@ export class ReviewService {
             }
     
             return 'Success';
-        }
-
-        throw new UnauthorizedException();
     }
 }
